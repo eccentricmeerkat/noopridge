@@ -1,0 +1,4 @@
+case,days,state,ctl,atl,tsb
+steady_42,42,ESTABLISHED,50.000000,50.000000,0.000000
+ramp_last_14,42,ESTABLISHED,48.504061,65.939942,-17.435881
+only_10_days,10,UNAVAILABLE,null,null,null

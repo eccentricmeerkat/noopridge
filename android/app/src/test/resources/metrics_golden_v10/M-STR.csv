@@ -1,0 +1,8 @@
+case,score0to3,band,usingStored
+at_baseline,1.500000,Medium,false
+rhr_up_hrv_down,2.999994,High,false
+rhr_down_hrv_up,0.000019,Low,false
+stored_value_wins,0.400000,Low,true
+no_signal,null,null,null
+baevsky_si_steady,2020.202020,,
+baevsky_si_varied,103.030303,,

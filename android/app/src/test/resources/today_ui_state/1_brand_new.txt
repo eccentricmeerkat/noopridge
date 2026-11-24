@@ -1,0 +1,15 @@
+selectedDay=2026-11-11
+selectedDayKey=2026-11-11
+isToday=true
+displayMetric=null
+effortForDay=null
+recoveryCalibration=0
+carryOverTodayKey=2026-11-11
+lastScoredRecoveryDay=null
+lastVitalsDay=null
+lastSpo2Day=null
+lastSkinTempDay=null
+lastHrvDay=null
+lastRestingHrDay=null
+lastRespDay=null
+scoreState=Calibrating(nightsRemaining=4)

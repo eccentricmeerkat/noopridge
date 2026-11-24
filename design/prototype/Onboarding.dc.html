@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Onboarding — Noop Ridge</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}
+.np-plain{text-decoration:none;color:inherit}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-row{display:flex;gap:14px;align-items:flex-start;padding:14px 0}
+.np-row+.np-row{border-top:1px solid rgba(190,220,235,.14)}
+.np-ic{width:36px;height:36px;flex-shrink:0;border-radius:12px;display:grid;place-items:center;background:rgba(89,236,170,.12);color:#59ecaa}
+.np-t{font:600 15px/20px Inter,sans-serif}
+.np-d{font:400 13px/19px Inter,sans-serif;color:#b6c3ca}
+.np-step{width:40px;height:40px;border-radius:50%;border:1px solid rgba(190,220,235,.2);background:rgba(170,205,220,.06);color:#f5efe4;display:grid;place-items:center;cursor:pointer;padding:0;font:600 18px/1 Inter,sans-serif}
+@keyframes npIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.np-in{animation:npIn .45s ease-out both}
+@keyframes npSpin{to{transform:rotate(360deg)}}
+.np-spin{width:18px;height:18px;border-radius:50%;border:2px solid rgba(89,236,170,.25);border-top-color:#59ecaa;animation:npSpin 1s linear infinite}
+</style>
+</helmet>
+<div style="{{ shell }}">
+
+<header style="position: relative; z-index: 3; display: flex; align-items: center; gap: 12px; padding: 18px 28px 8px 18px">
+<button type="button" onClick="{{ back }}" aria-label="Back" style="width: 40px; height: 40px; flex-shrink: 0; border: 0; border-radius: 50%; background: none; color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+<div style="flex-grow: 1; display: flex; gap: 6px; align-items: center" aria-label="{{ progressAria }}"><sc-for list="{{ dots }}" as="d" hint-placeholder-count="8"><span style="{{ d.st }}"></span></sc-for></div>
+<sc-if value="{{ canSkip }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ skip }}" style="border: 0; background: none; padding: 8px 0; cursor: pointer; font: 600 14px/18px var(--font-sans); color: var(--ink-muted)">Skip</button></sc-if>
+</header>
+
+<div class="np-scroll" style="position: relative; z-index: 2; flex: 1; overflow-y: auto; padding: 18px 28px 160px">
+<div class="np-in" style="display: flex; flex-direction: column; gap: 18px">
+<span class="nr-eyebrow" style="letter-spacing: 0.24em">{{ eyebrow }}</span>
+<h2 style="{{ titleSt }}">{{ title }}</h2>
+<p style="margin: -4px 0 0; font: 400 15px/23px var(--font-sans); color: var(--ink-muted)">{{ sub }}</p>
+
+<!-- 2 · What Noop Ridge is -->
+<sc-if value="{{ is.about }}" hint-placeholder-val="{{ true }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 4px 18px">
+<sc-for list="{{ aims }}" as="a" hint-placeholder-count="3"><div class="np-row"><span class="np-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ a.icon }}"></path></svg></span><span style="display: flex; flex-direction: column; gap: 2px"><span class="np-t">{{ a.t }}</span><span class="np-d">{{ a.d }}</span></span></div></sc-for>
+</section>
+<p style="margin: 0; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">Open source. Not a medical device. Not affiliated with WHOOP.</p>
+</sc-if>
+
+<!-- 3 · Your three numbers -->
+<sc-if value="{{ is.numbers }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: space-between; gap: 6px">
+<sc-for list="{{ orbs }}" as="o" hint-placeholder-count="3"><button type="button" onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" aria-label="{{ o.name }}" style="{{ o.btn }}"><x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="{{ o.liquid }}" value="{{ o.value }}" max="100" display="{{ o.display }}" size="84" style="display: block"></x-import><span style="font: 600 12px/16px var(--font-sans); letter-spacing: 0.16em; text-transform: uppercase">{{ o.name }}</span></button></sc-for>
+</div>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; justify-content: space-between; align-items: baseline"><span style="font: 700 22px/26px var(--font-display)">{{ orb.name }}</span><span style="font: 600 13px/16px var(--font-sans); color: var(--ink-muted)">{{ orb.scale }}</span></span>
+<span style="font: 400 15px/22px var(--font-sans)">{{ orb.line }}</span>
+</section>
+<p style="margin: 0; font: 400 13px/19px var(--font-sans); color: var(--ink-subtle)">Tap each orb. Full detail lives in Hub › How your numbers work.</p>
+</sc-if>
+
+<!-- 4 · Synthesis and Today's plan -->
+<sc-if value="{{ is.synth }}" hint-placeholder-val="{{ false }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<span class="nr-eyebrow">Synthesis · Charge's stage</span>
+<div style="height: 10px; border-radius: 5px; background: linear-gradient(90deg, #f7777d, #f39a5b 25%, #e8c46a 50%, #59ecaa 75%, #6ba1fd)"></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; text-align: center">
+<sc-for list="{{ stages }}" as="g" hint-placeholder-count="5"><span style="display: flex; flex-direction: column; gap: 2px"><span style="{{ g.st }}">{{ g.n }}</span><span style="font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)">{{ g.r }}</span></span></sc-for>
+</div>
+</section>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<span style="display: flex; align-items: center; gap: 8px; font: 600 15px/20px var(--font-sans)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M8 12.5l2.7 2.7L16 9.5"></path></svg>Today's plan, for example</span>
+<span style="font: 400 15px/22px var(--font-sans); color: var(--ink-muted)">Keep Effort <b style="color: #e8c46a">under 38</b> and aim for <b style="color: #59ecaa">8.1h</b> sleep tonight.</span>
+<div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid rgba(190, 220, 235, 0.14)">
+<span class="np-t">How the Effort target works</span>
+<span class="np-d">The lower your Charge, the lower the day's Effort target. Under 38 is about a 30-minute easy walk; a Strong or Peak day opens the door to a hard session.</span>
+</div>
+</section>
+</sc-if>
+
+<!-- 5 · Terms -->
+<sc-if value="{{ is.terms }}" hint-placeholder-val="{{ false }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 2px 18px">
+<sc-for list="{{ points }}" as="p" hint-placeholder-count="5"><div class="np-row" style="flex-direction: column; gap: 2px; padding: 12px 0"><span class="np-t">{{ p.t }}</span><span class="np-d">{{ p.d }}</span></div></sc-for>
+</section>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{ checks }}" as="c" hint-placeholder-count="4"><button type="button" role="checkbox" aria-checked="{{ c.on }}" onClick="{{ c.flip }}" style="display: flex; gap: 12px; align-items: flex-start; border: 0; background: none; padding: 8px 0; cursor: pointer; color: var(--ink); text-align: left"><span style="{{ c.box }}"><sc-if value="{{ c.on }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0c161c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if></span><span style="font: 400 14px/20px var(--font-sans)">{{ c.t }}</span></button></sc-for>
+</div>
+<p style="margin: 0; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">The full terms are in TERMS.md, shipped with Noop Ridge. This is not legal advice.</p>
+</sc-if>
+
+<!-- 6 · Connect your strap -->
+<sc-if value="{{ is.strap }}" hint-placeholder-val="{{ false }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; align-items: center; gap: 14px">
+<x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="battery" value="82" display="{{ strapDisplay }}" size="64" glow="false" style="display: block; flex-shrink: 0"></x-import>
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span class="np-t">{{ strap.label }}</span><span class="np-d">{{ strap.note }}</span></span>
+<sc-if value="{{ strap.busy }}" hint-placeholder-val="{{ false }}"><span class="np-spin" role="status" aria-label="Searching"></span></sc-if>
+</section>
+<sc-if value="{{ strap.idle }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ pair }}" class="nr-btn nr-btn-secondary">Find my strap</button></sc-if>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 4px 18px">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 72px"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span class="np-t">Bring your history (optional)</span><span class="np-d">Import a WHOOP export or Health Connect so baselines start on day one.</span></span><button type="button" role="switch" aria-checked="{{ imp }}" aria-label="Import history" onClick="{{ flipImp }}" style="{{ impTrack }}"><span style="{{ impKnob }}"></span></button></div>
+</section>
+<p style="margin: 0; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">WHOOP 4.0: turn on HR broadcast in the official app once. WHOOP 5.0 / MG: close the official app first. Bluetooth is only used to read your strap.</p>
+</sc-if>
+
+<!-- 7 · About you -->
+<sc-if value="{{ is.you }}" hint-placeholder-val="{{ false }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 4px 18px">
+<div class="np-row" style="align-items: center"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span class="np-t">Age</span><span class="np-d">For VO₂ max, fitness age and max HR</span></span><button type="button" class="np-step" aria-label="Younger" onClick="{{ ageDown }}">−</button><span style="min-width: 40px; text-align: center; font: 700 22px/26px var(--font-display)">{{ age }}</span><button type="button" class="np-step" aria-label="Older" onClick="{{ ageUp }}">+</button></div>
+<div class="np-row" style="flex-direction: column; gap: 8px"><span style="display: flex; flex-direction: column; gap: 2px"><span class="np-t">Sex</span><span class="np-d">Age norms differ, so body and fitness age use it</span></span><div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px"><sc-for list="{{ sexes }}" as="x" hint-placeholder-count="2"><button type="button" onClick="{{ x.pick }}" aria-pressed="{{ x.on }}" style="{{ x.st }}">{{ x.label }}</button></sc-for></div></div>
+<div class="np-row" style="align-items: center"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span class="np-t">Usual sleep</span><span class="np-d">Seeds sleep need and the smart alarm</span></span><span style="font: 700 17px/22px var(--font-display); white-space: nowrap">21:55 – 06:02</span></div>
+<div class="np-row" style="flex-direction: column; gap: 8px"><span style="display: flex; flex-direction: column; gap: 2px"><span class="np-t">Max heart rate · {{ maxHr }} bpm</span><span class="np-d">Sets your HR zones, which drive Effort</span></span><div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px"><sc-for list="{{ hrSrc }}" as="x" hint-placeholder-count="2"><button type="button" onClick="{{ x.pick }}" aria-pressed="{{ x.on }}" style="{{ x.st }}">{{ x.label }}</button></sc-for></div></div>
+</section>
+<p style="margin: 0; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">Stored on this phone only. Change any of it later in Settings.</p>
+</sc-if>
+
+<!-- 8 · Meet Sage -->
+<sc-if value="{{ is.sage }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: center; padding: 4px 0"><img src="sage.png" width="120" height="120" alt="Sage" style="display: block; filter: drop-shadow(0 0 18px rgba(198, 247, 92, 0.45))"></div>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 4px 18px">
+<sc-for list="{{ sage }}" as="a" hint-placeholder-count="3"><div class="np-row"><span class="np-ic" style="background: rgba(198, 247, 92, 0.12); color: #c6f75c"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ a.icon }}"></path></svg></span><span style="display: flex; flex-direction: column; gap: 2px"><span class="np-t">{{ a.t }}</span><span class="np-d">{{ a.d }}</span></span></div></sc-for>
+</section>
+<p style="margin: 0; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">Sage is not medical advice. You can connect or disconnect it any time from Hub.</p>
+</sc-if>
+
+<!-- 9 · First 14 nights -->
+<sc-if value="{{ is.cal }}" hint-placeholder-val="{{ false }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 6px 18px">
+<sc-for list="{{ unlocks }}" as="u" hint-placeholder-count="4"><div class="np-row" style="align-items: center"><span style="width: 74px; flex-shrink: 0; font: 700 15px/18px var(--font-display); color: var(--brand)">{{ u.when }}</span><span style="display: flex; flex-direction: column; gap: 2px"><span class="np-t">{{ u.t }}</span><span class="np-d">{{ u.d }}</span></span></div></sc-for>
+</section>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 14px 18px; display: flex; gap: 12px; align-items: center">
+<span class="nr-chip" style="flex-shrink: 0; border-color: #e8c46a; color: #e8c46a">Calibrating</span>
+<span class="np-d">This tag shows on any number that is still settling. When it goes, the number is settled.</span>
+</section>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 14px 18px; display: flex; gap: 12px; align-items: center">
+<span class="np-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-6 4 3 6-8M14 21V11"></path></svg></span>
+<span class="np-d"><b style="color: var(--ink)">Tip:</b> press and drag across any chart to read a single day.</span>
+</section>
+</sc-if>
+
+</div>
+</div>
+
+<footer style="position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; height: 150px; pointer-events: none; background: linear-gradient(180deg, rgba(19, 31, 38, 0), #131f26 45%)"></footer>
+<sc-if value="{{ isLast }}" hint-placeholder-val="{{ false }}"><a href="Main.dc.html" class="nr-btn nr-btn-primary np-plain" style="position: absolute; z-index: 5; left: 55px; bottom: 72px; width: 280px; height: 52px; box-sizing: border-box; margin: 0; padding: 0; display: inline-flex; justify-content: center; align-items: center; color: var(--ink-on-liquid);">Go to Today</a></sc-if>
+<sc-if value="{{ notLast }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ next }}" disabled="{{ blocked }}" class="nr-btn nr-btn-primary" style="{{ nextSt }}">{{ cta }}</button></sc-if>
+<sc-if value="{{ is.sage }}" hint-placeholder-val="{{ false }}"><a href="Coach.dc.html" class="np-plain" style="position: absolute; z-index: 5; left: 40px; right: 40px; bottom: 40px; text-align: center; font: 500 12px/16px var(--font-sans); font-weight: 600; font-size: 13px; color: #c6f75c">Connect a provider now ›</a></sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+var st = 0; try { var m = /s=(\d)/.exec(window.location.hash || ''); if (m) st = Math.max(0, Math.min(7, +m[1] - 3)); } catch (e) {}
+this.state = { step: st, orb: 'charge', checks: [false, false, false, false], strap: 'idle', imp: true, age: 40, sex: 0, hr: 0 };
+}
+renderVals() {
+var self = this, s = this.state;
+var K = ['about', 'numbers', 'synth', 'terms', 'strap', 'you', 'sage', 'cal'];
+var k = K[s.step];
+var H = {
+about: ['3 of 10 · What it does', 'What Noop Ridge hopes to do', 'Three ideas sit behind every screen.', 'Continue'],
+numbers: ['4 of 10 · Your numbers', 'Three numbers, every day', 'Everything in Noop Ridge starts from these. Each is scored 0–100 against your own baseline.', 'Continue'],
+synth: ['5 of 10 · Your plan', 'From numbers to a plan', 'Synthesis reads your Charge as one of five stages. Today\'s plan turns that stage into an Effort target and a sleep goal.', 'Continue'],
+terms: ['6 of 10 · Before you start', 'A few honest words', 'Please read these, then confirm each statement.', 'Accept & continue'],
+strap: ['7 of 10 · Your strap', 'Connect your strap', 'Put your strap on, keep it near your phone, and let Noop Ridge find it.', 'Continue'],
+you: ['8 of 10 · About you', 'A little about you', 'Four details the maths needs. Each one says why it is asked.', 'Continue'],
+sage: ['9 of 10 · Your coach', 'Meet Sage', 'Ask Sage about your recovery, sleep, training and HRV. Answers are grounded in your own numbers.', 'Continue'],
+cal: ['10 of 10 · The first two weeks', 'Your first 14 nights', 'Noop Ridge learns your normal as you wear it. Scores can swing at first, then settle.', '']
+}[k];
+var sw = function (on) { return ['position: relative; width: 52px; height: 32px; flex-shrink: 0; border-radius: 16px; border: 0; padding: 0; cursor: pointer; background: ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.22)') + ';', 'position: absolute; top: 4px; left: ' + (on ? 24 : 4) + 'px; width: 24px; height: 24px; border-radius: 50%; background: ' + (on ? '#0c161c' : '#f5efe4') + ';']; };
+var seg = function (on) { return 'height: 40px; border-radius: 12px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; border: 1px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.2)') + '; background: ' + (on ? 'rgba(89,236,170,0.16)' : 'transparent') + '; color: ' + (on ? '#59ecaa' : '#b6c3ca') + ';'; };
+var allChecked = s.checks.every(Boolean);
+var blocked = k === 'terms' && !allChecked;
+var O = { charge: ['Charge', 'charge', '72', '0–100', 'How ready your body is this morning, from overnight HRV, resting heart rate, sleep and temperature against your own 30-day baseline.'], effort: ['Effort', 'effort', '45', '0–100', 'How much load your heart has carried today. It gets harder to climb the higher you go, and each workout has its own Effort too.'], rest: ['Rest', 'rest', '90', '0–100%', 'The sleep you got as a share of the sleep you needed last night.'] };
+var oc = O[s.orb];
+var ST = s.strap === 'idle' ? ['Not connected yet', 'Tap Find my strap to start.'] : s.strap === 'busy' ? ['Looking for your strap…', 'Keep it within a metre of your phone.'] : ['WHOOP 4.0 connected', 'Battery 82% · history syncing in the background'];
+var ip = sw(s.imp);
+var maxHr = s.hr === 0 ? 220 - s.age : 186;
+return {
+shell: 'position: relative; width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; color: #f5efe4; font-family: Inter, sans-serif; background: radial-gradient(120% 45% at 50% 0%, ' + (k === 'sage' ? 'rgba(198,247,92,0.14)' : 'rgba(89,236,170,0.12)') + ', rgba(19,31,38,0) 70%), #131f26;',
+dots: K.map(function (x, i) { return { st: 'height: 6px; border-radius: 3px; transition: all .3s; width: ' + (i === s.step ? 22 : 6) + 'px; background: ' + (i <= s.step ? '#59ecaa' : 'rgba(190,220,235,0.25)') + ';' }; }),
+progressAria: 'Step ' + (s.step + 3) + ' of 10',
+canSkip: s.step >= 4 && s.step < 7, skip: function () { self.setState({ step: 7 }); },
+eyebrow: H[0], title: H[1], sub: H[2], titleSt: 'margin: -8px 0 0; font: 700 ' + '34px/40px' + ' var(--font-display);',
+is: { about: k === 'about', numbers: k === 'numbers', synth: k === 'synth', terms: k === 'terms', strap: k === 'strap', you: k === 'you', sage: k === 'sage', cal: k === 'cal' },
+aims: [['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3 2', 'Know your normal', 'Every score is compared with your own last 30–60 days, not a population average.'], ['M4 12h12M12 6l6 6-6 6', 'Turn numbers into a plan', 'One read of the day, Synthesis, and one plan, Today\'s plan.'], ['M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z', 'Own your data', 'Everything stays on this phone. Back it up or export it whenever you like.']].map(function (a) { return { icon: a[0], t: a[1], d: a[2] }; }),
+orbs: Object.keys(O).map(function (x) { var on = s.orb === x; return { name: O[x][0], liquid: O[x][1], value: O[x][2], display: O[x][2], on: on, pick: function () { self.setState({ orb: x }); }, btn: 'flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 0; border-radius: 22px; cursor: pointer; color: #f5efe4; border: 1px solid ' + (on ? 'rgba(89,236,170,0.6)' : 'rgba(190,220,235,0.12)') + '; background: ' + (on ? 'rgba(89,236,170,0.08)' : 'transparent') + ';' }; }),
+orb: { name: oc[0], scale: oc[3], line: oc[4] },
+stages: [['Depleted', '0–19', '#f7777d'], ['Low', '20–39', '#f39a5b'], ['Steady', '40–59', '#e8c46a'], ['Strong', '60–79', '#59ecaa'], ['Peak', '80–100', '#6ba1fd']].map(function (g) { return { n: g[0], r: g[1], st: 'font: 600 12px/16px Inter, sans-serif; color: ' + g[2] + ';' }; }),
+points: [['Independent', 'Not affiliated with, endorsed by or connected to WHOOP.'], ['May breach WHOOP\'s terms', 'Using Noop Ridge with your strap may breach WHOOP\'s Terms of Service.'], ['Experimental', 'Use at your own risk. Features can change or break.'], ['Not a medical device', 'Nothing here is medical advice or a diagnosis.'], ['No warranty', 'Provided as is; liability is limited.']].map(function (p) { return { t: p[0], d: p[1] }; }),
+checks: ['I am not a WHOOP employee or affiliate.', 'I own the device I will connect.', 'I understand Noop Ridge is unofficial, provided as is, and not medical.', 'I will not hold Noop Ridge\'s contributors liable.'].map(function (t, i) { var on = s.checks[i]; return { t: t, on: on, flip: function () { var c = s.checks.slice(); c[i] = !on; self.setState({ checks: c }); }, box: 'width: 22px; height: 22px; flex-shrink: 0; margin-top: 1px; border-radius: 7px; display: grid; place-items: center; border: 1.5px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.4)') + '; background: ' + (on ? '#59ecaa' : 'transparent') + ';' }; }),
+strap: { label: ST[0], note: ST[1], busy: s.strap === 'busy', idle: s.strap === 'idle' }, strapDisplay: s.strap === 'done' ? '82%' : ' ',
+pair: function () { self.setState({ strap: 'busy' }); setTimeout(function () { self.setState({ strap: 'done' }); }, 1800); },
+imp: s.imp, impTrack: ip[0], impKnob: ip[1], flipImp: function () { self.setState({ imp: !s.imp }); },
+age: String(s.age), ageDown: function () { self.setState({ age: Math.max(16, s.age - 1) }); }, ageUp: function () { self.setState({ age: Math.min(90, s.age + 1) }); },
+sexes: ['Male', 'Female'].map(function (l, i) { return { label: l, on: s.sex === i, st: seg(s.sex === i), pick: function () { self.setState({ sex: i }); } }; }),
+hrSrc: ['Estimate from age', 'I know mine'].map(function (l, i) { return { label: l, on: s.hr === i, st: seg(s.hr === i), pick: function () { self.setState({ hr: i }); } }; }),
+maxHr: String(maxHr),
+sage: [['M4 6h16M4 12h10M4 18h7', 'What Sage does', 'Answers questions about your days and writes a short morning brief, using your own scores, sleep and workouts.'], ['M15 7a4 4 0 1 1-3.9 4.9L4 19v-3l1-1h2v-2h2l1.1-1.1', 'Bring your own key', 'Connect Claude, Gemini or OpenAI with your own API key, or run a local model on your network. No Noop account.'], ['M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z', 'What leaves the phone', 'Only your question and a summary of the last 14 days (scores, sleep, workouts), and only if you allow it. Raw heart-rate data never leaves.']].map(function (a) { return { icon: a[0], t: a[1], d: a[2] }; }),
+unlocks: [['Night 1', 'Charge, Effort and Rest', 'Shown from the first night, tagged Calibrating.'], ['Night 14', 'Your normal ranges', 'Bands settle and the Calibrating tags clear.'], ['Day 28', 'Training load', '7-day vs 28-day load appears on Trends.'], ['Few weeks', 'VO₂ max and ages', 'After some GPS walks or runs, Baseline fills in.']].map(function (u) { return { when: u[0], t: u[1], d: u[2] }; }),
+back: function () { if (s.step > 0) self.setState({ step: s.step - 1 }); else { try { if (history.length > 1) history.back(); else window.location.href = 'Intro.dc.html'; } catch (e) {} } },
+isLast: k === 'cal', notLast: k !== 'cal', cta: H[3], blocked: blocked,
+nextSt: 'position: absolute; z-index: 5; left: 55px; bottom: 72px; width: 280px; height: 52px; box-sizing: border-box; margin: 0; padding: 0; display: inline-flex; justify-content: center; align-items: center; color: var(--ink-on-liquid);' + (blocked ? ' opacity: 0.45; cursor: not-allowed;' : ''),
+next: function () { if (!blocked) self.setState({ step: s.step + 1 }); }
+};
+}
+}
+</script>
+</body>
+</html>

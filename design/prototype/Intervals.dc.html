@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Interval timer — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-plain{text-decoration:none;color:inherit}
+.np-step{width:40px;height:40px;border-radius:50%;border:1px solid rgba(190,220,235,.2);background:rgba(170,205,220,.06);color:#f5efe4;display:grid;place-items:center;cursor:pointer;padding:0;font:600 18px/1 Inter,sans-serif}
+</style>
+</helmet>
+<div style="{{ root }}">
+<header style="display: flex; align-items: center; gap: 8px; padding: 20px 16px 0">
+<a href="Breathe.dc.html" aria-label="Back to Breathe" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">Interval timer</h1><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Silent haptic HIIT · the strap buzzes the transitions</span></div>
+<a href="LiveSession.dc.html" class="nr-chip nr-chip-beta np-plain" style="height: 34px">Guardian</a>
+</header>
+
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px">
+<div style="display: flex; gap: 8px"><span style="{{ phaseChip }}">{{ phase }}</span><span class="nr-chip" style="text-transform: none; letter-spacing: 0">Round {{ round }} / {{ rounds }}</span></div>
+<span aria-live="polite" style="font: 700 104px/104px var(--font-display); font-variant-numeric: lining-nums tabular-nums; text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4)">{{ clock }}</span>
+<div style="width: 260px; height: 6px; border-radius: 3px; background: rgba(190, 220, 235, 0.14)"><div style="{{ bar }}"></div></div>
+<span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">{{ totalLine }}</span>
+</div>
+
+<div style="padding: 0 16px 28px; display: flex; flex-direction: column; gap: 12px">
+<div class="nr-glass" style="border-radius: var(--radius-lg); padding: 4px 16px">
+<sc-for list="{{ steppers }}" as="p" hint-placeholder-count="3">
+<div style="{{ p.row }}"><span style="flex-grow: 1; font: 500 15px/20px var(--font-sans)">{{ p.label }}</span><button type="button" class="np-step" aria-label="{{ p.decAria }}" onClick="{{ p.dec }}" disabled="{{ locked }}">−</button><span style="min-width: 64px; text-align: center; font: 700 18px/22px var(--font-display)">{{ p.value }}</span><button type="button" class="np-step" aria-label="{{ p.incAria }}" onClick="{{ p.inc }}" disabled="{{ locked }}">+</button></div>
+</sc-for>
+</div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle); text-align: center">{{ hint }}</span>
+<div style="display: flex; gap: 10px"><button type="button" onClick="{{ reset }}" class="nr-btn nr-btn-secondary" style="flex: 1">Reset</button><button type="button" onClick="{{ toggle }}" class="nr-btn nr-btn-primary" style="flex: 1.6">{{ goLabel }}</button></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { work: 40, rest: 20, rounds: 8, run: false, el: 0 }; }
+componentWillUnmount() { if (this.t) clearInterval(this.t); }
+renderVals() {
+var self = this, s = this.state;
+var cyc = s.work + s.rest, total = cyc * s.rounds, el = Math.min(s.el, total);
+var r = Math.min(s.rounds, Math.floor(el / cyc) + 1), within = el - (r - 1) * cyc, isWork = within < s.work;
+var left = el >= total ? 0 : isWork ? s.work - within : cyc - within;
+var fin = el >= total;
+var mm = Math.floor(left / 60), ss = left % 60;
+var col = fin ? '#59ecaa' : isWork ? '#f39a5b' : '#58d7c9';
+var st = function (k, step, lo, hi, label, unit) { return { label: label, value: s[k] + unit, dec: function () { var o = {}; o[k] = Math.max(lo, s[k] - step); self.setState(o); }, inc: function () { var o = {}; o[k] = Math.min(hi, s[k] + step); self.setState(o); }, decAria: 'Decrease ' + label.toLowerCase(), incAria: 'Increase ' + label.toLowerCase() }; };
+var steppers = [st('work', 5, 5, 300, 'Work', 's'), st('rest', 5, 5, 300, 'Rest', 's'), st('rounds', 1, 1, 30, 'Rounds', '')].map(function (p, i) { p.row = 'display: flex; align-items: center; gap: 10px; min-height: 58px;' + (i ? ' border-top: 1px solid rgba(190,220,235,0.14);' : ''); return p; });
+var tick = function () { self.setState({ el: self.state.el + 1 }); if (self.state.el >= (self.state.work + self.state.rest) * self.state.rounds) { clearInterval(self.t); self.t = null; self.setState({ run: false }); } };
+return {
+root: 'position: relative; width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; color: #f5efe4; font-family: Inter, sans-serif; background: radial-gradient(120% 60% at 50% 35%, ' + col + '33, #131f26 70%);',
+phase: fin ? 'DONE' : isWork ? 'WORK' : 'REST', phaseChip: 'display: inline-flex; align-items: center; height: 30px; padding: 0 14px; border-radius: 999px; font: 700 12px/16px Inter, sans-serif; letter-spacing: 0.16em; color: #0c161c; background: ' + col + '; box-shadow: 0 0 16px ' + col + '88;',
+round: String(r), rounds: String(s.rounds), clock: mm + ':' + (ss < 10 ? '0' : '') + ss,
+bar: 'height: 6px; border-radius: 3px; background: ' + col + '; width: ' + Math.round(el / total * 100) + '%;',
+totalLine: Math.floor(total / 60) + ' min ' + (total % 60) + ' s total · ' + Math.floor((total - el) / 60) + ':' + ((total - el) % 60 < 10 ? '0' : '') + ((total - el) % 60) + ' left',
+steppers: steppers, locked: s.run, hint: s.run ? 'Pause to change work, rest or rounds.' : 'Bond your strap on the Live screen to feel the transitions hands-free.',
+goLabel: s.run ? 'Pause' : el > 0 && !fin ? 'Resume' : 'Start',
+toggle: function () { if (s.run) { clearInterval(self.t); self.t = null; self.setState({ run: false }); } else { if (fin) self.setState({ el: 0 }); self.setState({ run: true }); self.t = setInterval(tick, 1000); } },
+reset: function () { if (self.t) clearInterval(self.t); self.t = null; self.setState({ run: false, el: 0 }); }
+};
+}
+}
+</script>
+</body>
+</html>

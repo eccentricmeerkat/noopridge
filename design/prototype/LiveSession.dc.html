@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Live session — Noop Ridge</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#0c161c;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}
+.np-plain{text-decoration:none;color:inherit}
+@keyframes npGuard{0%,100%{transform:scale(.94);opacity:.85}50%{transform:scale(1.04);opacity:1}}
+.np-breath{animation:npGuard 5.2s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.np-breath{animation:none}}
+.np-fade{transition:opacity 1.2s}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: radial-gradient(90% 55% at 50% 45%, rgba(20, 40, 50, 1), #0c161c 75%); color: var(--ink); font-family: var(--font-sans); display: flex; flex-direction: column">
+
+<header style="display: flex; align-items: center; gap: 10px; padding: 20px 16px 0">
+<a href="Intervals.dc.html" aria-label="Close" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></a>
+<span style="flex-grow: 1; font: 700 22px/26px var(--font-display)">Live session</span>
+<span class="nr-chip nr-chip-beta">Beta</span>
+</header>
+
+<sc-if value="{{ running }}" hint-placeholder-val="{{ true }}">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px">
+<p class="np-fade" style="{{ chargeStyle }}">Charge is 8 today. Your band is low and gentle: 98–118 bpm.</p>
+<button type="button" onClick="{{ reveal }}" aria-label="{{ ringAria }}" style="position: relative; width: 260px; height: 260px; border: 0; padding: 0; background: none; cursor: pointer; border-radius: 50%">
+<svg width="260" height="260" viewBox="0 0 260 260" aria-hidden="true" style="position: absolute; inset: 0; transform: rotate(-90deg)"><circle cx="130" cy="130" r="124" fill="none" stroke="rgba(190,220,235,0.12)" stroke-width="4"></circle><circle cx="130" cy="130" r="124" fill="none" stroke="#59ecaa" stroke-width="4" stroke-linecap="round" stroke-dasharray="{{ arc }}" style="filter: drop-shadow(0 0 4px rgba(89,236,170,0.7))"></circle></svg>
+<span class="{{ ringClass }}" style="{{ ring }}"></span>
+<sc-if value="{{ showBpm }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font: 700 64px/64px var(--font-display)">{{ bpm }}</span><span style="font: 600 12px/16px var(--font-sans); letter-spacing: 0.2em; color: var(--ink-muted)">BPM</span></span></sc-if>
+</button>
+<span aria-live="polite" style="font: 500 16px/22px var(--font-sans); color: var(--ink-muted); text-align: center; max-width: 280px">{{ line }}</span>
+<span style="font: 500 12px/16px var(--font-sans); color: var(--ink-subtle)">{{ minutes }} of 60 min in band · press the ring to see your heart rate</span>
+</div>
+<div style="padding: 0 16px 28px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap"><span style="font: 500 11px/28px var(--font-sans); color: var(--ink-subtle)">Preview:</span><sc-for list="{{ sims }}" as="m" hint-placeholder-count="4"><button type="button" onClick="{{ m.pick }}" aria-pressed="{{ m.on }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+<button type="button" onClick="{{ end }}" class="nr-btn nr-btn-secondary" style="width: 100%">End session</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ summary }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: 0 20px 28px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center"><span class="nr-eyebrow">Session summary</span><h1 style="margin: 0; font: 700 34px/38px var(--font-display)">Guarded for 32 min</h1></div>
+<div style="display: flex; height: 14px; gap: 3px; border-radius: 7px; overflow: hidden"><span style="width: 72%; background: #58d7c9"></span><span style="width: 19%; background: rgba(88, 215, 201, 0.4)"></span><span style="flex-grow: 1; background: #f39a5b"></span></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<div class="nr-glass" style="border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">In band</span><span style="font: 700 22px/26px var(--font-display); color: #58d7c9">23m</span></div>
+<div class="nr-glass" style="border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">Below</span><span style="font: 700 22px/26px var(--font-display)">6m</span></div>
+<div class="nr-glass" style="border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">Above</span><span style="font: 700 22px/26px var(--font-display); color: #f39a5b">3m</span></div>
+</div>
+<a href="Intervals.dc.html" class="nr-btn nr-btn-primary np-plain" style="display: inline-flex; justify-content: center; align-items: center; color: var(--ink-on-liquid)">Done</a>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { mode: 'in', show: false, charge: true, done: false, min: 23 }; }
+renderVals() {
+var self = this, s = this.state;
+if (!this.started) { this.started = true; setTimeout(function () { self.setState({ charge: false }); }, 6000); }
+var M = { in: ['Holding steady. Keep this easy pace.', 'rgba(88,215,201,0.85)', 'rgba(88,215,201,0.5)', 108, true], below: ['A little under your band. Lift the pace gently.', 'rgba(88,215,201,0.3)', 'rgba(88,215,201,0.15)', 92, false], above: ['Above your band. Ease off for a minute.', 'rgba(243,154,91,0.9)', 'rgba(243,154,91,0.55)', 131, false], stale: ['No signal from the strap. Coaching is paused.', 'rgba(157,173,182,0.35)', 'rgba(157,173,182,0)', 0, false] };
+var m = M[s.mode];
+var circ = 2 * Math.PI * 124, part = Math.min(1, s.min / 60) * circ;
+return {
+running: !s.done, summary: s.done,
+chargeStyle: 'margin: 0; font: 500 14px/20px Inter, sans-serif; color: #e8b84f; text-align: center; max-width: 280px; opacity: ' + (s.charge ? 1 : 0) + ';',
+ring: 'position: absolute; inset: 28px; border-radius: 50%; background: radial-gradient(circle at 38% 32%, rgba(255,255,255,0.35), ' + m[1] + ' 40%, rgba(12,22,28,0.6) 80%); box-shadow: 0 0 60px ' + m[2] + ', inset 0 -20px 40px rgba(0,0,0,0.35);',
+ringClass: m[4] ? 'np-breath' : '', arc: part.toFixed(1) + ' ' + circ.toFixed(1),
+ringAria: 'Guardian ring, ' + s.mode + ' band. Press to show heart rate.',
+showBpm: s.show && s.mode !== 'stale', bpm: String(m[3]), line: m[0], minutes: String(s.min),
+reveal: function () { self.setState({ show: true }); setTimeout(function () { self.setState({ show: false }); }, 4000); },
+sims: [['in', 'In band'], ['below', 'Below'], ['above', 'Above'], ['stale', 'Stale']].map(function (x) { var on = s.mode === x[0]; return { label: x[1], on: on, pick: function () { self.setState({ mode: x[0] }); }, style: 'height: 28px; padding: 0 10px; border-radius: 999px; cursor: pointer; font: 600 11px/14px Inter, sans-serif; border: 1px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.2)') + '; background: transparent; color: ' + (on ? '#59ecaa' : '#9dadb6') + ';' }; }),
+end: function () { self.setState({ done: true }); }
+};
+}
+}
+</script>
+</body>
+</html>

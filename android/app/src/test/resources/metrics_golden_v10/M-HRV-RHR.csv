@@ -1,0 +1,7 @@
+case,value
+rmssd_steady_alternating,50.000000
+rmssd_varied,29.393877
+sdnn_varied,24.067405
+resting_hr_lowest_5min_bin,52
+resting_hr_20_sample_dip_wins_bin,35
+resting_hr_3_sample_dip_gated_out,52

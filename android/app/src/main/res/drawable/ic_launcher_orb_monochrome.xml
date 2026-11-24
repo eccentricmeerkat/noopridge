@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed-icon (Android 13+) silhouette of the orb icon: the glass ring with its liquid fill below a
+     wave, inside the 66dp safe zone. The launcher tints it; only the alpha matters. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <path
+        android:pathData="M54,54m-30,0a30,30 0,1 1,60 0a30,30 0,1 1,-60 0"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="3"
+        android:fillColor="#00000000"/>
+    <path
+        android:pathData="M25.2,59 C33,53 40,53 47,57 C54,61 61,62 68,57 C73,54 78,54 82.6,57.5 A28.5,28.5 0 0 1 25.2,59 Z"
+        android:fillColor="#FFFFFFFF"/>
+</vector>

@@ -1,0 +1,5 @@
+case,maxHr,source
+tanaka_age_40,180.000000,tanaka
+tanaka_age_25,190.500000,tanaka
+no_age_default_220_minus_30,190,default
+observed_beats_tanaka,199.000000,observed

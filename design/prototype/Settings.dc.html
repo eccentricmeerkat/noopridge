@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+.np-step{width:40px;height:40px;border-radius:50%;border:1px solid rgba(190,220,235,.2);background:rgba(170,205,220,.06);color:#f5efe4;display:grid;place-items:center;cursor:pointer;padding:0}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; display: flex; flex-direction: column; gap: 18px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex-grow: 1; margin: 0; font: 700 30px/34px var(--font-display)">Settings</h1>
+</header>
+
+<section aria-label="Profile" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 14px; padding-bottom: 12px">
+<span style="width: 56px; height: 56px; border-radius: 50%; background: var(--glass-fill-strong); border: 1px solid var(--glass-stroke); display: grid; place-items: center; font: 700 24px/28px var(--font-display)">P</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font: 700 22px/26px var(--font-display)">Alex</span><span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">Used to personalise baselines</span></span>
+</div>
+<sc-for list="{{ steppers }}" as="p" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-top: 1px solid var(--glass-stroke)">
+<span style="flex-grow: 1; font: 500 15px/20px var(--font-sans)">{{ p.label }}</span>
+<button type="button" class="np-step" aria-label="{{ p.decAria }}" onClick="{{ p.dec }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<span style="min-width: 64px; text-align: center; font: 700 18px/22px var(--font-display); font-variant-numeric: lining-nums">{{ p.value }}</span>
+<button type="button" class="np-step" aria-label="{{ p.incAria }}" onClick="{{ p.inc }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</sc-for>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-top: 1px solid var(--glass-stroke)">
+<span style="flex-grow: 1; font: 500 15px/20px var(--font-sans)">Units</span>
+<div role="group" aria-label="Units" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)">
+<sc-for list="{{ units }}" as="u" hint-placeholder-count="2"><button type="button" onClick="{{ u.pick }}" aria-pressed="{{ u.on }}" style="{{ u.style }}">{{ u.label }}</button></sc-for>
+</div>
+</div>
+</section>
+
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+<section style="display: flex; flex-direction: column; gap: 8px">
+<div class="nr-eyebrow" style="padding: 0 4px">{{ g.title }}</div>
+<div class="nr-glass" style="border-radius: var(--radius-lg); padding: 2px 18px">
+<sc-for list="{{ g.items }}" as="t" hint-placeholder-count="3">
+<div style="{{ t.row }}"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 500 15px/20px var(--font-sans)">{{ t.label }}</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">{{ t.sub }}</span></span><button type="button" role="switch" aria-checked="{{ t.on }}" aria-label="{{ t.label }}" onClick="{{ t.flip }}" style="{{ t.track }}"><span style="{{ t.knob }}"></span></button></div>
+</sc-for>
+</div>
+</section>
+</sc-for>
+
+<section aria-label="Baseline" style="display: flex; flex-direction: column; gap: 8px">
+<div class="nr-eyebrow" style="padding: 0 4px">Baseline</div>
+<div class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<span style="font: 400 14px/20px var(--font-sans); color: var(--ink-muted)">{{ baseLine }}</span>
+<sc-if value="{{ confirmRecal }}" hint-placeholder-val="{{ false }}">
+<div role="alertdialog" aria-label="Recalibrate baseline?" style="display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: var(--radius-md); border: 1px solid rgba(232, 196, 106, 0.45); background: rgba(232, 196, 106, 0.08)">
+<span style="font: 600 15px/20px var(--font-sans)">Recalibrate baseline?</span>
+<span style="font: 400 13px/19px var(--font-sans); color: var(--ink-muted)">Scores will show Calibrating for about 14 nights while NOOP relearns your normal. Your history is kept.</span>
+<div style="display: flex; gap: 8px"><button type="button" onClick="{{ cancelRecal }}" class="nr-btn nr-btn-secondary" style="flex: 1">Cancel</button><button type="button" onClick="{{ doRecal }}" class="nr-btn nr-btn-primary" style="flex: 1">Recalibrate</button></div>
+</div>
+</sc-if>
+<sc-if value="{{ showRecal }}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{ askRecal }}" class="nr-btn nr-btn-secondary" style="width: 100%">Recalibrate baseline</button>
+</sc-if>
+</div>
+</section>
+
+<section aria-label="About" style="display: flex; flex-direction: column; gap: 8px">
+<div class="nr-eyebrow" style="padding: 0 4px">About</div>
+<div class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font: 500 15px/20px var(--font-sans)">NOOP</span><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Version 10.0.2</span></div>
+<span aria-live="polite" style="{{ updStyle }}">{{ updLine }}</span>
+<button type="button" onClick="{{ checkUpd }}" class="nr-btn nr-btn-secondary" style="width: 100%">{{ updBtn }}</button>
+</div>
+</section>
+
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { age: 40, height: 181, weight: 74.2, metric: true, t: { brief: true, low: true, bed: true, wake: false, saver: true, haptic: true, zones: false, hc: true, crash: false }, recal: false, recalDone: false, upd: 'idle' };
+}
+renderVals() {
+var self = this, s = this.state;
+var setT = function (k, v) { var t = Object.assign({}, s.t); t[k] = v; self.setState({ t: t }); };
+var sw = function (on) { return { track: 'position: relative; width: 52px; height: 32px; flex-shrink: 0; border-radius: 16px; border: 0; padding: 0; cursor: pointer; background: ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.22)') + ';', knob: 'position: absolute; top: 4px; left: ' + (on ? 24 : 4) + 'px; width: 24px; height: 24px; border-radius: 50%; background: ' + (on ? '#0c161c' : '#f5efe4') + ';' }; };
+var mk = function (arr) { return arr.map(function (x, i) { var on = !!s.t[x[0]], st = sw(on); return { label: x[1], sub: x[2], on: on, track: st.track, knob: st.knob, flip: function () { setT(x[0], !on); }, row: 'display: flex; align-items: center; gap: 12px; min-height: 64px;' + (i ? ' border-top: 1px solid rgba(190,220,235,0.14);' : '') }; }); };
+var groups = [
+{ title: 'Notifications', items: mk([['brief', 'Morning summary', 'Charge and plan at wake'], ['low', 'Low Charge alert', 'When Charge is under 34'], ['bed', 'Bedtime reminder', '30 min before lights out'], ['wake', 'Smart wake', 'Buzz in your lightest sleep']]) },
+{ title: 'Strap', items: mk([['saver', 'Power saving', 'Lower sample rate when idle'], ['haptic', 'Haptic coaching', 'Buzz on HR-zone changes'], ['zones', 'HR-zone coaching', 'Voice cues during workouts']]) },
+{ title: 'Data & privacy', items: mk([['hc', 'Health Connect sync', 'Share workouts and sleep'], ['crash', 'Send crash reports', 'Anonymous, no health data']]) }
+];
+var w = s.metric ? s.weight.toFixed(1) + ' kg' : (s.weight * 2.2046).toFixed(1) + ' lb';
+var h = s.metric ? s.height + ' cm' : Math.floor(s.height / 30.48) + '′ ' + Math.round((s.height / 2.54) % 12) + '″';
+var steppers = [
+{ label: 'Age', value: String(s.age), dec: function () { self.setState({ age: Math.max(13, s.age - 1) }); }, inc: function () { self.setState({ age: Math.min(99, s.age + 1) }); } },
+{ label: 'Height', value: h, dec: function () { self.setState({ height: s.height - 1 }); }, inc: function () { self.setState({ height: s.height + 1 }); } },
+{ label: 'Weight', value: w, dec: function () { self.setState({ weight: Math.round((s.weight - 0.1) * 10) / 10 }); }, inc: function () { self.setState({ weight: Math.round((s.weight + 0.1) * 10) / 10 }); } }
+].map(function (p) { p.decAria = 'Decrease ' + p.label.toLowerCase(); p.incAria = 'Increase ' + p.label.toLowerCase(); return p; });
+var pill = function (on) { return 'border: 0; border-radius: 999px; height: 32px; padding: 0 14px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; ' + (on ? 'background: #59ecaa; color: #0c161c;' : 'background: transparent; color: #b6c3ca;'); };
+var units = [[true, 'Metric'], [false, 'Imperial']].map(function (u) { return { label: u[1], on: s.metric === u[0], style: pill(s.metric === u[0]), pick: function () { self.setState({ metric: u[0] }); } }; });
+var U = { idle: ['Last checked yesterday', 'Check for updates', '#b6c3ca'], busy: ['Checking…', 'Checking…', '#b6c3ca'], done: ["You're on the latest version.", 'Check again', '#59ecaa'] }[s.upd];
+return {
+steppers: steppers, units: units, groups: groups,
+baseLine: s.recalDone ? 'Calibrating · night 1 of 14. Scores may swing more than usual.' : 'Learned from 30 nights. Recalibrate after a big change like illness, travel or a new training block.',
+confirmRecal: s.recal, showRecal: !s.recal,
+askRecal: function () { self.setState({ recal: true }); }, cancelRecal: function () { self.setState({ recal: false }); }, doRecal: function () { self.setState({ recal: false, recalDone: true }); },
+updLine: U[0], updBtn: U[1], updStyle: 'font: 400 13px/18px Inter, sans-serif; color: ' + U[2] + ';',
+checkUpd: function () { if (s.upd === 'busy') return; self.setState({ upd: 'busy' }); setTimeout(function () { self.setState({ upd: 'done' }); }, 1200); }
+};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+case,coefficient,sampleDays,confidence,manual,estimateFor1100
+auto_fit_4_days,7.500000,4,0.631746,false,8250
+too_few_days,null,null,null,null,null
+manual_override,9.500000,4,1.000000,true,10450

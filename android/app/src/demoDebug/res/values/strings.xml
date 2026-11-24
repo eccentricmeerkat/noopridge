@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The demo debug build (com.noop.app.ridge.demo.debug), the one testers install without a strap. The variant
+         source set wins over src/debug, whose "Noop Ridge Debug" would otherwise label it. -->
+    <string name="app_name">Noop Ridge Demo</string>
+</resources>

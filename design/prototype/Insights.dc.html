@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Insights — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+.np-hs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.np-hs::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%; background: radial-gradient(120% 40% at 50% 0%, rgba(107, 161, 253, 0.16), rgba(19, 31, 38, 0) 70%)">
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">{{ title }}</h1><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">{{ sub }}</span></div>
+</header>
+
+<div role="tablist" aria-label="Mode" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)">
+<sc-for list="{{ modes }}" as="m" hint-placeholder-count="3"><button type="button" role="tab" onClick="{{ m.pick }}" aria-selected="{{ m.on }}" style="{{ m.style }}">{{ m.label }}</button></sc-for>
+</div>
+
+<sc-if value="{{ isExplore }}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{ openDeep }}" class="nr-glass" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-lg); cursor: pointer; color: var(--ink); text-align: left; border-color: rgba(255, 129, 152, 0.35)">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--data-heart)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2-5 4 10 2-5h6"></path></svg>
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 600 15px/20px var(--font-sans)">Deep Timeline</span><span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">Every second of your day, zoomable.</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-subtle)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+</button>
+<button type="button" onClick="{{ openPicker }}" aria-haspopup="dialog" style="display: flex; align-items: center; gap: 10px; min-height: 60px; padding: 0 16px; border-radius: var(--radius-md); border: 1px solid var(--glass-stroke); background: var(--glass-fill-strong); color: var(--ink); cursor: pointer; text-align: left">
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="color: var(--brand)">{{ cur.cat }}</span><span style="font: 600 16px/20px var(--font-sans)">{{ cur.name }}</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"></path></svg>
+</button>
+</sc-if>
+
+<sc-if value="{{ isCompare }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px"><span class="nr-eyebrow">Overlay 2–4 signals</span>
+<div style="display: flex; gap: 6px; flex-wrap: wrap">
+<sc-for list="{{ selChips }}" as="c" hint-placeholder-count="3"><button type="button" onClick="{{ c.remove }}" aria-label="{{ c.aria }}" style="{{ c.style }}"><span style="{{ c.dot }}"></span>{{ c.name }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></sc-for>
+<button type="button" onClick="{{ openAdd }}" disabled="{{ full }}" style="{{ addStyle }}">{{ addLabel }}</button>
+</div></div>
+</sc-if>
+
+<sc-if value="{{ notIntel }}" hint-placeholder-val="{{ true }}"><div class="np-hs" role="group" aria-label="Range"><sc-for list="{{ ranges }}" as="r" hint-placeholder-count="6"><button type="button" onClick="{{ r.pick }}" aria-pressed="{{ r.on }}" style="{{ r.style }}">{{ r.label }}</button></sc-for></div></sc-if>
+
+<sc-if value="{{ isExplore }}" hint-placeholder-val="{{ true }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px"><div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font: 700 22px/26px var(--font-display)">{{ cur.name }}</h2><span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">{{ cur.desc }}</span><sc-if value="{{ cur.hasBand }}" hint-placeholder-val="{{ true }}"><span style="{{ cur.normalStyle }}">{{ cur.normal }}</span></sc-if></div><span style="{{ cur.bigStyle }}">{{ cur.latest }}</span></div>
+<div style="position: relative"><svg width="100%" height="150" viewBox="0 0 300 150" preserveAspectRatio="none" role="img" aria-label="{{ cur.aria }}" style="display: block; overflow: visible"><sc-if value="{{ cur.hasBand }}" hint-placeholder-val="{{ true }}"><rect x="0" y="{{ cur.bandY }}" width="300" height="{{ cur.bandH }}" fill="#f5efe4" fill-opacity="0.07"></rect></sc-if><line x1="0" x2="300" y1="140" y2="140" stroke="rgba(190,220,235,0.22)" vector-effect="non-scaling-stroke"></line><path d="{{ cur.area }}" fill="{{ cur.color }}" fill-opacity="0.14"></path><path d="{{ cur.line }}" fill="none" stroke="{{ cur.color }}" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path></svg><div style="{{ cur.sc.pad }}" onPointerMove="{{ cur.sc.move }}" onPointerDown="{{ cur.sc.down }}" onPointerLeave="{{ cur.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ cur.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ cur.sc.line }}"></span><sc-if value="{{ cur.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ cur.sc.dot }}"></span></sc-if><span style="{{ cur.sc.tip }}"><b style="{{ cur.sc.vSt }}">{{ cur.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ cur.sc.d }}</span></span></sc-if></div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding-top: 12px; border-top: 1px solid var(--glass-stroke)">
+<sc-for list="{{ cur.stats }}" as="st" hint-placeholder-count="4"><span style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">{{ st.k }}</span><span style="font: 700 17px/20px var(--font-display); font-variant-numeric: lining-nums">{{ st.v }}</span></span></sc-for>
+</div>
+</section>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; justify-content: space-between; align-items: center">
+<span style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">Over the visible window</span><span style="font: 500 14px/19px var(--font-sans)">Δ vs previous {{ rangeWord }}</span></span>
+<span style="{{ cur.dStyle }}">{{ cur.delta }}</span>
+</section>
+<sc-if value="{{ cur.hasBand }}" hint-placeholder-val="{{ true }}"><span style="margin-top: -8px; padding: 0 4px; font: 400 12px/16px var(--font-sans); color: var(--ink-subtle)">{{ cur.bandText }}</span></sc-if>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px">
+<div class="nr-eyebrow">What it means</div>
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">{{ cur.about }}</p>
+</section>
+<sc-if value="{{ cur.isStress }}" hint-placeholder-val="{{ false }}">
+<section aria-label="Stress today" class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span class="nr-eyebrow">Today so far</span><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">since 06:02 wake</span></div>
+<div style="display: flex; height: 10px; gap: 3px"><span style="width: 81%; border-radius: 5px 0 0 5px; background: #59ecaa"></span><span style="width: 15%; background: #e8c46a"></span><span style="flex-grow: 1; border-radius: 0 5px 5px 0; background: #f39a5b"></span></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; font: 500 12px/16px var(--font-sans); color: var(--ink-muted)"><span>Settled<br><b style="font: 700 16px/20px var(--font-display); color: var(--ink)">9h 40m</b></span><span>Raised<br><b style="font: 700 16px/20px var(--font-display); color: var(--ink)">1h 50m</b></span><span>High<br><b style="font: 700 16px/20px var(--font-display); color: var(--ink)">25m</b></span></div>
+<div style="display: flex; gap: 8px"><a href="Stress.dc.html" class="nr-btn nr-btn-secondary np-plain" style="flex: 1; display: inline-flex; justify-content: center; align-items: center">Stress page</a><a href="Breathe.dc.html" class="nr-btn nr-btn-secondary np-plain" style="flex: 1; display: inline-flex; justify-content: center; align-items: center">Breathe 3 min</a></div>
+</section>
+</sc-if>
+<sc-if value="{{ cur.unverified }}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 0 4px; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">Strap estimate (unverified). Not a medical device reading.</p></sc-if>
+</sc-if>
+
+<sc-if value="{{ isCompare }}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{ canCompare }}" hint-placeholder-val="{{ true }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end"><div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">The last {{ rangeWord }}</span><h2 style="margin: 0; font: 700 22px/26px var(--font-display)">Normalised overlay</h2></div><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">{{ nSeries }} series</span></div>
+<div style="position: relative"><svg width="100%" height="150" viewBox="0 0 300 150" preserveAspectRatio="none" role="img" aria-label="Selected signals overlaid on a shared 0 to 1 scale" style="display: block"><line x1="0" x2="300" y1="140" y2="140" stroke="rgba(190,220,235,0.22)" vector-effect="non-scaling-stroke"></line><sc-for list="{{ overlay }}" as="o" hint-placeholder-count="3"><path d="{{ o.d }}" fill="none" stroke="{{ o.c }}" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path></sc-for></svg><div style="{{ cmpSc.pad }}" onPointerMove="{{ cmpSc.move }}" onPointerDown="{{ cmpSc.down }}" onPointerLeave="{{ cmpSc.leave }}" aria-hidden="true"></div><sc-if value="{{ cmpSc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ cmpSc.line }}"></span><sc-if value="{{ cmpSc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ cmpSc.dot }}"></span></sc-if><span style="{{ cmpSc.tip }}"><b style="{{ cmpSc.vSt }}">{{ cmpSc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ cmpSc.d }}</span></span></sc-if></div>
+</section>
+<sc-for list="{{ pairs }}" as="p" hint-placeholder-count="2">
+<section class="nr-glass" style="border-radius: var(--radius-md); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font: 600 15px/20px var(--font-sans)">{{ p.name }}</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">{{ p.note }}</span></span><span style="{{ p.rStyle }}">{{ p.r }}</span></section>
+</sc-for>
+</sc-if>
+<sc-if value="{{ cantCompare }}" hint-placeholder-val="{{ false }}"><div class="nr-glass" style="border-radius: var(--radius-lg); padding: 24px; text-align: center; font: 500 14px/20px var(--font-sans); color: var(--ink-muted)">Compare needs at least two metrics with history.</div></sc-if>
+</sc-if>
+
+<sc-if value="{{ isIntel }}" hint-placeholder-val="{{ false }}">
+<section aria-label="Tomorrow's Charge" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px; border-color: rgba(232, 184, 79, 0.35)">
+<div style="display: flex; justify-content: space-between; align-items: center"><div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">Evening forecast</span><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Tomorrow's Charge</h2></div><span class="nr-chip" style="text-transform: none; letter-spacing: 0">Estimate</span></div>
+<div style="display: flex; align-items: center; gap: 16px">
+<x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="charge" value="{{ intel.fc }}" size="110" aria-label="Forecast Charge" style="display: block; flex-shrink: 0"></x-import>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font: 500 15px/22px var(--font-sans)">You'll likely wake around <span style="font: 700 18px/22px var(--font-display); color: var(--charge)">{{ intel.fc }} ± 8</span> Charge if you sleep about {{ intel.sleepLabel }}.</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px"><span class="nr-eyebrow">If I sleep</span><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)"><sc-for list="{{ intel.sleeps }}" as="x" hint-placeholder-count="4"><button type="button" onClick="{{ x.pick }}" aria-pressed="{{ x.on }}" style="{{ x.style }}">{{ x.label }}</button></sc-for></div></div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">Estimate from today's effort, your typical sleep and your 14-night baseline.</span>
+</section>
+
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px">
+<span class="nr-eyebrow">How this works</span>
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">Charge weighs your heart-rate variability against your personal baseline, then adjusts for resting heart rate, sleep, breathing and temperature. Effort runs on a 0–100 scale and feeds tomorrow's forecast.</p>
+</section>
+
+<section aria-label="Charge model" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">Weights</span><h2 style="margin: 0; font: 700 22px/26px var(--font-display)">Charge model</h2></div>
+<sc-for list="{{ intel.weights }}" as="w" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font: 500 14px/18px var(--font-sans)"><span>{{ w.label }}</span><span style="font: 700 15px/18px var(--font-display)">{{ w.pct }}</span></div><div style="height: 8px; border-radius: 4px; background: rgba(190, 220, 235, 0.12)"><div style="{{ w.bar }}"></div></div></div>
+</sc-for>
+</section>
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 4px"><div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">Recent</span><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">By day</h2></div><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">{{ intel.nDays }} days</span></div>
+<div role="group" aria-label="Range" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)"><sc-for list="{{ intel.ranges }}" as="r" hint-placeholder-count="3"><button type="button" onClick="{{ r.pick }}" aria-pressed="{{ r.on }}" style="{{ r.style }}">{{ r.label }}</button></sc-for></div>
+<div class="nr-glass" style="border-radius: var(--radius-lg); padding: 2px 16px">
+<sc-for list="{{ intel.days }}" as="d" hint-placeholder-count="7">
+<div style="{{ d.row }}"><span style="width: 74px; flex-shrink: 0; font: 600 13px/18px var(--font-sans)">{{ d.date }}</span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font: 700 17px/20px var(--font-display); color: var(--charge)">{{ d.c }}</span><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">Charge</span></span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font: 700 17px/20px var(--font-display); color: var(--effort)">{{ d.e }}</span><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">Effort</span></span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font: 700 17px/20px var(--font-display); color: var(--brand)">{{ d.r }}</span><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">Rest</span></span></div>
+</sc-for>
+</div>
+</sc-if>
+
+</div>
+</div>
+</div>
+
+<sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end">
+<button type="button" aria-label="Close" onClick="{{ closePicker }}" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(6, 11, 15, 0.62); cursor: pointer"></button>
+<div class="np-scroll" style="position: relative; max-height: 80%; overflow-y: auto; border-radius: 28px 28px 0 0; background: var(--bg-400); border-top: 1px solid var(--glass-stroke); padding: 10px 20px 34px; display: flex; flex-direction: column; gap: 4px">
+<div style="width: 40px; height: 4px; border-radius: 2px; background: rgba(245, 239, 228, 0.25); margin: 0 auto 10px"></div>
+<sc-for list="{{ menu }}" as="g" hint-placeholder-count="5">
+<span class="nr-eyebrow" style="color: var(--brand); padding-top: 10px">{{ g.cat }}</span>
+<sc-for list="{{ g.items }}" as="i" hint-placeholder-count="2"><button type="button" onClick="{{ i.pick }}" style="{{ i.style }}">{{ i.name }}<span style="font: 500 12px/16px var(--font-sans); color: var(--ink-subtle)">{{ i.unit }}</span></button></sc-for>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ deepOpen }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-label="Deep Timeline" style="position: absolute; inset: 0; z-index: 50; background: var(--bg-000); display: flex; flex-direction: column; gap: 14px; padding: 20px 16px 28px">
+<header style="display: flex; align-items: center; gap: 8px"><button type="button" aria-label="Close Deep Timeline" onClick="{{ closeDeep }}" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; border: 0; background: none; color: var(--ink); cursor: pointer; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button><div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font: 700 26px/30px var(--font-display)">Deep Timeline</h2><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">My WHOOP · {{ deepDay }}</span></div></header>
+<div class="np-hs"><sc-for list="{{ deepMetrics }}" as="d" hint-placeholder-count="7"><button type="button" onClick="{{ d.pick }}" aria-pressed="{{ d.on }}" style="{{ d.style }}">{{ d.label }}</button></sc-for></div>
+<div style="display: flex; justify-content: space-between; align-items: center"><button type="button" onClick="{{ prevDeep }}" class="nr-btn nr-btn-ghost" style="padding: 0 10px">‹ Previous day</button><button type="button" onClick="{{ nextDeep }}" class="nr-btn nr-btn-ghost" style="padding: 0 10px">Next day ›</button></div>
+<div class="nr-glass" style="flex: 1; min-height: 0; border-radius: var(--radius-lg); padding: 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; font: 500 12px/16px var(--font-sans); color: var(--ink-muted)"><span>{{ resLabel }}</span><span>{{ zoomHint }}</span></div>
+<svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="none" role="img" aria-label="{{ deepAria }}" style="flex: 1; display: block; min-height: 220px"><path d="{{ deepLine }}" fill="none" stroke="{{ deepColor }}" stroke-width="1.2" vector-effect="non-scaling-stroke"></path></svg>
+<div style="display: flex; justify-content: space-between; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)"><span>{{ t0 }}</span><span>{{ t1 }}</span></div>
+</div>
+<div style="display: flex; gap: 8px"><button type="button" onClick="{{ zoomOut }}" class="nr-btn nr-btn-secondary" style="flex: 1" aria-label="Zoom out">Zoom out</button><button type="button" onClick="{{ zoomIn }}" class="nr-btn nr-btn-secondary" style="flex: 1" aria-label="Zoom in">Zoom in</button></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px"><sc-for list="{{ deepStats }}" as="st" hint-placeholder-count="3"><div style="padding: 10px; border-radius: 14px; background: var(--glass-fill-strong); border: 1px solid var(--glass-stroke); display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">{{ st.k }}</span><span style="font: 700 18px/22px var(--font-display)">{{ st.v }}</span></div></sc-for></div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); var hm = 'charge', hmode = 'explore'; try { var h = String(window.location.hash || ''); var a = h.match(/m=([a-z0-9]+)/); if (a) hm = a[1]; var b = h.match(/mode=(explore|compare|intel)/); if (b) hmode = b[1]; } catch (e) {} this.state = { mode: hmode, metric: hm, range: 'M', picker: null, sel: ['hrv', 'charge', 'sleep'], deep: false, dm: 0, dd: 0, zoom: 0, isl: 2, irange: 7 }; }
+intelVals() {
+var self = this, s = this.state;
+var pill = function (on) { return 'border: 0; border-radius: 999px; height: 34px; cursor: pointer; font: 600 12px/16px Inter, sans-serif; ' + (on ? 'background: #59ecaa; color: #0c161c;' : 'background: transparent; color: #b6c3ca;'); };
+var SL = [['6h', 41, '6h'], ['7h', 52, '7h'], ['7h 40m', 62, '7h 40m'], ['8h 30m', 70, '8h 30m']];
+var sleeps = SL.map(function (x, i) { return { label: x[0], on: s.isl === i, style: pill(s.isl === i), pick: function () { self.setState({ isl: i }); } }; });
+var weights = [['Heart-rate variability', 42, '#b8a3ff'], ['Resting heart rate', 22, '#ff8198'], ['Sleep', 20, '#59ecaa'], ['Respiratory rate', 9, '#58d7c9'], ['Skin temperature', 7, '#ffb45e']].map(function (w) { return { label: w[0], pct: w[1] + '%', bar: 'height: 8px; border-radius: 4px; width: ' + (w[1] / 42 * 100) + '%; background: ' + w[2] + '; box-shadow: 0 0 6px ' + w[2] + '88;' }; });
+var all = [['Sun 20 Sep', 8, 16, 90], ['Sat 19 Sep', 34, 77, 88], ['Fri 18 Sep', 46, 58, 79], ['Thu 17 Sep', 61, 70, 85], ['Wed 16 Sep', 72, 46, 91], ['Tue 15 Sep', 55, 63, 76], ['Mon 14 Sep', 48, 52, 80], ['Sun 13 Sep', 66, 39, 93], ['Sat 12 Sep', 59, 75, 84], ['Fri 11 Sep', 44, 68, 72], ['Thu 10 Sep', 63, 68, 88], ['Wed 9 Sep', 70, 35, 90], ['Tue 8 Sep', 52, 60, 81], ['Mon 7 Sep', 49, 60, 78]];
+var n = Math.min(s.irange, all.length);
+var days = all.slice(0, n).map(function (d, i) { return { date: d[0], c: String(d[1]), e: String(d[2]), r: d[3] + '%', row: 'display: flex; align-items: center; gap: 8px; min-height: 56px;' + (i ? ' border-top: 1px solid rgba(190,220,235,0.14);' : '') }; });
+var ranges = [[7, '7 days'], [14, '14 days'], [30, '30 days']].map(function (r) { return { label: r[1], on: s.irange === r[0], style: pill(s.irange === r[0]), pick: function () { self.setState({ irange: r[0] }); } }; });
+return { fc: String(SL[s.isl][1]), sleepLabel: SL[s.isl][2], sleeps: sleeps, weights: weights, days: days, ranges: ranges, nDays: String(n) };
+}
+
+renderVals() {
+var self = this, s = this.state;
+var mkScrub = function (key, n, xAt, yAt, val, when, o) {
+var cur = s.scrub && s.scrub.k === key ? Math.min(s.scrub.i, n - 1) : -1;
+var pick = function (e) { var r = e.currentTarget.getBoundingClientRect(); if (!r.width) return; var px = (e.clientX - r.left) / r.width * o.w, best = 0, bd = 1e9; for (var i = 0; i < n; i++) { var dd = Math.abs(xAt(i) - px); if (dd < bd) { bd = dd; best = i; } } var c = self.state.scrub; if (!c || c.k !== key || c.i !== best) self.setState({ scrub: { k: key, i: best } }); };
+var on = cur >= 0, xp = on ? Math.round(xAt(cur) / o.w * 1000) / 10 : 0, yp = on && yAt ? Math.round(yAt(cur) / o.h * 1000) / 10 : 0;
+var tx = xp < 18 ? '0' : xp > 82 ? '-100%' : '-50%', col = o.c || '#f5efe4';
+return { move: pick, down: pick, leave: function () { self.setState({ scrub: null }); }, on: on, hasDot: on && !!yAt,
+pad: 'position: absolute; inset: 0; touch-action: pan-y; cursor: crosshair; z-index: 2;',
+line: 'position: absolute; top: ' + (o.top || 0) + 'px; bottom: ' + (o.bot || 0) + 'px; left: ' + xp + '%; width: 1.5px; margin-left: -0.75px; background: rgba(245,239,228,0.55); pointer-events: none; z-index: 1;',
+dot: 'position: absolute; left: ' + xp + '%; top: ' + yp + '%; width: 10px; height: 10px; margin: -7px 0 0 -7px; border-radius: 50%; background: #131f26; border: 2px solid ' + col + '; box-shadow: 0 0 10px ' + col + '; pointer-events: none; z-index: 1;',
+tip: 'position: absolute; left: ' + xp + '%; top: ' + (o.tip != null ? o.tip : -40) + 'px; transform: translateX(' + tx + '); padding: 5px 10px; border-radius: 10px; background: rgba(12,22,28,0.94); border: 1px solid rgba(190,220,235,0.28); box-shadow: 0 6px 18px rgba(0,0,0,0.4); white-space: nowrap; pointer-events: none; z-index: 3; display: flex; flex-direction: column; gap: 1px; align-items: ' + (tx === '0' ? 'flex-start' : tx === '-100%' ? 'flex-end' : 'center') + ';',
+vSt: 'font: 700 14px/18px "Playfair Display", Georgia, serif; font-variant-numeric: lining-nums; color: ' + col + ';',
+v: on ? val(cur) : '', d: on ? when(cur) : '' };
+};
+var pill = function (on) { return 'flex-shrink: 0; border: 0; border-radius: 999px; height: 36px; padding: 0 14px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; ' + (on ? 'background: #59ecaa; color: #0c161c;' : 'background: rgba(170,205,220,0.08); color: #b6c3ca;'); };
+var MET = [
+['charge', 'Charge', 'Charge', '/100', '#e8b84f', 60, 14, 0, 'Morning readiness, 0–100.', [55, 71], 'How ready your body is this morning, from overnight HRV, resting heart rate, sleep, breathing and temperature against your own 30-day baseline. Synthesis bands: Depleted 0–19, Low 20–39, Steady 40–59, Strong 60–79, Peak 80–100.'],
+['effort', 'Effort', 'Effort', '/100', '#6ba1fd', 57, 19, 0, 'Cardiovascular load per day, 0–100.', [43, 67], "Cardiovascular load so far today on the 0\u2013100 scale. It climbs through the day as you move."],
+['hrv', 'Heart', 'HRV', 'ms', '#b8a3ff', 49, 4, 0, 'Overnight rMSSD.', [44, 54], "The variation between heartbeats while you sleep. Higher than your normal usually means you have recovered; a run of lower nights is a sign to ease off."],
+['rhr', 'Heart', 'Resting HR', 'bpm', '#ff8198', 55, 1.5, 0, 'Lowest steady overnight heart rate.', [53, 57], "Your lowest steady heart rate overnight. A rise of a few beats above your normal often comes with stress, illness, alcohol or heavy training."],
+['avghr', 'Heart', 'Average heart rate', 'bpm', '#ff8198', 68, 5, 0, 'Daily average across waking hours.', null, 'Your average heart rate across waking hours. It rises with activity, heat, caffeine and stress.'],
+['stress', 'Body', 'Stress', 'of 3', '#e8c46a', 0.95, 0.15, 1, 'Daytime load, 0–3 · Settled, Raised, High.', [0.7, 1.1], "An estimate of how hard your nervous system is working while you are still, read from heart rate and HRV against your own baseline. It reflects physical and mental load together and is not a diagnosis."],
+['resp', 'Body', 'Breathing rate', 'rpm', '#58d7c9', 14.6, 0.25, 1, 'Breaths per minute while asleep.', [14.2, 15.0], "Breaths per minute while asleep. It is very stable for most people, so a jump of a breath or more is worth noticing."],
+['spo2', 'Body', 'Blood oxygen', '%', '#6ba1fd', 96, 0.6, 0, 'Strap estimate, unverified.', [95, 98], "Estimated oxygen saturation from the strap's optical sensor during sleep. It is not a medical device reading."],
+['skin', 'Body', 'Skin temp Δ', '°C', '#ffb45e', 0.05, 0.12, 1, 'Overnight skin temperature vs your baseline.', [-0.3, 0.3], 'How warm your skin ran overnight compared with your usual. A rise of half a degree or more can come with illness, alcohol, heat or your cycle.'],
+['sleep', 'Rest', 'Sleep', 'h', '#59ecaa', 7.2, 0.5, 1, 'Hours asleep each night.', [7.0, 8.1], 'Time actually asleep each night. Rest compares this with what you needed; Sleep shows the stages.'],
+['eff', 'Rest', 'Sleep efficiency', '%', '#59ecaa', 88, 4, 0, 'Time asleep as a share of time in bed.', null, 'The share of time in bed you spent asleep. Above 85% is typical for good sleepers.'],
+['steps', 'Activity', 'Steps', '', '#6ba1fd', 8400, 1500, 0, 'Daily steps from the strap.', null, 'Steps counted by the strap. A 4.0 strap estimates steps from wrist motion, so treat small changes loosely.'],
+['energy', 'Activity', 'Active energy', 'kcal', '#ffb45e', 900, 220, 0, 'Estimated calories burned through activity.', null, 'An estimate of the calories you burned through movement, on top of your resting burn. Every calorie figure in NOOP is an estimate.'],
+['kcal', 'Nutrition', 'Calories in', 'kcal', '#ffb45e', 2350, 300, 0, 'From your nutrition CSV import.', null, 'Calories you logged in another app, imported from its CSV export.'],
+['mood', 'Mind', 'Mood', '/5', '#a6dc7e', 3.6, 0.7, 1, 'Daily check-in from the Journal.', null, 'Your 1–5 mood check-in from the Journal.'],
+['vo2', 'Imported', 'VO₂ max', 'ml/kg/min', '#59ecaa', 47, 0.5, 1, 'Imported series from your WHOOP export. Lives on Baseline.', null, 'Cardio fitness from your WHOOP export. VO₂ max and fitness age live on Baseline; this is the raw series.']
+];
+var CAN = {"hrv": [52.0, 50.0, 53.0, 49.0, 51.0, 54.0, 50.0, 48.0, 52.0, 51.0, 49.0, 47.0, 50.0, 48.0, 46.0, 44.0, 49.0, 41.0, 45.0, 43.0, 40.0, 44.0, 38.0, 42.0, 39.0, 37.0, 36.0, 41.0, 39.0, 35.0], "rhr": [54.0, 55.0, 54.0, 53.0, 55.0, 54.0, 56.0, 55.0, 54.0, 55.0, 53.0, 54.0, 56.0, 55.0, 56.0, 57.0, 55.0, 58.0, 57.0, 59.0, 58.0, 57.0, 59.0, 58.0, 60.0, 59.0, 58.0, 57.0, 58.0, 60.0], "resp": [14.5, 14.6, 14.4, 14.6, 14.7, 14.5, 14.6, 14.4, 14.5, 14.7, 14.6, 14.5, 14.6, 14.5, 14.4, 14.6, 14.5, 14.9, 14.7, 14.6, 15.0, 14.8, 14.6, 14.9, 14.7, 14.8, 15.1, 14.8, 14.9, 14.8], "stress": [0.7, 0.9, 0.7, 1.1, 0.8, 0.8, 0.9, 1.2, 1.0, 0.9, 0.8, 0.8, 1.1, 1.0, 0.9, 1.1, 1.3, 1.2, 1.0, 1.4, 1.2, 1.1, 1.3, 1.4, 1.2, 1.1, 1.1, 0.9, 0.9, 0.8], "spo2": [97.0, 96.0, 97.0, 96.0, 97.0, 97.0, 96.0, 96.0, 97.0, 96.0, 96.0, 97.0, 96.0, 96.0, 96.0, 97.0, 96.0, 95.0, 96.0, 97.0, 96.0, 96.0, 95.0, 96.0, 97.0, 96.0, 96.0, 96.0, 96.0, 96.0], "effort": [53.0, 47.0, 67.0, 57.0, 40.0, 72.0, 48.0, 60.0, 62.0, 45.0, 77.0, 53.0, 38.0, 61.0, 64.0, 33.0, 60.0, 60.0, 35.0, 68.0, 68.0, 75.0, 39.0, 52.0, 63.0, 46.0, 70.0, 58.0, 77.0, 16.0], "charge": [49, 52, 70, 63, 44, 59, 66, 48, 55, 72, 61, 46, 34, 8], "skin": [0.1, 0.0, 0.2, 0.2, 0.3, 0.4, 0.6], "steps": [6200, 9100, 7400, 10200, 5600, 8800, 7900, 11000, 6800, 9400, 8100, 7600, 9900, 8412], "energy": [980, 1420, 559], "sleep": [7.3], "vo2": [47.4]};
+var QUICK = ['charge', 'effort', 'hrv', 'rhr', 'stress', 'resp', 'spo2', 'skin', 'sleep'];
+var byId = {}; MET.forEach(function (m) { byId[m[0]] = m; });
+var RN = { W: 7, M: 30, '3M': 90, '6M': 180, '1Y': 365, ALL: 900 }, RW = { W: 'week', M: 'month', '3M': 'quarter', '6M': 'half-year', '1Y': 'year', ALL: 'period' };
+var series = function (m, n) { var seed = m[0].length * 17 + m[0].charCodeAt(0), out = []; for (var i = 0; i < n; i++) { seed = (seed * 9301 + 49297) % 233280; var r = seed / 233280 - 0.5; out.push(m[5] + r * m[6] * 1.6 + Math.sin(i / 6) * m[6] * 0.5 - (i > n * 0.7 ? m[6] * 0.4 : 0)); } var c = CAN[m[0]]; if (c) { if (RN[s.range] <= 120) { for (var t = 0; t < Math.min(c.length, n); t++) out[n - 1 - t] = c[c.length - 1 - t]; } else out[n - 1] = c[c.length - 1]; } return out; };
+var pts = Math.min(RN[s.range], 120);
+var path = function (arr, lo, hi) { return 'M' + arr.map(function (v, i) { return (Math.round(i / (arr.length - 1) * 3000) / 10) + ' ' + (Math.round((130 - (v - lo) / ((hi - lo) || 1) * 115) * 10) / 10); }).join(' L'); };
+var m = byId[s.metric] || byId.charge, arr = series(m, pts), lo = Math.min.apply(null, arr), hi = Math.max.apply(null, arr);
+var B = m[9], clo = B ? Math.min(lo, B[0]) : lo, chi = B ? Math.max(hi, B[1]) : hi, cpad = (chi - clo) * 0.1 || 1; clo -= cpad; chi += cpad;
+var yv = function (v) { return Math.round((130 - (v - clo) / (chi - clo) * 115) * 10) / 10; };
+var f = function (v) { return (m[0] === 'skin' && v > 0 ? '+' : '') + v.toFixed(m[7]); };
+var avg = arr.reduce(function (a, b) { return a + b; }, 0) / arr.length;
+var line = path(arr, clo, chi), d = arr[arr.length - 1] - arr[0];
+var now = arr[arr.length - 1], inBand = B && now >= B[0] && now <= B[1];
+var ranges = ['W', 'M', '3M', '6M', '1Y', 'ALL'].map(function (r) { return { label: r, on: s.range === r, style: pill(s.range === r), pick: function () { self.setState({ range: r }); } }; });
+var cats = []; MET.forEach(function (x) { if (cats.indexOf(x[1]) < 0) cats.push(x[1]); });
+var adding = s.picker === 'add';
+var menu = cats.map(function (c) { return { cat: c, items: MET.filter(function (x) { return x[1] === c; }).map(function (x) { var on = adding ? s.sel.indexOf(x[0]) >= 0 : s.metric === x[0]; return { name: x[2], unit: x[3], pick: function () { if (adding) { if (!on && s.sel.length < 4) self.setState({ sel: s.sel.concat([x[0]]), picker: null }); else self.setState({ picker: null }); } else self.setState({ metric: x[0], picker: null }); }, style: 'display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 12px; border-radius: 12px; border: 0; cursor: pointer; text-align: left; font: 500 15px/20px Inter, sans-serif; color: #f5efe4; background: ' + (on ? 'rgba(89,236,170,0.14)' : 'transparent') + ';' }; }) }; });
+var selChips = s.sel.map(function (k) { var x = byId[k]; return { name: x[2], aria: 'Remove ' + x[2], remove: function () { self.setState({ sel: s.sel.filter(function (y) { return y !== k; }) }); }, dot: 'width: 8px; height: 8px; border-radius: 50%; background: ' + x[4] + ';', style: 'display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 10px 0 12px; border-radius: 999px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; color: #f5efe4; border: 1px solid ' + x[4] + '88; background: rgba(170,205,220,0.06);' }; });
+var COL = ['#b8a3ff', '#e8b84f', '#59ecaa', '#ff8198'];
+var overlay = s.sel.map(function (k, i) { var x = byId[k], a = series(x, pts), l = Math.min.apply(null, a), h = Math.max.apply(null, a); return { d: path(a, l, h), c: x[4] === '#59ecaa' && i !== 2 ? COL[i] : x[4] }; });
+var pairs = [];
+for (var i = 0; i < s.sel.length; i++) for (var j = i + 1; j < s.sel.length && pairs.length < 3; j++) { var r = [0.62, 0.41, -0.18, 0.33, -0.27, 0.12][pairs.length]; pairs.push({ name: byId[s.sel[i]][2] + ' ↔ ' + byId[s.sel[j]][2], r: 'r ' + (r > 0 ? '+' : '−') + Math.abs(r).toFixed(2), note: Math.min(pts, 62) + ' overlapping days · ' + (Math.abs(r) > 0.5 ? 'strong' : Math.abs(r) > 0.3 ? 'moderate' : 'weak') + ' ' + (r > 0 ? 'positive' : 'negative') + ' correlation', rStyle: 'flex-shrink: 0; font: 700 18px/22px "Playfair Display", Georgia, serif; color: ' + (r > 0 ? '#59ecaa' : '#f39a5b') + ';' }); }
+var DM = [['Heart rate', '#ff8198', 'bpm'], ['rMSSD (HRV)', '#b8a3ff', 'ms'], ['SpO₂', '#6ba1fd', '%'], ['Skin temp', '#ffb45e', '°C'], ['Respiration', '#58d7c9', 'rpm'], ['Motion', '#e8c46a', 'g'], ['Band sleep state', '#59ecaa', '']];
+var dmv = DM[s.dm], np = [300, 160, 60][s.zoom], seed2 = s.dm * 31 + s.dd * 7 + 3, dl = [];
+for (var k = 0; k < np; k++) { seed2 = (seed2 * 9301 + 49297) % 233280; var v = 100 + Math.sin(k / (np / 9)) * 40 + (seed2 / 233280 - 0.5) * (70 - s.zoom * 20); dl.push((Math.round(k / (np - 1) * 3000) / 10) + ' ' + Math.round(200 - v * 0.8)); }
+var dnames = ['Sun 20 Sep', 'Sat 19 Sep', 'Fri 18 Sep'];
+var MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], dAgo = function (k) { var d = new Date(2026, 8, 20 - k); return d.getDate() + ' ' + MONS[d.getMonth()]; };
+var spanD = RN[s.range], dOf = function (i, n) { return dAgo(Math.round((n - 1 - i) / Math.max(1, n - 1) * spanD)); };
+var exSc = mkScrub('ex', arr.length, function (i) { return i / (arr.length - 1) * 300; }, function (i) { return yv(arr[i]); }, function (i) { return f(arr[i]) + (m[3] ? ' ' + m[3] : ''); }, function (i) { return dOf(i, arr.length); }, { w: 300, h: 150, bot: 10, c: m[4] });
+var ovVals = s.sel.map(function (k) { return series(byId[k], pts); });
+var cmpSc = mkScrub('cmp', pts, function (i) { return i / (pts - 1) * 300; }, null, function (i) { return s.sel.map(function (k, q) { return byId[k][2] + ' ' + ovVals[q][i].toFixed(byId[k][7]); }).join(' · '); }, function (i) { return dOf(i, pts); }, { w: 300, h: 150 });
+return {
+cmpSc: cmpSc,
+title: 'Insights', sub: s.mode === 'explore' ? 'Every signal, one tap deep.' : s.mode === 'compare' ? 'Overlay signals and see how they move together.' : 'The on-device models behind your scores.',
+intel: self.intelVals(), isIntel: s.mode === 'intel', notIntel: s.mode !== 'intel',
+modes: [['explore', 'Explore'], ['compare', 'Compare'], ['intel', 'Intelligence']].map(function (x) { return { label: x[1], on: s.mode === x[0], style: pill(s.mode === x[0]) + ' width: 100%;', pick: function () { self.setState({ mode: x[0] }); } }; }),
+isExplore: s.mode === 'explore', isCompare: s.mode === 'compare', ranges: ranges, rangeWord: RW[s.range],
+quick: QUICK.map(function (k) { var x = byId[k], on = s.metric === k; return { label: x[2], on: on, pick: function () { self.setState({ metric: k }); }, style: 'flex-shrink: 0; height: 36px; padding: 0 14px; border-radius: 999px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; border: 1px solid ' + (on ? x[4] : 'rgba(190,220,235,0.2)') + '; background: ' + (on ? x[4] + '26' : 'transparent') + '; color: ' + (on ? '#f5efe4' : '#b6c3ca') + ';' }; }),
+cur: { sc: exSc, cat: m[1], name: m[2], desc: m[8], color: m[4], about: m[10], hasBand: !!B, bandY: B ? yv(B[1]) : 0, bandH: B ? Math.round(Math.max(4, yv(B[0]) - yv(B[1])) * 10) / 10 : 0, bandText: B ? 'Shaded band is your normal: ' + f(B[0]) + '–' + f(B[1]) + ' ' + m[3] : '', normal: !B ? '' : inBand ? 'Inside your normal range' : 'Outside your normal range', normalStyle: 'font: 600 13px/18px Inter, sans-serif; color: ' + (inBand ? '#59ecaa' : '#f39a5b') + ';', isStress: m[0] === 'stress', unverified: m[0] === 'spo2', latest: f(arr[arr.length - 1]) + ' ' + m[3], line: line, area: line + ' L300 140 L0 140 Z', aria: m[2] + ' over the selected range',
+bigStyle: 'flex-shrink: 0; font: 700 22px/26px "Playfair Display", Georgia, serif; color: ' + m[4] + ';',
+stats: [{ k: 'Latest', v: f(arr[arr.length - 1]) }, { k: 'Average', v: f(avg) }, { k: 'Min', v: f(lo) }, { k: 'Max', v: f(hi) }],
+delta: (d >= 0 ? '+' : '−') + f(Math.abs(d)) + ' ' + m[3], dStyle: 'font: 700 20px/24px "Playfair Display", Georgia, serif; color: ' + (d >= 0 ? '#59ecaa' : '#f39a5b') + ';' },
+pickerOpen: !!s.picker, menu: menu, openPicker: function () { self.setState({ picker: 'one' }); }, openAdd: function () { if (s.sel.length < 4) self.setState({ picker: 'add' }); }, closePicker: function () { self.setState({ picker: null }); },
+selChips: selChips, full: s.sel.length >= 4, addLabel: s.sel.length >= 4 ? 'Max 4' : '+ Add metric', addStyle: 'height: 34px; padding: 0 14px; border-radius: 999px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; border: 1px dashed rgba(89,236,170,0.5); background: transparent; color: #59ecaa;' + (s.sel.length >= 4 ? ' opacity: 0.45;' : ''),
+canCompare: s.sel.length >= 2, cantCompare: s.sel.length < 2, overlay: overlay, pairs: pairs, nSeries: String(s.sel.length),
+deepOpen: s.deep, openDeep: function () { self.setState({ deep: true }); }, closeDeep: function () { self.setState({ deep: false }); },
+deepMetrics: DM.map(function (x, i) { return { label: x[0], on: s.dm === i, style: pill(s.dm === i), pick: function () { self.setState({ dm: i }); } }; }),
+deepDay: dnames[s.dd], prevDeep: function () { self.setState({ dd: Math.min(2, s.dd + 1) }); }, nextDeep: function () { self.setState({ dd: Math.max(0, s.dd - 1) }); },
+deepLine: 'M' + dl.join(' L'), deepColor: dmv[1], deepAria: dmv[0] + ' through the day',
+resLabel: s.zoom === 2 ? 'Raw · per second' : s.zoom === 1 ? '1-minute samples' : '5-minute samples', zoomHint: s.zoom ? 'Zoomed in · drag to pan' : 'Pinch to zoom · drag to pan',
+t0: ['00:00', '06:00', '06:40'][s.zoom], t1: ['Now', '12:00', '06:50'][s.zoom],
+zoomIn: function () { self.setState({ zoom: Math.min(2, s.zoom + 1) }); }, zoomOut: function () { self.setState({ zoom: Math.max(0, s.zoom - 1) }); },
+deepStats: [{ k: 'Min', v: ['48', '22', '94', '−0.4', '12.8', '0.0', 'Deep'][s.dm] }, { k: 'Avg', v: ['61', '41', '96', '+0.1', '14.6', '0.2', 'Light'][s.dm] }, { k: 'Max', v: ['96', '78', '99', '+0.6', '17.1', '2.4', 'Awake'][s.dm] }]
+};
+}
+}
+</script>
+</body>
+</html>

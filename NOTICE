@@ -1,0 +1,61 @@
+Noop Ridge — third-party notices
+===========================
+
+NOOP's own source code and documentation are licensed under the PolyForm
+Noncommercial License 1.0.0 (see LICENSE). That license covers NOOP's original
+work only. The components and prior work below keep their own terms.
+
+Bundled dependencies
+--------------------
+
+OkHttp — https://github.com/square/okhttp
+  License: Apache License 2.0
+  Used for: the app's few network requests (the update check, Sage, the optional push).
+
+AndroidX (Compose, Room, WorkManager, Glance, Security, Activity, Navigation, Health Connect client) and Kotlin
+coroutines — https://developer.android.com/jetpack , https://github.com/Kotlin/kotlinx.coroutines
+  License: Apache License 2.0
+  Used for: the user interface, on-device SQLite storage, background work, widgets and Health Connect import.
+
+The Apache 2.0 and SIL Open Font licenses are permissive: these components may be used, modified, and
+redistributed (including commercially) on their own terms. When they are used as
+part of Noop's combined work, the combined work as a whole is governed by Noop's
+PolyForm Noncommercial license.
+
+DM Serif Display — https://github.com/google/fonts/tree/main/ofl/dmserifdisplay
+  License: SIL Open Font License 1.1 (android/licenses/DMSerifDisplay-OFL.txt)
+  Used for: the serif display headings on the Android Today screen
+  (android/app/src/main/res/font/dm_serif_display.ttf, unmodified).
+
+Playfair Display — https://github.com/google/fonts/tree/main/ofl/playfairdisplay
+  License: SIL Open Font License 1.1 (android/licenses/PlayfairDisplay-OFL.txt)
+  Used for: Noop Ridge headings and numerals on the Android Today screen
+  (android/app/src/main/res/font/playfair_display.ttf, the variable font, unmodified).
+
+Inter — https://github.com/google/fonts/tree/main/ofl/inter
+  License: SIL Open Font License 1.1 (android/licenses/Inter-OFL.txt)
+  Used for: Noop Ridge UI text on the Android Today screen
+  (android/app/src/main/res/font/inter.ttf, the variable font, unmodified).
+
+Allura — https://github.com/google/fonts/tree/main/ofl/allura
+  License: SIL Open Font License 1.1 (android/licenses/Allura-OFL.txt)
+  Used for: the Noop Ridge script line on the Android Today header
+  (android/app/src/main/res/font/allura.ttf, unmodified).
+
+Prior reverse-engineering research
+----------------------------------
+
+NOOP builds on two community reverse-engineering efforts. Neither states a
+license; NOOP does not redistribute their code. NOOP uses only the uncopyrightable
+factual protocol information they document (BLE service/characteristic identifiers,
+frame layouts, CRC parameters, command/event/packet numbers, byte offsets) and
+re-implements those facts as original code — it does not copy their source.
+
+  johnmiddleton12/my-whoop — https://github.com/johnmiddleton12/my-whoop
+    WHOOP 4.0 BLE protocol facts.
+
+  b-nnett/goose — https://github.com/b-nnett/goose
+    WHOOP 5.0 / MG ("puffin") BLE protocol facts.
+
+See ATTRIBUTION.md for fuller credit and DISCLAIMER.md for the interoperability and
+fair-use rationale.

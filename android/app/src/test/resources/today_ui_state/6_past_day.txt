@@ -1,0 +1,15 @@
+selectedDay=2026-11-08
+selectedDayKey=2026-11-08
+isToday=false
+displayMetric=2026-11-08 rec=43.0 strain=40.0
+effortForDay=40.0
+recoveryCalibration=null
+carryOverTodayKey=2026-11-11
+lastScoredRecoveryDay=null
+lastVitalsDay=null
+lastSpo2Day=null
+lastSkinTempDay=null
+lastHrvDay=null
+lastRestingHrDay=null
+lastRespDay=null
+scoreState=Scored(value=43.0)

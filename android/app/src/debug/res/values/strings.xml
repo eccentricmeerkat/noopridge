@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug builds of Noop Ridge (com.noop.app.ridge.debug) install beside the release and beside every v10 NOOP
+  build, so the launcher name says which one this is. The build-type source set wins over main and the flavors,
+  so the demo debug build sets its own name in src/demoDebug.
+-->
+<resources>
+    <string name="app_name">Noop Ridge Debug</string>
+    <!-- Ridge R1a: the debug-only metric inspector's launcher label. -->
+    <string name="metric_inspector_label">Ridge metrics</string>
+</resources>

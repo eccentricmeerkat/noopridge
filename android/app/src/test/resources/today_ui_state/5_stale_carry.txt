@@ -1,0 +1,15 @@
+selectedDay=2026-11-11
+selectedDayKey=2026-11-11
+isToday=true
+displayMetric=2026-11-11 rec=null strain=12.0
+effortForDay=12.0
+recoveryCalibration=null
+carryOverTodayKey=2026-11-11
+lastScoredRecoveryDay=2026-11-06
+lastVitalsDay=2026-11-06
+lastSpo2Day=2026-11-06
+lastSkinTempDay=2026-11-06
+lastHrvDay=2026-11-06
+lastRestingHrDay=2026-11-06
+lastRespDay=2026-11-06
+scoreState=CarriedLastNight(dateLabel=6 Nov, stale=true)

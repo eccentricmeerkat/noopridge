@@ -1,0 +1,183 @@
+<!doctype html>
+<meta charset="utf-8"><style data-dc-design-system-vars>@layer{:root{--bg-000:#0c161c;--bg-100:#131f26;--bg-200:#172630;--bg-300:#1f313b;--bg-400:#283d48;--glass-fill:#aacddc0f;--glass-fill-strong:#aacddc1a;--glass-stroke:#bedceb24;--glass-highlight:#ffffff24;--ink:#f5efe4;--ink-muted:#b6c3ca;--ink-subtle:#9dadb6;--ink-on-liquid:#0c161c;--brand:#59ecaa;--brand-deep:#1f8a5e;--charge:#e8b84f;--charge-deep:#9a6a18;--effort:#6ba1fd;--effort-deep:#2c5bbd;--rest:#59ecaa;--rest-deep:#1f8a5e;--battery:#2f9a62;--battery-deep:#15512f;--state-depleted:#f7777d;--state-low:#f39a5b;--state-moderate:#e8c46a;--state-good:#a6dc7e;--state-ready:#59ecaa;--data-hrv:#b8a3ff;--data-heart:#ff8198;--data-energy:#ffb45e;--data-breath:#58d7c9;--focus-ring:#f5efe4;--shadow-card:0 12px 32px rgba(2, 6, 16, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);--glow-charge:0 0 28px rgba(232, 184, 79, 0.35);--glow-effort:0 0 28px rgba(107, 161, 253, 0.35);--glow-rest:0 0 28px rgba(89, 236, 170, 0.35);--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--radius-sm:10px;--radius-md:18px;--radius-lg:24px;--radius-xl:32px;--radius-pill:999px;--radius-orb:50%;--blur-glass:20px;--font-display:"Playfair Display", Georgia, serif;--font-sans:Inter, "SF Pro Display", system-ui, sans-serif;--font-script:Allura, "Snell Roundhand", cursive;--text-numeral-xl:700 60px/1 var(--font-display);--text-numeral-lg:700 44px/1 var(--font-display);--text-title-xl:700 40px/44px var(--font-display);--text-title-lg:700 30px/34px var(--font-display);--text-numeral-md:700 28px/32px var(--font-display);--text-body:400 15px/22px var(--font-sans);--text-body-sm:500 13px/18px var(--font-sans);--text-label:600 13px/16px var(--font-sans);--text-eyebrow:600 11px/14px var(--font-sans);--text-button:600 14px/20px var(--font-sans);--text-tab:500 11px/14px var(--font-sans);--text-wordmark:300 22px/24px var(--font-sans);--text-tagline:500 10px/14px var(--font-sans);--text-script:400 26px/26px var(--font-script);}}</style>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your data — Noop Ridge</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%; background: radial-gradient(120% 40% at 50% 0%, rgba(47, 154, 98, 0.18), rgba(19, 31, 38, 0) 70%)">
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">Your data</h1><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Everything stays on this phone.</span></div>
+<a href="Backup.dc.html" class="nr-chip np-plain" style="height: 34px; text-transform: none; letter-spacing: 0">Backup</a>
+</header>
+
+<div role="tablist" aria-label="View" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3"><button type="button" role="tab" onClick="{{ t.pick }}" aria-selected="{{ t.on }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+</div>
+
+<sc-if value="{{ isSources }}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">Bring your history in once, then it's yours.</p>
+<sc-for list="{{ sources }}" as="c" hint-placeholder-count="6">
+<sc-if value="{{ c.isHC }}" hint-placeholder-val="{{ false }}">
+<section aria-label="Health Connect" style="{{ hc.card }}">
+<div style="display: flex; align-items: center; gap: 10px">
+
+<h2 style="flex-grow: 1; min-width: 0; margin: 0; font: 700 16px/20px var(--font-display); font-size: 18px; line-height: 1.14; font-weight: 700; letter-spacing: -0.28px; font-style: normal; font-family: &quot;Playfair Display&quot;, Georgia, serif">Health Connect</h2>
+<span style="{{ hc.pill }}"><sc-if value="{{ hc.on }}" hint-placeholder-val="{{ false }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if>{{ hc.state }}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<p style="flex-grow: 1; margin: 0; font: 400 14px/20px var(--font-sans); color: var(--ink-muted)">{{ hc.desc }}</p>
+<button type="button" onClick="{{ hc.toggle }}" aria-expanded="{{ hc.open }}" aria-label="{{ hc.toggleLabel }}" style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; border: 1px solid rgba(190, 220, 235, 0.22); background: rgba(12, 22, 28, 0.25); color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{ hc.chev }}"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding-top: 14px; border-top: 1px solid rgba(190, 220, 235, 0.14)">
+<sc-for list="{{ hc.stats }}" as="t" hint-placeholder-count="3"><div style="{{ t.cell }}"><span style="{{ t.ic }}"><sc-if value="{{ t.k1 }}" hint-placeholder-val="{{ true }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.4 7.3A4.5 4.5 0 1 0 4.77 13.38L8.9 17.5"></path><rect x="9.8" y="4.67" width="8.6" height="15.67" rx="4.3" transform="rotate(45 14.1 12.5)"></rect><circle cx="15.7" cy="10.4" r="0.8" fill="currentColor" stroke="none"></circle></svg></sc-if><sc-if value="{{ t.k2 }}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.5"></rect><path d="M8 3v4M16 3v4M4 10h16M8.5 13.5h.01M12 13.5h.01M15.5 13.5h.01M8.5 16.5h.01M12 16.5h.01"></path></svg></sc-if><sc-if value="{{ t.k3 }}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8 4-8 4-8-4z"></path><path d="M4 12l8 4 8-4"></path><path d="M4 16l8 4 8-4"></path></svg></sc-if></span><b style="font: 700 15px/19px var(--font-display); font-size: 13px; line-height: 1.23; font-weight: 600; letter-spacing: 1.82px; font-style: normal; font-family: Inter, &quot;SF Pro Display&quot;, system-ui, sans-serif">{{ t.a }}</b><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">{{ t.b }}</span></div></sc-for>
+</div>
+<sc-if value="{{ hc.open }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 18px; background: rgba(12, 22, 28, 0.38); border: 1px solid rgba(190, 220, 235, 0.10)">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Read workouts, sleep and body data from other apps.</span></div>
+<span style="font: 500 12px/16px var(--font-sans); color: var(--ink-subtle)">{{ hc.syncLine }}</span>
+<button type="button" onClick="{{ hc.run }}" class="nr-btn nr-btn-secondary" style="width: 100%; font-size: 13px; letter-spacing: 0.06em; white-space: nowrap">{{ hc.btn }}</button>
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 14px; background: rgba(12, 22, 28, 0.4)"><span class="nr-eyebrow" style="font-size: 9px">NOOP can read</span><sc-for list="{{ hcCats }}" as="h" hint-placeholder-count="3"><button type="button" role="checkbox" aria-checked="{{ h.on }}" onClick="{{ h.flip }}" style="display: flex; gap: 10px; align-items: center; min-height: 36px; border: 0; background: none; padding: 0; cursor: pointer; color: var(--ink); text-align: left"><span style="{{ h.box }}"></span><span style="font: 500 13px/18px var(--font-sans)">{{ h.t }}</span></button></sc-for></div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 52px"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 500 14px/18px var(--font-sans)">Share computed metrics back</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">{{ hc.shareLine }}</span></span><button type="button" role="switch" aria-checked="{{ share }}" aria-label="Share computed metrics back to Health Connect" onClick="{{ flipShare }}" style="{{ shTrack }}"><span style="{{ shKnob }}"></span></button></div>
+<sc-if value="{{ hc.on }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ hc.disconnect }}" style="border: 0; background: none; padding: 6px; cursor: pointer; font: 600 13px/18px var(--font-sans); color: var(--ink-muted)">Disconnect Health Connect</button></sc-if>
+</div>
+</sc-if>
+</section>
+</sc-if>
+<sc-if value="{{ c.plain }}" hint-placeholder-val="{{ true }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font: 700 16px/20px var(--font-display)">{{ c.t }}</span><span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">{{ c.d }}</span></span><span style="{{ c.pill }}">{{ c.state }}</span></div>
+<sc-if value="{{ c.hasCount }}" hint-placeholder-val="{{ false }}"><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-subtle)">{{ c.count }}</span></sc-if>
+<sc-if value="{{ c.hasBtn }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ c.run }}" class="nr-btn nr-btn-secondary" style="width: 100%">{{ c.btn }}</button></sc-if>
+
+<sc-if value="{{ c.isBc }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 52px"><span style="flex-grow: 1; font: 500 14px/18px var(--font-sans)">Broadcast heart rate as a Bluetooth sensor</span><button type="button" role="switch" aria-checked="{{ bc }}" aria-label="Broadcast heart rate" onClick="{{ flipBc }}" style="{{ bcTrack }}"><span style="{{ bcKnob }}"></span></button></div>
+<sc-if value="{{ bc }}" hint-placeholder-val="{{ false }}"><span style="font: 400 12px/17px var(--font-sans); color: var(--state-low)">Broadcast HR is on · 1 device listening. This drains the battery faster.</span></sc-if>
+</sc-if>
+</section>
+</sc-if>
+</sc-for>
+<a href="About.dc.html" class="np-plain" style="text-align: center; font: 600 13px/18px var(--font-sans); color: var(--brand); padding: 8px">What NOOP can read from a 4.0 vs 5.0/MG ›</a>
+</sc-if>
+
+<sc-if value="{{ isFused }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">Your bands report different numbers. Here's every source, and the one NOOP is using.</p>
+<div style="display: flex; align-items: center; gap: 8px"><span class="nr-eyebrow">Sun 20 Sep · day owner</span><span class="nr-chip nr-chip-live" style="text-transform: none; letter-spacing: 0">WHOOP 4.0</span></div>
+<div class="nr-glass" style="border-radius: var(--radius-lg); padding: 2px 16px">
+<sc-for list="{{ fused }}" as="f" hint-placeholder-count="5">
+<div style="{{ f.row }}"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font: 600 15px/20px var(--font-sans)">{{ f.m }}</span><span style="{{ f.agreeStyle }}">{{ f.agree }}</span></span><span style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px"><span style="font: 700 18px/22px var(--font-display)">{{ f.v }}</span><sc-if value="{{ f.conflict }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ f.open }}" style="border: 0; background: none; padding: 0; cursor: pointer; font: 600 12px/16px var(--font-sans); color: var(--state-low)">Compare</button></sc-if></span></div>
+</sc-for>
+</div>
+<p style="margin: 0; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">Fused on this phone. Nothing leaves it: no account, no cloud.</p>
+</sc-if>
+
+<sc-if value="{{ isImported }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">Latest values from your Apple Health and Health Connect imports.</p>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{ imported }}" as="i" hint-placeholder-count="6"><div class="nr-glass" style="border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow" style="font-size: 9px">{{ i.k }}</span><span style="font: 700 20px/24px var(--font-display)">{{ i.v }}</span><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">{{ i.src }}</span></div></sc-for>
+</div>
+<a href="Insights.dc.html" class="nr-btn nr-btn-secondary np-plain" style="display: inline-flex; justify-content: center; align-items: center">Chart any imported series in Insights</a>
+</sc-if>
+
+</div>
+</div>
+</div>
+
+<sc-if value="{{ cmpOpen }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-label="Sources differ" style="position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; padding: 24px; background: rgba(6, 11, 15, 0.7)">
+<div style="width: 100%; box-sizing: border-box; border-radius: 28px; background: var(--bg-400); border: 1px solid var(--glass-stroke); padding: 22px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="color: var(--state-low)">Sources differ</span><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">{{ cmp.m }}</h2></div>
+<sc-for list="{{ cmp.rows }}" as="r" hint-placeholder-count="2"><div style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border-top: 1px solid var(--glass-stroke)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font: 600 14px/18px var(--font-sans)">{{ r.s }}</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">Trust: {{ r.trust }}</span></span><span style="font: 700 18px/22px var(--font-display)">{{ r.v }}</span></div></sc-for>
+<p style="margin: 0; font: 400 13px/19px var(--font-sans); color: var(--ink-muted)">NOOP shows the WHOOP reading because it is a higher-trust source for this metric.</p>
+<button type="button" onClick="{{ closeCmp }}" class="nr-btn nr-btn-primary" style="width: 100%">Done</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { tab: 'sources', st: { whoop: 2, apple: 0, hc: 2, nut: 0, wear: 0, file: 0 }, hc: [true, true, false], share: true, hcOn: /hc=on/.test(location.hash), hcBusy: false, hcOpen: false, bc: false, cmp: null }; }
+renderVals() {
+var self = this, s = this.state;
+var pill = function (on) { return 'border: 0; border-radius: 999px; height: 36px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; ' + (on ? 'background: #59ecaa; color: #0c161c;' : 'background: transparent; color: #b6c3ca;'); };
+var sp = function (t, kind) { var c = kind === 'on' ? ['#59ecaa', 'rgba(89,236,170,0.4)'] : kind === 'busy' ? ['#6ba1fd', 'rgba(107,161,253,0.4)'] : ['#9dadb6', 'rgba(190,220,235,0.25)']; return 'flex-shrink: 0; height: 24px; display: inline-flex; align-items: center; padding: 0 10px; border-radius: 999px; font: 600 11px/14px Inter, sans-serif; color: ' + c[0] + '; border: 1px solid ' + c[1] + ';'; };
+var sw = function (on) { return ['position: relative; width: 52px; height: 32px; flex-shrink: 0; border-radius: 16px; border: 0; padding: 0; cursor: pointer; background: ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.22)') + ';', 'position: absolute; top: 4px; left: ' + (on ? 24 : 4) + 'px; width: 24px; height: 24px; border-radius: 50%; background: ' + (on ? '#0c161c' : '#f5efe4') + ';']; };
+var run = function (k, counts) { return function () { var o = Object.assign({}, s.st); o[k] = 1; self.setState({ st: o }); setTimeout(function () { var p = Object.assign({}, self.state.st); p[k] = 2; self.setState({ st: p }); }, 1200); }; };
+var SRC = [
+['whoop', 'WHOOP history', 'Your official WHOOP export, plus live strap samples.', 'Import WHOOP export (.zip)', '412 days · 186 workouts', 'Streaming locally'],
+['strap', 'WHOOP strap (live)', 'Bluetooth, straight from the strap.', null, null, 'Streaming locally'],
+['hc', 'Health Connect', 'Read workouts, sleep and body data from other apps.', 'Import from Health Connect', 'Last sync 07:02 · every 6h', 'Imported'],
+['apple', 'Apple Health', 'An export file from an iPhone.', 'Import Apple Health export…', null, null],
+['nut', 'Nutrition (CSV)', 'Calories and macros from any tracker that exports CSV.', 'Import nutrition CSV…', null, null],
+['wear', 'Other wearables', 'Oura, Fitbit, Garmin, Mi Band, lifting logs and GPX/TCX/FIT files.', 'Import a file…', null, null],
+['bc', 'Broadcast HR from this phone', 'Let a gym bike or watch read your heart rate.', null, null, null]
+];
+var sources = SRC.map(function (c) {
+var st = c[0] === 'strap' || c[0] === 'bc' ? (c[0] === 'bc' ? (s.bc ? 2 : 0) : 2) : s.st[c[0]];
+var label = st === 1 ? 'Importing…' : st === 2 ? (c[5] || 'Imported') : c[0] === 'bc' ? 'Off' : 'Nothing imported';
+return { t: c[1], d: c[2], btn: c[3] || '', hasBtn: !!c[3], run: c[3] ? run(c[0]) : null, count: st === 2 ? (c[4] || 'Imported just now · 38 days') : '', hasCount: st === 2, state: label, pill: sp(label, st === 2 ? 'on' : st === 1 ? 'busy' : 'off'), isHC: c[0] === 'hc', plain: c[0] !== 'hc', isBc: c[0] === 'bc' };
+});
+var hcCats = ['Recovery & wellness', 'Activity', 'Body composition'].map(function (t, i) { var on = s.hc[i]; return { t: t, on: on, flip: function () { var a = s.hc.slice(); a[i] = !on; self.setState({ hc: a }); }, box: 'width: 20px; height: 20px; flex-shrink: 0; border-radius: 6px; border: 1.5px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.4)') + '; background: ' + (on ? '#59ecaa' : 'transparent') + ';' }; });
+var hcN = s.hc.filter(Boolean).length, hcOn = s.hcOn, hcB = s.hcBusy;
+var hcNames = ['Health', 'Activity', 'Body'].filter(function (x, i) { return s.hc[i]; });
+var stCell = function (j) { return 'display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; padding: 0 4px;' + (j ? ' border-left: 1px solid rgba(190,220,235,0.14);' : ''); };
+var stIc = 'display: grid; place-items: center; height: 30px; color: ' + (hcOn ? '#59ecaa' : '#7f909a') + ';';
+var hcStats = (hcOn ? [['Syncing', 'Next sync in 4h'], ['120 days', 'of history'], [hcN + (hcN === 1 ? ' category' : ' categories'), hcNames.join(' · ') || 'none chosen']] : [[hcB ? 'Connecting…' : 'Not syncing', hcB ? 'Waiting for permission' : 'Open to connect'], ['No history', 'nothing imported'], ['No metrics', hcN + ' of 3 chosen']]).map(function (x, j) { return { a: x[0], b: x[1], k1: j === 0, k2: j === 1, k3: j === 2, cell: stCell(j), ic: stIc }; });
+var hc = {
+on: hcOn, open: s.hcOpen, state: hcOn ? 'Connected' : hcB ? 'Connecting…' : 'Not connected',
+desc: hcOn ? 'Syncing your health, activity and body metrics with Android Health Connect.' : 'Connect to read workouts, sleep and body data from other apps on this phone.',
+card: 'position: relative; border-radius: 28px; padding: 18px; display: flex; flex-direction: column; gap: 14px; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); ' + (hcOn ? 'background: linear-gradient(180deg, rgba(47,154,98,0.30), rgba(31,138,94,0.14) 60%, rgba(19,31,38,0.55)); border: 1.5px solid rgba(89,236,170,0.55); box-shadow: 0 0 24px rgba(89,236,170,0.18), inset 0 1px 0 rgba(255,255,255,0.08);' : 'background: rgba(170,205,220,0.06); border: 1px solid rgba(190,220,235,0.16); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);'),
+icon: 'width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px; display: grid; place-items: center; ' + (hcOn ? 'background: linear-gradient(180deg, #59ecaa, #2f9a62); color: #0c2a1c; box-shadow: 0 4px 14px rgba(89,236,170,0.3);' : 'background: rgba(190,220,235,0.12); color: #b6c3ca;'),
+pill: 'flex-shrink: 0; height: 24px; display: inline-flex; align-items: center; gap: 4px; padding: 0 10px; border-radius: 999px; font: 600 11px/14px Inter, sans-serif; white-space: nowrap; ' + (hcOn ? 'color: #59ecaa; border: 1px solid rgba(89,236,170,0.4);' : hcB ? 'color: #6ba1fd; border: 1px solid rgba(107,161,253,0.4);' : 'color: #9dadb6; border: 1px solid rgba(190,220,235,0.25);'),
+chev: 'transition: transform .2s; transform: rotate(' + (s.hcOpen ? 0 : 180) + 'deg);',
+toggle: function () { self.setState({ hcOpen: !self.state.hcOpen }); }, toggleLabel: s.hcOpen ? 'Hide Health Connect settings' : 'Show Health Connect settings',
+stats: hcStats,
+syncLine: hcOn ? 'Last sync 07:02 · every 6h' : 'Never synced',
+btn: hcB ? 'Connecting…' : 'Import from Health Connect',
+run: function () { if (self.state.hcBusy) return; self.setState({ hcBusy: true }); setTimeout(function () { self.setState({ hcBusy: false, hcOn: true }); }, 1200); },
+shareLine: hcOn ? (s.share ? 'Last shared 07:02 today' : 'Off') : 'Not shared yet',
+disconnect: function () { self.setState({ hcOn: false }); }
+};
+var sh = sw(s.share), bc = sw(s.bc);
+var F = [['Charge', '8 of 100', 'Only source', false], ['HRV', '35 ms', 'Oura agrees: 36 ms', false], ['Resting HR', '60 bpm', 'Oura says 56 bpm', true, [['WHOOP 4.0', '60 bpm', 'High'], ['Oura ring', '56 bpm', 'Medium']]], ['Sleep', '7h 18m', 'Health Connect says 7h 41m', true, [['WHOOP 4.0', '7h 18m', 'High'], ['Pixel Watch · Health Connect', '7h 41m', 'Low']]], ['Steps', '8,412', 'Phone agrees: 8,450', false]];
+var fused = F.map(function (f, i) { return { m: f[0], v: f[1], agree: f[2], conflict: f[3], agreeStyle: 'font: 400 12px/16px Inter, sans-serif; color: ' + (f[3] ? '#f39a5b' : '#9dadb6') + ';', open: function () { self.setState({ cmp: i }); }, row: 'display: flex; align-items: center; gap: 10px; min-height: 64px;' + (i ? ' border-top: 1px solid rgba(190,220,235,0.14);' : '') }; });
+var c = s.cmp != null ? F[s.cmp] : F[2];
+return {
+tabs: [['sources', 'Sources'], ['fused', 'Fused'], ['imported', 'Imported']].map(function (t) { return { label: t[1], on: s.tab === t[0], style: pill(s.tab === t[0]), pick: function () { self.setState({ tab: t[0] }); } }; }),
+isSources: s.tab === 'sources', isFused: s.tab === 'fused', isImported: s.tab === 'imported',
+sources: sources, hc: hc, hcCats: hcCats, share: s.share, shTrack: sh[0], shKnob: sh[1], flipShare: function () { self.setState({ share: !s.share }); },
+bc: s.bc, bcTrack: bc[0], bcKnob: bc[1], flipBc: function () { self.setState({ bc: !s.bc }); },
+fused: fused, cmpOpen: s.cmp != null, closeCmp: function () { self.setState({ cmp: null }); },
+cmp: { m: c[0], rows: (c[4] || []).map(function (r) { return { s: r[0], v: r[1], trust: r[2] }; }) },
+imported: [['Steps', '8,450', 'Health Connect'], ['Active energy', '612 kcal', 'Health Connect'], ['Walking HR', '96 bpm', 'Apple Health'], ['Weight', '74.2 kg', 'Health Connect'], ['VO₂ max', '46.8', 'Apple Health'], ['Basal energy', '1,710 kcal', 'Apple Health']].map(function (x) { return { k: x[0], v: x[1], src: x[2] }; })
+};
+}
+}
+</script>
+</body>
+</html>

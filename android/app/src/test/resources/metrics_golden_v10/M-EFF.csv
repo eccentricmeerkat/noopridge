@@ -1,0 +1,10 @@
+case,samples,maxHr,restingHr,method,sex,effort,display0to100,display0to21
+easy_60min_edwards,3600,188.000000,55.000000,EDWARDS,male,0.000000,0.0,0.0
+hard_60min_edwards,3600,188.000000,55.000000,EDWARDS,male,61.750000,61.8,13.0
+hard_60min_banister_f,3600,188.000000,55.000000,BANISTER,female,56.480000,56.5,11.9
+sparse_30s_cadence,40,188.000000,55.000000,EDWARDS,male,41.810000,41.8,8.8
+too_few_samples,300,188.000000,55.000000,EDWARDS,male,null,null,null
+no_maxhr_uses_190,3600,null,55.000000,EDWARDS,male,60.260000,60.3,12.7
+effectiveEffort(live=null;stored=40),,,,,,40.000000,,
+effectiveEffort(live=12;stored=40),,,,,,40.000000,,
+effectiveEffort(live=55;stored=40),,,,,,55.000000,,

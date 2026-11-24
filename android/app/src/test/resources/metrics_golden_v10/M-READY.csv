@@ -1,0 +1,6 @@
+case,level,acwr,monotony
+balanced,BALANCED,1.000000,null
+hrv_down_rhr_up,RUNDOWN,1.000000,null
+primed,PRIMED,1.000000,null
+load_spike,STRAINED,1.555556,null
+insufficient,INSUFFICIENT,null,null

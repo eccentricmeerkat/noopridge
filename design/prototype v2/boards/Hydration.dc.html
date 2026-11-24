@@ -1,0 +1,104 @@
+<!doctype html>
+<meta charset="utf-8"><style data-dc-design-system-vars>@layer{:root{--bg-000:#0c161c;--bg-100:#131f26;--bg-200:#172630;--bg-300:#1f313b;--bg-400:#283d48;--glass-fill:#aacddc0f;--glass-fill-strong:#aacddc1a;--glass-stroke:#bedceb24;--glass-highlight:#ffffff24;--ink:#f5efe4;--ink-muted:#b6c3ca;--ink-subtle:#9dadb6;--ink-on-liquid:#0c161c;--brand:#59ecaa;--brand-deep:#1f8a5e;--charge:#e8b84f;--charge-deep:#9a6a18;--effort:#6ba1fd;--effort-deep:#2c5bbd;--rest:#59ecaa;--rest-deep:#1f8a5e;--battery:#2f9a62;--battery-deep:#15512f;--state-depleted:#f7777d;--state-low:#f39a5b;--state-moderate:#e8c46a;--state-good:#a6dc7e;--state-ready:#59ecaa;--data-hrv:#b8a3ff;--data-heart:#ff8198;--data-energy:#ffb45e;--data-breath:#58d7c9;--focus-ring:#f5efe4;--shadow-card:0 12px 32px rgba(2, 6, 16, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);--glow-charge:0 0 28px rgba(232, 184, 79, 0.35);--glow-effort:0 0 28px rgba(107, 161, 253, 0.35);--glow-rest:0 0 28px rgba(89, 236, 170, 0.35);--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--radius-sm:10px;--radius-md:18px;--radius-lg:24px;--radius-xl:32px;--radius-pill:999px;--radius-orb:50%;--blur-glass:20px;--font-display:"Playfair Display", Georgia, serif;--font-sans:Inter, "SF Pro Display", system-ui, sans-serif;--font-script:Allura, "Snell Roundhand", cursive;--text-numeral-xl:700 60px/1 var(--font-display);--text-numeral-lg:700 44px/1 var(--font-display);--text-title-xl:700 40px/44px var(--font-display);--text-title-lg:700 30px/34px var(--font-display);--text-numeral-md:700 28px/32px var(--font-display);--text-body:400 15px/22px var(--font-sans);--text-body-sm:500 13px/18px var(--font-sans);--text-label:600 13px/16px var(--font-sans);--text-eyebrow:600 11px/14px var(--font-sans);--text-button:600 14px/20px var(--font-sans);--text-tab:500 11px/14px var(--font-sans);--text-wordmark:300 22px/24px var(--font-sans);--text-tagline:500 10px/14px var(--font-sans);--text-script:400 26px/26px var(--font-script);}}</style>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hydration — Noop Ridge</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%; background: radial-gradient(120% 40% at 50% 0%, rgba(142, 208, 255, 0.16), rgba(19, 31, 38, 0) 70%)">
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="BodyMore.dc.html" aria-label="Back to More" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">Hydration</h1><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Your fluid intake today, on this phone only.</span></div>
+</header>
+
+<section style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px 0">
+<div style="--effort: #8ed0ff; --effort-deep: #3f90d4; --glow-effort: 0 0 44px rgba(142, 208, 255, 0.42); display: block"><x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="effort" value="{{ pct }}" display="{{ mlShort }}" size="170" aria-label="{{ aria }}" style="display: block"></x-import></div>
+<span style="font: 700 28px/32px var(--font-display)">{{ ml }} ml</span>
+<span style="font: 500 14px/20px var(--font-sans); color: var(--ink-muted)">{{ pct }}% of today's {{ goal }} ml goal</span>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle); text-align: center; max-width: 300px">A simple goal that adjusts to your effort: +250 ml for today's Effort.</span>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{ tiles }}" as="t" hint-placeholder-count="4"><button type="button" onClick="{{ t.log }}" class="nr-glass" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 4px; min-height: 92px; border-radius: var(--radius-md); cursor: pointer; color: var(--ink)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8ed0ff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ t.icon }}"></path></svg><span style="font: 600 13px/16px var(--font-sans)">{{ t.label }}</span><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">{{ t.ml }}</span></button></sc-for>
+</div>
+
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column">
+<div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px"><span class="nr-eyebrow">Logged today</span><div style="display: flex; gap: 4px"><button type="button" onClick="{{ undo }}" style="border: 0; background: none; padding: 6px; cursor: pointer; font: 600 12px/16px var(--font-sans); color: var(--brand)">{{ undoLabel }}</button><button type="button" onClick="{{ clear }}" style="border: 0; background: none; padding: 6px; cursor: pointer; font: 600 12px/16px var(--font-sans); color: var(--ink-muted)">Clear today</button></div></div>
+<sc-if value="{{ none }}" hint-placeholder-val="{{ false }}"><span style="padding: 12px 0; font: 400 14px/20px var(--font-sans); color: var(--ink-muted)">No drinks logged yet. Tap Sip, Cup or Bottle to start.</span></sc-if>
+<sc-for list="{{ log }}" as="l" hint-placeholder-count="4"><div style="display: flex; align-items: center; gap: 10px; min-height: 44px; border-top: 1px solid var(--glass-stroke)"><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted); width: 46px">{{ l.t }}</span><span style="flex-grow: 1; font: 500 14px/18px var(--font-sans)">{{ l.what }}</span><span style="{{ l.srcStyle }}">{{ l.src }}</span><span style="font: 700 15px/18px var(--font-display)">{{ l.ml }}</span></div></sc-for>
+</section>
+
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px">
+<span class="nr-eyebrow">Last 14 days</span>
+<div style="display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px; align-items: end; height: 90px"><sc-for list="{{ hist }}" as="h" hint-placeholder-count="14"><span style="{{ h }}"></span></sc-for></div>
+<div style="display: flex; justify-content: space-between; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)"><span>7 Sep</span><span>Today</span></div>
+</section>
+
+</div>
+</div>
+</div>
+
+<sc-if value="{{ customOpen }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-label="Custom amount" style="position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; padding: 24px; background: rgba(6, 11, 15, 0.7)">
+<div style="width: 100%; box-sizing: border-box; border-radius: 28px; background: var(--bg-400); border: 1px solid var(--glass-stroke); padding: 22px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Custom amount</h2>
+<div style="display: flex; align-items: center; justify-content: space-between"><button type="button" aria-label="Less" onClick="{{ less }}" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--glass-stroke); background: var(--glass-fill); color: var(--ink); cursor: pointer; font: 600 22px/1 var(--font-sans)">−</button><span style="font: 700 34px/38px var(--font-display)">{{ custom }} <span style="font: 500 14px/18px var(--font-sans); color: var(--ink-muted)">ml</span></span><button type="button" aria-label="More" onClick="{{ more }}" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--glass-stroke); background: var(--glass-fill); color: var(--ink); cursor: pointer; font: 600 22px/1 var(--font-sans)">+</button></div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">Enter any amount from 1 to 3000 ml.</span>
+<div style="display: flex; gap: 8px"><button type="button" onClick="{{ closeCustom }}" class="nr-btn nr-btn-secondary" style="flex: 1">Cancel</button><button type="button" onClick="{{ logCustom }}" class="nr-btn nr-btn-primary" style="flex: 1">Log</button></div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { log: [['07:10', 'Cup', 237, 0], ['09:40', 'Bottle', 500, 0], ['11:05', 'Walk · Health Connect', 276, 1], ['12:30', 'Cup', 237, 0]], custom: 330, cOpen: false }; }
+renderVals() {
+var self = this, s = this.state, goal = 2300;
+var ml = s.log.reduce(function (a, l) { return a + l[2]; }, 0), pct = Math.min(100, Math.round(ml / goal * 100));
+var now = function () { return '14:' + String(10 + s.log.length * 7).slice(-2); };
+var add = function (what, n) { self.setState({ log: s.log.concat([[now(), what, n, 0]]) }); };
+var I = 'M7 3h10l-1.5 17a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM7.5 9h9';
+var tiles = [['Sip', 30, 'M10 4h4l-.8 8a1.2 1.2 0 0 1-1.2 1h0a1.2 1.2 0 0 1-1.2-1z'], ['Cup', 237, 'M5 7h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5zM17 9h1.5a2.5 2.5 0 0 1 0 5H17'], ['Bottle', 500, I], ['Custom', 0, 'M12 5v14M5 12h14']].map(function (t) { return { label: t[0], ml: t[1] ? t[1] + ' ml' : 'any amount', icon: t[2], log: function () { if (t[1]) add(t[0], t[1]); else self.setState({ cOpen: true }); } }; });
+var lastMine = null; for (var i = s.log.length - 1; i >= 0; i--) if (!s.log[i][3]) { lastMine = i; break; }
+var H = [1900, 2400, 2100, 1600, 2250, 2600, 2000, 1750, 2300, 2450, 1500, 2200, 2050, ml];
+var hist = H.map(function (v, i) { var hit = v >= goal; return 'height: ' + Math.round(v / 2800 * 90) + 'px; border-radius: 4px 4px 2px 2px; background: ' + (i === 13 ? '#8ed0ff' : hit ? 'rgba(142,208,255,0.7)' : 'rgba(142,208,255,0.35)') + ';' + (i === 13 ? ' box-shadow: 0 0 8px rgba(142,208,255,0.6);' : ''); });
+return {
+ml: ml.toLocaleString(), mlShort: (ml / 1000).toFixed(1) + 'L', pct: String(pct), goal: goal.toLocaleString(), aria: ml + ' ml, ' + pct + '% of goal',
+tiles: tiles, none: s.log.length === 0,
+log: s.log.slice().reverse().map(function (l) { return { t: l[0], what: l[1], ml: l[2] + ' ml', src: l[3] ? 'Read-only' : '', srcStyle: 'font: 500 11px/14px Inter, sans-serif; color: #9dadb6;' }; }),
+undoLabel: lastMine != null ? 'Undo last (' + s.log[lastMine][2] + ' ml)' : 'Undo last',
+undo: function () { if (lastMine == null) return; var a = s.log.slice(); a.splice(lastMine, 1); self.setState({ log: a }); },
+clear: function () { self.setState({ log: s.log.filter(function (l) { return l[3]; }) }); },
+hist: hist,
+customOpen: s.cOpen, custom: String(s.custom), less: function () { self.setState({ custom: Math.max(1, s.custom - 50) }); }, more: function () { self.setState({ custom: Math.min(3000, s.custom + 50) }); },
+closeCustom: function () { self.setState({ cOpen: false }); }, logCustom: function () { self.setState({ cOpen: false, log: s.log.concat([[now(), 'Custom', s.custom, 0]]) }); }
+};
+}
+}
+</script>
+</body>
+</html>

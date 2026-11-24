@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Breathe — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+.np-hs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}.np-hs::-webkit-scrollbar{display:none}
+.np-orbwrap{transition:transform 1.2s ease-in-out}
+@media (prefers-reduced-motion: reduce){.np-orbwrap{transition:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<img src="/_blob/78bf32f1f23a7ccfac55c88185a3a22a" alt="" style="position: absolute; left: 0; top: -60px; width: 390px; height: 926px; object-fit: cover; object-position: top; opacity: 0.4">
+<div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19, 31, 38, 0.2), #131f26 60%)"></div>
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">Breathe</h1><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Haptic-paced breathing · find your pace · calm down</span></div>
+<a href="Intervals.dc.html" class="nr-chip np-plain" style="height: 34px; text-transform: none; letter-spacing: 0">Timer</a>
+</header>
+
+<div role="tablist" aria-label="Mode" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)">
+<sc-for list="{{ modes }}" as="m" hint-placeholder-count="3"><button type="button" role="tab" onClick="{{ m.pick }}" aria-selected="{{ m.on }}" style="{{ m.style }}">{{ m.label }}</button></sc-for>
+</div>
+
+<sc-if value="{{ isBreathe }}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{ checkin }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: var(--radius-lg); border: 1px solid rgba(184, 163, 255, 0.4); background: rgba(184, 163, 255, 0.1)"><span style="font: 500 14px/20px var(--font-sans)">Your HRV dipped while you were still. Want a minute to breathe?</span><div style="display: flex; gap: 8px"><button type="button" onClick="{{ breatheNow }}" class="nr-btn nr-btn-primary" style="flex: 1">Breathe now</button><button type="button" onClick="{{ notNow }}" class="nr-btn nr-btn-ghost" style="flex: 1">Not now</button></div></div>
+</sc-if>
+<div style="display: flex; justify-content: space-between; align-items: flex-end"><span class="nr-eyebrow">Protocol · 18</span><button type="button" onClick="{{ openInfo }}" style="border: 0; background: none; padding: 6px 0; cursor: pointer; font: 600 13px/18px var(--font-sans); color: var(--brand)">About {{ p.name }}</button></div>
+<div class="np-hs"><sc-for list="{{ protos }}" as="x" hint-placeholder-count="8"><button type="button" onClick="{{ x.pick }}" aria-pressed="{{ x.on }}" style="{{ x.style }}">{{ x.label }}</button></sc-for></div>
+
+<section aria-label="Pacer" style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 8px 0">
+<div class="np-orbwrap" style="{{ orbScale }}"><x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="rest" value="{{ fill }}" display=" " size="190" aria-label="Breathing pacer" style="display: block"></x-import></div>
+<span aria-live="polite" style="font: 700 28px/32px var(--font-display)">{{ phase }}</span>
+<div style="width: 220px; height: 4px; border-radius: 2px; background: rgba(190, 220, 235, 0.14)"><div style="{{ prog }}"></div></div>
+<span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">{{ breathsLine }}</span>
+<sc-if value="{{ p.timer }}" hint-placeholder-val="{{ false }}"><span class="nr-chip nr-chip-beta">Guided timer · coaching text only</span></sc-if>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<div class="nr-glass" style="border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">Heart rate</span><span style="font: 700 20px/24px var(--font-display); color: var(--data-heart)">{{ hr }}</span></div>
+<div class="nr-glass" style="border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">HRV (RMSSD)</span><span style="font: 700 20px/24px var(--font-display); color: var(--data-hrv)">{{ hrv }}</span></div>
+<div class="nr-glass" style="border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 2px; border-color: rgba(89, 236, 170, 0.35)"><span class="nr-eyebrow" style="font-size: 9px">Coherence</span><span style="font: 700 20px/24px var(--font-display); color: var(--brand)">{{ coh }}</span></div>
+</div>
+
+<div class="nr-glass" style="border-radius: var(--radius-lg); padding: 6px 16px">
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 0"><span style="font: 500 14px/18px var(--font-sans)">Session length</span><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)"><sc-for list="{{ lens }}" as="l" hint-placeholder-count="4"><button type="button" onClick="{{ l.pick }}" aria-pressed="{{ l.on }}" style="{{ l.style }}">{{ l.label }}</button></sc-for></div></div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 60px; border-top: 1px solid var(--glass-stroke)"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 500 15px/20px var(--font-sans)">Audio cues</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">Soft tone on each phase · honours silent mode</span></span><button type="button" role="switch" aria-checked="{{ audio }}" aria-label="Audio cues" onClick="{{ flipAudio }}" style="{{ aTrack }}"><span style="{{ aKnob }}"></span></button></div>
+</div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle); text-align: center">Strap connected · haptic guidance on.</span>
+<div style="display: flex; gap: 8px"><button type="button" onClick="{{ startStop }}" class="nr-btn nr-btn-primary" style="flex: 1.4">{{ ssLabel }}</button><button type="button" onClick="{{ done }}" class="nr-btn nr-btn-secondary" style="flex: 1">Done</button></div>
+</sc-if>
+
+<sc-if value="{{ isRes }}" hint-placeholder-val="{{ false }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font: 700 22px/26px var(--font-display)">Find your resonance pace</h2>
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">Everyone has a breathing pace where heart rate and breath line up most strongly. NOOP sweeps a few paces and locks the one your heart responds to best.</p>
+<sc-if value="{{ sweepIdle }}" hint-placeholder-val="{{ true }}"><div style="display: flex; gap: 8px"><button type="button" onClick="{{ quick }}" class="nr-btn nr-btn-primary" style="flex: 1">Quick sweep · ~7 min</button><button type="button" onClick="{{ fullSweep }}" class="nr-btn nr-btn-secondary" style="flex: 1">Full sweep · ~13 min</button></div></sc-if>
+<sc-if value="{{ sweeping }}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-direction: column; gap: 8px"><span style="font: 500 14px/20px var(--font-sans)">Sit still and breathe with the buzz… testing {{ sweepPace }} br/min</span><div style="height: 6px; border-radius: 3px; background: rgba(190, 220, 235, 0.12)"><div style="{{ sweepBar }}"></div></div><button type="button" onClick="{{ stopSweep }}" class="nr-btn nr-btn-ghost">Stop sweep</button></div></sc-if>
+</section>
+<sc-if value="{{ locked }}" hint-placeholder-val="{{ true }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; border-color: rgba(89, 236, 170, 0.35)">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span class="nr-eyebrow">Your locked pace</span><span style="font: 700 30px/34px var(--font-display); color: var(--brand)">5.8 <span style="font: 500 13px/16px var(--font-sans); color: var(--ink-muted)">br/min</span></span></div>
+<svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none" role="img" aria-label="Heart-rate swing by breathing pace, peaking at 5.8 breaths per minute" style="display: block"><path d="M0 80 C40 72 70 50 110 30 C130 20 150 14 165 16 C190 20 220 46 260 66 L300 78" fill="none" stroke="#59ecaa" stroke-width="2.5" vector-effect="non-scaling-stroke"></path><line x1="165" x2="165" y1="8" y2="92" stroke="#f5efe4" stroke-opacity="0.5" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"></line></svg>
+<div style="display: flex; justify-content: space-between; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)"><span>4.5</span><span>5.5</span><span>6.5</span><span>7.0</span></div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">Locked 2 Oct · paces drift, re-measure anytime.</span>
+</section>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{ isCalm }}" hint-placeholder-val="{{ false }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="effort" value="{{ calmFill }}" display="{{ calmHr }}" size="140" aria-label="Calm me heart rate" style="display: block"></x-import>
+<h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Calm me · 3 min</h2>
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">{{ calmText }}</p>
+<div style="display: flex; gap: 8px; width: 100%"><button type="button" onClick="{{ calmGo }}" class="nr-btn nr-btn-primary" style="flex: 1.4">{{ calmLabel }}</button><button type="button" onClick="{{ testBuzz }}" class="nr-btn nr-btn-secondary" style="flex: 1">{{ buzzLabel }}</button></div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">Estimate only — not medical advice. Stop if you feel unwell.</span>
+</section>
+</sc-if>
+
+</div>
+</div>
+
+<sc-if value="{{ infoOpen }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-label="Protocol info" style="position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; padding: 24px; background: rgba(6, 11, 15, 0.7)">
+<div style="width: 100%; box-sizing: border-box; border-radius: 28px; background: var(--bg-400); border: 1px solid var(--glass-stroke); padding: 22px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font: 700 24px/28px var(--font-display)">{{ p.name }}</h2>
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">{{ p.desc }}</p>
+<div style="display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--glass-stroke); font: 500 14px/18px var(--font-sans)"><span>Suggested length</span><span>{{ p.len }} min</span></div>
+<div style="padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(243, 154, 91, 0.35); background: rgba(243, 154, 91, 0.08); font: 400 13px/19px var(--font-sans); color: var(--ink-muted)">{{ p.safety }}</div>
+<button type="button" onClick="{{ closeInfo }}" class="nr-btn nr-btn-primary" style="width: 100%">Close</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { mode: 'breathe', proto: 0, len: 1, audio: true, run: false, t: 0, info: false, checkin: true, sweep: 0, sweepT: 0, locked: true, calm: 0, buzzed: false }; }
+componentWillUnmount() { if (this.tm) clearInterval(this.tm); if (this.sw) clearInterval(this.sw); if (this.cm) clearInterval(this.cm); }
+renderVals() {
+var self = this, s = this.state;
+var pill = function (on) { return 'border: 0; border-radius: 999px; height: 36px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; ' + (on ? 'background: #59ecaa; color: #0c161c;' : 'background: transparent; color: #b6c3ca;'); };
+var chip = function (on) { return 'flex-shrink: 0; height: 36px; padding: 0 14px; border-radius: 999px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; white-space: nowrap; border: 1px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.2)') + '; background: ' + (on ? 'rgba(89,236,170,0.16)' : 'rgba(12,22,28,0.4)') + '; color: ' + (on ? '#59ecaa' : '#b6c3ca') + ';'; };
+var PR = [['Relax 4-6', [4, 0, 6, 0], 5, 'A longer exhale than inhale nudges the body toward rest.'], ['Coherence 5.5', [5.5, 0, 5.5, 0], 10, 'Even breathing at about 5.5 breaths a minute, close to most people\'s resonance pace.'], ['Box 4-4-4-4', [4, 4, 4, 4], 5, 'Equal in, hold, out, hold. Steadying before a hard moment.'], ['4-7-8', [4, 7, 8, 0], 5, 'In for 4, hold for 7, out for 8. Often used before sleep.'], ['Diaphragmatic', [4, 1, 6, 0], 10, 'Slow belly breathing with the chest still.'], ['Alternate nostril', [4, 2, 4, 2], 10, 'Nadi Shodhana: switch nostrils on each breath.'], ['Coherent 6-6', [6, 0, 6, 0], 10, 'Five breaths a minute, even in and out.'], ['Buteyko', [3, 0, 4, 5], 5, 'Gentle, reduced breathing with a pause after each exhale.'], ['Ujjayi', [5, 0, 7, 0], 10, 'Slight throat constriction for an audible, slow breath.'], ['Kapalabhati', [1, 0, 1, 0], 3, 'Rapid, active belly exhales with passive inhales. Timer and coaching text only.', true], ['Wim Hof', [2, 0, 2, 0], 10, 'Rounds of deep breaths followed by a breath hold.'], ['Holotropic', [2, 0, 2, 0], 15, 'Fast, deep breathing for long sessions. Timer and coaching text only.', true], ['Physiological sigh', [3, 1, 6, 0], 3, 'A double inhale through the nose, then a long exhale. The quickest way to settle.'], ['Triangle 4-4-4', [4, 4, 4, 0], 5, 'In, hold and out for equal counts.'], ['Extended exhale 4-8', [4, 0, 8, 0], 5, 'Exhale twice as long as you inhale to slow your heart rate.'], ['Pre-sleep 5-7', [5, 0, 7, 0], 10, 'Slow, quiet breathing to wind down before lights out.'], ['Energise 6-2', [6, 0, 2, 0], 3, 'Long inhale, short exhale to lift alertness. Stop if light-headed.'], ['Recovery 4-2-6', [4, 2, 6, 0], 10, 'A brief hold and a long exhale after hard training.']];
+var x = PR[s.proto], pat = x[1], cyc = pat[0] + pat[1] + pat[2] + pat[3];
+var tt = s.t % cyc, ph, frac;
+if (tt < pat[0]) { ph = 'Breathe in…'; frac = tt / pat[0]; } else if (tt < pat[0] + pat[1]) { ph = 'Hold…'; frac = 1; } else if (tt < pat[0] + pat[1] + pat[2]) { ph = 'Breathe out…'; frac = 1 - (tt - pat[0] - pat[1]) / pat[2]; } else { ph = 'Hold…'; frac = 0; }
+var LN = [0, 5, 10, 15], mins = LN[s.len] || x[2], total = Math.round(mins * 60 / cyc) || 30, done = Math.floor(s.t / cyc);
+var sw = function (on) { return ['position: relative; width: 52px; height: 32px; flex-shrink: 0; border-radius: 16px; border: 0; padding: 0; cursor: pointer; background: ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.22)') + ';', 'position: absolute; top: 4px; left: ' + (on ? 24 : 4) + 'px; width: 24px; height: 24px; border-radius: 50%; background: ' + (on ? '#0c161c' : '#f5efe4') + ';']; };
+var as = sw(s.audio);
+var start = function () { if (self.tm) clearInterval(self.tm); self.setState({ run: true, t: 0, checkin: false }); self.tm = setInterval(function () { self.setState({ t: self.state.t + 0.5 }); }, 500); };
+var stop = function () { if (self.tm) clearInterval(self.tm); self.tm = null; self.setState({ run: false }); };
+var SP = [4.5, 5.0, 5.5, 6.0, 6.5, 7.0];
+var sweepGo = function (n) { if (self.sw) clearInterval(self.sw); self.setState({ sweep: 1, sweepT: 0, locked: false }); self.sw = setInterval(function () { var k = self.state.sweepT + 1; if (k >= n) { clearInterval(self.sw); self.sw = null; self.setState({ sweep: 0, locked: true, sweepT: 0 }); } else self.setState({ sweepT: k }); }, 700); };
+var calmHrs = [92, 88, 84, 80, 77, 74];
+return {
+modes: [['breathe', 'Breathe'], ['res', 'Resonance'], ['calm', 'Calm me']].map(function (m) { return { label: m[1], on: s.mode === m[0], style: pill(s.mode === m[0]), pick: function () { self.setState({ mode: m[0] }); } }; }),
+isBreathe: s.mode === 'breathe', isRes: s.mode === 'res', isCalm: s.mode === 'calm',
+checkin: s.checkin, breatheNow: start, notNow: function () { self.setState({ checkin: false }); },
+protos: PR.map(function (q, i) { return { label: q[0], on: s.proto === i, style: chip(s.proto === i), pick: function () { stop(); self.setState({ proto: i, t: 0 }); } }; }),
+p: { name: x[0], desc: x[3], len: String(x[2]), timer: !!x[4], safety: x[4] ? 'Not for pregnancy, epilepsy, heart conditions or high blood pressure. Sit or lie down; stop if dizzy.' : 'Stop and breathe normally if you feel light-headed.' },
+infoOpen: s.info, openInfo: function () { self.setState({ info: true }); }, closeInfo: function () { self.setState({ info: false }); },
+fill: String(Math.round(15 + frac * 75)), orbScale: 'transform: scale(' + (0.82 + frac * 0.22).toFixed(3) + ');',
+phase: s.run ? (x[4] ? 'Follow the coaching…' : ph) : 'Ready when you are',
+prog: 'height: 4px; border-radius: 2px; background: #59ecaa; width: ' + Math.min(100, Math.round(done / total * 100)) + '%;',
+breathsLine: (s.run ? done : 0) + ' / ' + total + ' breaths' + (s.len === 0 ? ' · open session' : ''),
+hr: s.run ? String(Math.max(58, 72 - Math.floor(s.t / 6))) : '72', hrv: s.run ? String(38 + Math.floor(s.t / 4)) : '38', coh: s.run ? '+' + Math.min(24, Math.floor(s.t / 3)) + '%' : '—',
+lens: ['Open', '5 min', '10 min', '15 min'].map(function (l, i) { return { label: l, on: s.len === i, style: pill(s.len === i), pick: function () { self.setState({ len: i }); } }; }),
+audio: s.audio, aTrack: as[0], aKnob: as[1], flipAudio: function () { self.setState({ audio: !s.audio }); },
+ssLabel: s.run ? 'Stop' : 'Start', startStop: function () { if (s.run) stop(); else start(); }, done: function () { stop(); self.setState({ t: 0 }); },
+sweepIdle: s.sweep === 0, sweeping: s.sweep === 1, locked: s.locked && s.sweep === 0, sweepPace: SP[s.sweepT % SP.length].toFixed(1), sweepBar: 'height: 6px; border-radius: 3px; background: #59ecaa; width: ' + Math.round((s.sweepT + 1) / 12 * 100) + '%;',
+quick: function () { sweepGo(8); }, fullSweep: function () { sweepGo(12); }, stopSweep: function () { if (self.sw) clearInterval(self.sw); self.setState({ sweep: 0, locked: true }); },
+calmHr: s.calm ? String(calmHrs[Math.min(5, s.calm - 1)]) : '92', calmFill: String(s.calm ? 70 - s.calm * 8 : 70),
+calmText: s.calm ? 'Started at 92 bpm · the rhythm trails your heart down.' : 'The strap buzzes a gentle rhythm just below your current heart rate. Match your breathing to it.',
+calmLabel: s.calm ? 'Stop' : 'Start Calm me',
+calmGo: function () { if (s.calm) { clearInterval(self.cm); self.setState({ calm: 0 }); return; } self.setState({ calm: 1 }); self.cm = setInterval(function () { var c = self.state.calm; if (!c) return; self.setState({ calm: Math.min(6, c + 1) }); }, 1200); },
+buzzLabel: s.buzzed ? 'Buzzed' : 'Test buzz', testBuzz: function () { self.setState({ buzzed: true }); }
+};
+}
+}
+</script>
+</body>
+</html>

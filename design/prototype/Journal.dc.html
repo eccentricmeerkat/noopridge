@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Journal — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+.np-num{width:72px;height:36px;border-radius:12px;border:1px solid rgba(190,220,235,.2);background:rgba(170,205,220,.08);color:#f5efe4;text-align:center;font:600 15px/20px Inter,sans-serif}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%; background: radial-gradient(120% 40% at 50% 0%, rgba(255, 180, 94, 0.14), rgba(19, 31, 38, 0) 70%)">
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">Journal</h1><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Log your day. NOOP finds what affects what.</span></div>
+</header>
+
+<a href="WhatMovesYou.dc.html" class="nr-glass np-plain" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-lg); border-color: rgba(89, 236, 170, 0.35)">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"></path></svg>
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 600 15px/20px var(--font-sans)">What moves you</span><span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">Ranked patterns in your own data, and your dose-response.</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-subtle)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+</a>
+
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)">
+<button type="button" aria-label="Previous day" onClick="{{ prevDay }}" style="width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: var(--ink); cursor: pointer; display: grid; place-items: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+<span style="font: 600 15px/20px var(--font-sans)">{{ dayLabel }}</span>
+<button type="button" aria-label="Next day" onClick="{{ nextDay }}" disabled="{{ atToday }}" style="{{ nextStyle }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+</div>
+<span style="margin-top: -8px; text-align: center; font: 400 12px/16px var(--font-sans); color: var(--ink-subtle)">Pre-filled from last night. Tap to confirm or change.</span>
+
+<section aria-label="Journal log" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px"><span class="nr-eyebrow">Log</span><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Yesterday's habits</h2></div>
+<sc-for list="{{ items }}" as="it" hint-placeholder-count="6">
+<div style="{{ it.row }}">
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font: 500 15px/20px var(--font-sans)">{{ it.name }}</span><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle); text-transform: uppercase; letter-spacing: 0.12em">{{ it.group }}</span></span>
+<sc-if value="{{ it.yn }}" hint-placeholder-val="{{ true }}"><div style="display: flex; gap: 4px"><button type="button" onClick="{{ it.yes }}" aria-pressed="{{ it.isYes }}" style="{{ it.yesStyle }}">Yes</button><button type="button" onClick="{{ it.no }}" aria-pressed="{{ it.isNo }}" style="{{ it.noStyle }}">No</button></div></sc-if>
+<sc-if value="{{ it.num }}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; align-items: center; gap: 6px"><input class="np-num" aria-label="{{ it.name }}" value="{{ it.val }}" readonly=""><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">{{ it.unit }}</span></span></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ added }}" hint-placeholder-val="{{ false }}"><div style="display: flex; align-items: center; gap: 10px; min-height: 56px; border-top: 1px solid var(--glass-stroke)"><span style="flex-grow: 1; font: 500 15px/20px var(--font-sans)">Evening walk</span><span class="nr-chip nr-chip-live" style="text-transform: none; letter-spacing: 0">Added · Yes/No</span></div></sc-if>
+<button type="button" onClick="{{ addItem }}" style="display: flex; align-items: center; gap: 8px; min-height: 48px; border: 0; border-top: 1px solid var(--glass-stroke); background: none; padding: 0; cursor: pointer; font: 600 14px/18px var(--font-sans); color: var(--brand)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add a custom item · Group: Lifestyle</button>
+</section>
+
+<section aria-label="Mind" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font: 700 22px/26px var(--font-display)">How are you feeling today?</h2></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{ moods }}" as="m" hint-placeholder-count="5"><button type="button" onClick="{{ m.pick }}" aria-pressed="{{ m.on }}" aria-label="{{ m.label }}" style="{{ m.btn }}"><span style="{{ m.dot }}"></span><span style="font: 600 11px/14px var(--font-sans)">{{ m.label }}</span></button></sc-for>
+</div>
+<span style="font: 400 12px/16px var(--font-sans); color: var(--ink-subtle)">{{ moodNote }}</span>
+</section>
+
+<section aria-label="Caffeine" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font: 700 22px/26px var(--font-display)">Caffeine</h2><span style="font: 700 18px/22px var(--font-display); color: var(--data-energy)">{{ active }}</span></div>
+<p style="margin: 0; font: 400 13px/19px var(--font-sans); color: var(--ink-muted)">Log a coffee, tea or energy drink and NOOP estimates how much may still be active.</p>
+<div style="display: flex; gap: 8px"><button type="button" onClick="{{ hadIt }}" class="nr-btn nr-btn-primary" style="flex: 1">Had it</button><button type="button" onClick="{{ hadLate }}" class="nr-btn nr-btn-secondary" style="flex: 1">Log one at 16:30</button></div>
+<sc-for list="{{ drinks }}" as="d" hint-placeholder-count="2"><div style="display: flex; align-items: center; gap: 10px; min-height: 44px; border-top: 1px solid var(--glass-stroke)"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 500 14px/18px var(--font-sans)">{{ d.t }}</span><span style="{{ d.warnStyle }}">{{ d.warn }}</span></span><button type="button" onClick="{{ d.remove }}" style="border: 0; background: none; padding: 8px; cursor: pointer; font: 600 12px/16px var(--font-sans); color: var(--ink-muted)">Remove</button></div></sc-for>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-top: 1px solid var(--glass-stroke)"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 500 15px/20px var(--font-sans)">Late-caffeine nudge</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">Bedtime 21:55 · last caffeine by about 14:00</span></span><button type="button" role="switch" aria-checked="{{ nudge }}" aria-label="Late-caffeine nudge" onClick="{{ flipNudge }}" style="{{ nudgeTrack }}"><span style="{{ nudgeKnob }}"></span></button></div>
+</section>
+
+<section aria-label="Experiment" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center"><div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">Experiment</span><h2 style="margin: 0; font: 700 22px/26px var(--font-display)">Run a clean personal test</h2></div><span class="nr-chip" style="text-transform: none; letter-spacing: 0.08em; font: 600 10px/14px var(--font-sans)">LOCAL ONLY</span></div>
+<sc-if value="{{ expSetup }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 8px"><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Test</span><div style="display: flex; gap: 6px; flex-wrap: wrap"><sc-for list="{{ behaviours }}" as="b" hint-placeholder-count="3"><button type="button" onClick="{{ b.pick }}" aria-pressed="{{ b.on }}" style="{{ b.style }}">{{ b.label }}</button></sc-for></div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Against · for</span><div style="display: flex; gap: 6px; flex-wrap: wrap"><span class="nr-chip nr-chip-live" style="text-transform: none; letter-spacing: 0">Charge</span><sc-for list="{{ lengths }}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{ l.pick }}" aria-pressed="{{ l.on }}" style="{{ l.style }}">{{ l.label }}</button></sc-for></div></div>
+<button type="button" onClick="{{ startExp }}" class="nr-btn nr-btn-primary" style="width: 100%">Start experiment</button>
+</sc-if>
+<sc-if value="{{ expActive }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">{{ expLine }}</span><span style="font: 700 16px/20px var(--font-display); color: var(--brand)">DAY {{ expDay }}/{{ expLen }}</span></div>
+<div style="height: 6px; border-radius: 3px; background: rgba(190, 220, 235, 0.12)"><div style="{{ expBar }}"></div></div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">Baseline</span><span style="font: 700 18px/22px var(--font-display)">58</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">Test</span><span style="font: 700 18px/22px var(--font-display)">63</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">Change</span><span style="font: 700 18px/22px var(--font-display); color: var(--brand)">+5</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow" style="font-size: 9px">Kept to</span><span style="font: 700 18px/22px var(--font-display)">{{ comp }}</span></div>
+</div>
+<span style="font: 500 12px/16px var(--font-sans); color: var(--ink-subtle)">{{ todayStatus }}</span>
+<div style="display: flex; gap: 6px"><button type="button" onClick="{{ markDone }}" class="nr-btn nr-btn-primary" style="flex: 1; padding: 0 8px">Mark done</button><button type="button" onClick="{{ skipToday }}" class="nr-btn nr-btn-secondary" style="flex: 1; padding: 0 8px">Skip today</button><button type="button" onClick="{{ endExp }}" class="nr-btn nr-btn-ghost" style="flex: 1; padding: 0 8px; color: var(--state-depleted)">End</button></div>
+</sc-if>
+</section>
+
+<section aria-label="Activity cost" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">Activity cost</span><h2 style="margin: 0; font: 700 22px/26px var(--font-display)">What each activity costs your recovery</h2></div>
+<sc-for list="{{ costs }}" as="c" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 0; border-top: 1px solid var(--glass-stroke)">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font: 600 15px/20px var(--font-sans)">{{ c.sport }}</span><span style="{{ c.pill }}">{{ c.conf }}</span></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; font: 400 12px/16px var(--font-sans); color: var(--ink-muted)"><span>Next morning<br><span style="{{ c.dStyle }}">{{ c.delta }}</span></span><span>Bounce back<br><span style="font: 700 17px/22px var(--font-display); color: var(--ink)">{{ c.back }}</span></span><span>Sessions<br><span style="font: 700 17px/22px var(--font-display); color: var(--ink)">{{ c.n }}</span></span></div>
+</div>
+</sc-for>
+</section>
+
+<section aria-label="Metric relationships" class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">Pearson r</span><h2 style="margin: 0; font: 700 22px/26px var(--font-display)">Metric relationships</h2></div>
+<sc-for list="{{ rel }}" as="r" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-top: 1px solid var(--glass-stroke)">
+<div style="display: flex; justify-content: space-between"><span style="font: 600 14px/18px var(--font-sans)">{{ r.pair }}</span><span style="font: 600 12px/16px var(--font-sans); color: var(--ink-muted)">r = {{ r.r }} · {{ r.p }}</span></div>
+<div style="position: relative; height: 6px; border-radius: 3px; background: rgba(190, 220, 235, 0.12)"><div style="position: absolute; left: 50%; top: -3px; width: 1px; height: 12px; background: var(--ink-subtle)"></div><div style="{{ r.bar }}"></div></div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-muted)">{{ r.s }}</span>
+</div>
+</sc-for>
+</section>
+
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { day: 0, ans: { alc: 0, late: 1, screen: 0, stretch: 1, sauna: -1 }, added: false, mood: 3, drinks: [{ t: 'Coffee · 08:10 · 95 mg', late: false }], nudge: true, beh: 'alc', len: 14, exp: false, expDay: 5, done: false, skipped: false }; }
+renderVals() {
+var self = this, s = this.state;
+var chip = function (on) { return 'height: 34px; padding: 0 14px; border-radius: 999px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; border: 1px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.2)') + '; background: ' + (on ? 'rgba(89,236,170,0.16)' : 'transparent') + '; color: ' + (on ? '#59ecaa' : '#b6c3ca') + ';'; };
+var sw = function (on) { return ['position: relative; width: 52px; height: 32px; flex-shrink: 0; border-radius: 16px; border: 0; padding: 0; cursor: pointer; background: ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.22)') + ';', 'position: absolute; top: 4px; left: ' + (on ? 24 : 4) + 'px; width: 24px; height: 24px; border-radius: 50%; background: ' + (on ? '#0c161c' : '#f5efe4') + ';']; };
+var days = ['Today · Sun 20 Sep', 'Yesterday · Sat 19 Sep', 'Fri 18 Sep', 'Thu 17 Sep'];
+var Q = [['alc', 'Alcohol', 'Lifestyle', 'yn'], ['late', 'Ate within 2h of bed', 'Nutrition', 'yn'], ['screen', 'Screens in bed', 'Sleep', 'yn'], ['stretch', 'Stretching', 'Recovery', 'yn'], ['sauna', 'Sauna', 'Recovery', 'yn'], ['water', 'Water', 'Nutrition', 'num', '2.1', 'L']];
+var items = Q.map(function (q, i) {
+var v = s.ans[q[0]], set = function (x) { return function () { var a = Object.assign({}, s.ans); a[q[0]] = x; self.setState({ ans: a }); }; };
+return { name: q[1], group: q[2], yn: q[3] === 'yn', num: q[3] === 'num', val: q[4], unit: q[5], isYes: v === 1, isNo: v === 0, yes: set(1), no: set(0), yesStyle: chip(v === 1), noStyle: chip(v === 0), row: 'display: flex; align-items: center; gap: 10px; min-height: 60px;' + (i ? ' border-top: 1px solid rgba(190,220,235,0.14);' : '') };
+});
+var MC = ['#f7777d', '#f39a5b', '#e8c46a', '#a6dc7e', '#59ecaa'];
+var moods = ['Awful', 'Low', 'Okay', 'Good', 'Great'].map(function (l, i) { var on = s.mood === i; return { label: l, on: on, pick: function () { self.setState({ mood: i }); }, btn: 'display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 0; border-radius: 16px; cursor: pointer; color: ' + (on ? '#f5efe4' : '#b6c3ca') + '; border: 1px solid ' + (on ? MC[i] : 'rgba(190,220,235,0.14)') + '; background: ' + (on ? 'rgba(245,239,228,0.06)' : 'transparent') + ';', dot: 'width: ' + (on ? 26 : 20) + 'px; height: ' + (on ? 26 : 20) + 'px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.6), ' + MC[i] + ' 45%, rgba(0,0,0,0.3)); box-shadow: ' + (on ? '0 0 12px ' + MC[i] : 'none') + ';' }; });
+var drinks = s.drinks.map(function (d, i) { return { t: d.t, warn: d.late ? 'After your 14:00 cutoff — may still be active at bed.' : 'Mostly cleared by bedtime.', warnStyle: 'font: 400 12px/16px Inter, sans-serif; color: ' + (d.late ? '#f39a5b' : '#9dadb6') + ';', remove: function () { var a = s.drinks.slice(); a.splice(i, 1); self.setState({ drinks: a }); } }; });
+var mg = s.drinks.reduce(function (a, d) { return a + (d.late ? 80 : 30); }, 0);
+var ns = sw(s.nudge);
+var behaviours = [['alc', 'Alcohol'], ['late', 'Late meals'], ['screen', 'Screens in bed']].map(function (b) { return { label: b[1], on: s.beh === b[0], style: chip(s.beh === b[0]), pick: function () { self.setState({ beh: b[0] }); } }; });
+var lengths = [7, 14, 28].map(function (n) { return { label: n + 'd', on: s.len === n, style: chip(s.len === n), pick: function () { self.setState({ len: n }); } }; });
+var bn = { alc: 'Alcohol', late: 'Late meals', screen: 'Screens in bed' }[s.beh];
+var costs = [['Padel', 'SOLID', -11, '2 days', 14], ['Running', 'SOLID', -7, '1 day', 22], ['Strength', 'BUILDING', -4, 'same day', 6]].map(function (c) { var solid = c[1] === 'SOLID'; return { sport: c[0], conf: c[1], delta: c[2] + ' Charge', back: c[3], n: String(c[4]), dStyle: 'font: 700 17px/22px "Playfair Display", Georgia, serif; color: #f39a5b;', pill: 'height: 24px; display: inline-flex; align-items: center; padding: 0 10px; border-radius: 999px; font: 600 10px/14px Inter, sans-serif; letter-spacing: 0.1em; color: ' + (solid ? '#59ecaa' : '#e8c46a') + '; border: 1px solid ' + (solid ? 'rgba(89,236,170,0.4)' : 'rgba(232,196,106,0.4)') + ';' }; });
+var rel = [['HRV ↔ Charge', 0.71, 'p < 0.05', 'Higher HRV goes with higher Charge most mornings.'], ['Sleep ↔ Next-day Charge', 0.48, 'p < 0.05', 'Longer nights tend to come before better Charge.'], ['Effort ↔ Next-day RHR', -0.12, 'n.s.', 'No clear link yet over 90 days.']].map(function (r) { var pos = r[1] >= 0, w = Math.abs(r[1]) * 50; return { pair: r[0], r: (pos ? '+' : '−') + Math.abs(r[1]).toFixed(2), p: r[2], s: r[3], bar: 'position: absolute; top: 0; height: 6px; border-radius: 3px; width: ' + w + '%; ' + (pos ? 'left: 50%; background: #59ecaa;' : 'right: 50%; background: #f39a5b;') }; });
+return {
+dayLabel: days[s.day], atToday: s.day === 0, prevDay: function () { self.setState({ day: Math.min(3, s.day + 1) }); }, nextDay: function () { self.setState({ day: Math.max(0, s.day - 1) }); },
+nextStyle: 'width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: #f5efe4; cursor: pointer; display: grid; place-items: center;' + (s.day === 0 ? ' opacity: 0.3;' : ''),
+items: items, added: s.added, addItem: function () { self.setState({ added: true }); },
+moods: moods, moodNote: 'Logged today · one check-in a day. Mood correlations unlock after 14 days.',
+drinks: drinks, active: '~' + mg + ' mg active', hadIt: function () { self.setState({ drinks: s.drinks.concat([{ t: 'Coffee · 12:40 · 95 mg', late: false }]) }); }, hadLate: function () { self.setState({ drinks: s.drinks.concat([{ t: 'Espresso · 16:30 · 65 mg', late: true }]) }); },
+nudge: s.nudge, nudgeTrack: ns[0], nudgeKnob: ns[1], flipNudge: function () { self.setState({ nudge: !s.nudge }); },
+behaviours: behaviours, lengths: lengths, expSetup: !s.exp, expActive: s.exp,
+startExp: function () { self.setState({ exp: true, expDay: 5, done: false, skipped: false }); },
+expLine: 'Started 15 Sep · testing no ' + bn.toLowerCase(), expDay: String(s.expDay), expLen: String(s.len),
+expBar: 'height: 6px; border-radius: 3px; background: #59ecaa; width: ' + Math.round(s.expDay / s.len * 100) + '%;',
+comp: s.skipped ? '80%' : '100%', todayStatus: s.done ? 'Logged today' : s.skipped ? 'Skipped today' : 'Not logged today',
+markDone: function () { self.setState({ done: true, skipped: false }); }, skipToday: function () { self.setState({ skipped: true, done: false }); }, endExp: function () { self.setState({ exp: false }); },
+costs: costs, rel: rel
+};
+}
+}
+</script>
+</body>
+</html>

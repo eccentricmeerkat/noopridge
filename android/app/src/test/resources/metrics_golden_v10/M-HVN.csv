@@ -1,0 +1,5 @@
+case,sleepTabNeedMin,debtNeedMin,lastNightMin,hoursVsNeededPct
+short_sleeper_floor_450,450.000000,480.000000,414.000000,92.000000
+long_sleeper_mean,493.500000,500.250000,507.000000,102.735562
+gaps_ignored,450.000000,480.000000,470.000000,104.444444
+no_nights,450.000000,480.000000,0.000000,null

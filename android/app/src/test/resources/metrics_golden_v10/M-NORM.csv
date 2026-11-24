@@ -1,0 +1,7 @@
+case,value,historyNights,band,basis
+personal_in_range,56.000000,20,IN_RANGE,PERSONAL
+personal_out_of_range,63.000000,20,OUT_OF_RANGE,PERSONAL
+population_fallback_under_14_nights,63.000000,10,IN_RANGE,POPULATION
+implausible_value,25.000000,20,OUT_OF_RANGE,POPULATION
+spo2_population_only_95,95.0,0,IN_RANGE,POPULATION
+spo2_population_only_92,92.0,0,OUT_OF_RANGE,POPULATION

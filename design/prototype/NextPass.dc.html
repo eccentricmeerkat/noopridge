@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Not built yet — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-plain{text-decoration:none;color:inherit}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<img src="/_blob/78bf32f1f23a7ccfac55c88185a3a22a" alt="" style="position: absolute; left: 0; top: 0; width: 390px; height: 926px; object-fit: cover; object-position: top; opacity: 0.35">
+<div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(19, 31, 38, 0.3), #131f26 70%)"></div>
+
+<header style="position: relative; display: flex; align-items: center; gap: 8px; padding: 20px 16px 0">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+</header>
+
+<div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 140px 32px 0; text-align: center">
+<x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="brand" value="30" display=" " size="128" aria-label="Empty" style="display: block"></x-import>
+<h1 style="margin: 0; font: 700 32px/36px var(--font-display)">Not built yet</h1>
+<p style="margin: 0; max-width: 290px; font: 400 15px/23px var(--font-sans); color: var(--ink-muted)">This screen keeps its v10 behaviour and gets the Ridge treatment in the next pass. Everything on the Today, Trends, Baseline, Sleep and Hub tabs works.</p>
+<div style="display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 8px">
+<a href="More.dc.html" class="nr-btn nr-btn-primary np-plain" style="display: inline-flex; justify-content: center; align-items: center; color: var(--ink-on-liquid)">Back to Hub</a>
+<a href="Main.dc.html" class="nr-btn nr-btn-secondary np-plain" style="display: inline-flex; justify-content: center; align-items: center">Go to Today</a>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

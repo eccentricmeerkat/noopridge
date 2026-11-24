@@ -1,0 +1,306 @@
+<!doctype html>
+<meta charset="utf-8"><style data-dc-design-system-vars>@layer{:root{--bg-000:#0c161c;--bg-100:#131f26;--bg-200:#172630;--bg-300:#1f313b;--bg-400:#283d48;--glass-fill:#aacddc0f;--glass-fill-strong:#aacddc1a;--glass-stroke:#bedceb24;--glass-highlight:#ffffff24;--ink:#f5efe4;--ink-muted:#b6c3ca;--ink-subtle:#9dadb6;--ink-on-liquid:#0c161c;--brand:#59ecaa;--brand-deep:#1f8a5e;--charge:#e8b84f;--charge-deep:#9a6a18;--effort:#6ba1fd;--effort-deep:#2c5bbd;--rest:#59ecaa;--rest-deep:#1f8a5e;--battery:#2f9a62;--battery-deep:#15512f;--state-depleted:#f7777d;--state-low:#f39a5b;--state-moderate:#e8c46a;--state-good:#a6dc7e;--state-ready:#59ecaa;--data-hrv:#b8a3ff;--data-heart:#ff8198;--data-energy:#ffb45e;--data-breath:#58d7c9;--focus-ring:#f5efe4;--shadow-card:0 12px 32px rgba(2, 6, 16, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);--glow-charge:0 0 28px rgba(232, 184, 79, 0.35);--glow-effort:0 0 28px rgba(107, 161, 253, 0.35);--glow-rest:0 0 28px rgba(89, 236, 170, 0.35);--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--radius-sm:10px;--radius-md:18px;--radius-lg:24px;--radius-xl:32px;--radius-pill:999px;--radius-orb:50%;--blur-glass:20px;--font-display:"Playfair Display", Georgia, serif;--font-sans:Inter, "SF Pro Display", system-ui, sans-serif;--font-script:Allura, "Snell Roundhand", cursive;--text-numeral-xl:700 60px/1 var(--font-display);--text-numeral-lg:700 44px/1 var(--font-display);--text-title-xl:700 40px/44px var(--font-display);--text-title-lg:700 30px/34px var(--font-display);--text-numeral-md:700 28px/32px var(--font-display);--text-body:400 15px/22px var(--font-sans);--text-body-sm:500 13px/18px var(--font-sans);--text-label:600 13px/16px var(--font-sans);--text-eyebrow:600 11px/14px var(--font-sans);--text-button:600 14px/20px var(--font-sans);--text-tab:500 11px/14px var(--font-sans);--text-wordmark:300 22px/24px var(--font-sans);--text-tagline:500 10px/14px var(--font-sans);--text-script:400 26px/26px var(--font-script);}}</style>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sleep — Noop Ridge</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.nr-orb-num,.nr-tile-value{font-variant-numeric:lining-nums}
+.np-plain{text-decoration:none;color:inherit}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%">
+<img src="./assets/78bf32f1f23a7ccfac55c88185a3a22a.png" alt="" style="position: absolute; left: 0; top: -84px; width: 390px; height: 926px; object-fit: cover; object-position: top; opacity: 0.6">
+<div style="position: absolute; left: 0; top: 380px; width: 390px; height: 546px; background: linear-gradient(180deg, rgba(19, 31, 38, 0), #131f26 70%)"></div>
+
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding: 28px 16px 132px">
+
+<header style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div class="nr-eyebrow" style="color: var(--ink-muted)">Last night · Sat 19 Sep</div>
+<h1 style="margin: 0; font: 700 40px/44px var(--font-display); letter-spacing: -0.01em">Sleep</h1>
+</div>
+</header>
+
+<section aria-label="Sleep debt" class="nr-glass" style="margin-top: 12px; border-radius: var(--radius-lg); background: var(--glass-fill-strong); padding: 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<div class="nr-eyebrow" style="white-space: nowrap">Sleep debt · 14 nights</div>
+<span style="font: 700 44px/48px var(--font-display); font-variant-numeric: lining-nums; white-space: nowrap">{{ debt.big }}</span><span style="font: 500 14px/18px var(--font-sans); color: var(--ink-muted); white-space: nowrap">{{ debt.cap }}</span>
+</div>
+<span class="nr-chip nr-chip-live" style="text-transform: none; letter-spacing: 0; font: 600 12px/16px var(--font-sans); white-space: nowrap"><span class="nr-dot"></span>11 of 14 tracked</span>
+</div>
+<div style="position: relative; height: 150px">
+<div style="position: absolute; left: 0; right: 0; top: 118px; height: 1px; background: rgba(190, 220, 235, 0.22)"></div>
+<div onPointerMove="{{ debtDrag }}" onPointerDown="{{ debtDrag }}" style="position: absolute; inset: 0; display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px; touch-action: pan-y">
+<sc-for list="{{ debt.bars }}" as="b" hint-placeholder-count="14">
+<button type="button" onClick="{{ b.pick }}" aria-label="{{ b.aria }}" aria-pressed="{{ b.on }}" style="position: relative; border: 0; padding: 0; background: transparent; cursor: pointer; height: 150px; min-width: 0">
+<span style="{{ b.tube }}"></span><span style="{{ b.fill }}"></span><span style="{{ b.lab }}">{{ b.label }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-top: 14px; border-top: 1px solid var(--glass-stroke)">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">Average</span><span style="font: 700 20px/24px var(--font-display); font-variant-numeric: lining-nums">1h 29m</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">Worst</span><span style="font: 700 20px/24px var(--font-display); font-variant-numeric: lining-nums; color: var(--state-low)">3h 57m</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">Last night</span><span style="font: 700 20px/24px var(--font-display); font-variant-numeric: lining-nums; color: var(--brand)">59m</span></div>
+</div>
+</section>
+
+<section aria-label="Hours versus needed" class="nr-glass" style="border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Hours vs Needed</h2><a href="ScoringGuide.dc.html" style="font: 600 13px/18px var(--font-sans); padding: 8px 0">How Rest works</a></div>
+<div style="display: flex; align-items: center; gap: 18px">
+<x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="rest" value="90" size="112" aria-label="Rest 90 percent of need" style="display: block; flex-shrink: 0"></x-import>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: baseline; gap: 6px"><span style="font: 700 32px/36px var(--font-display); font-variant-numeric: lining-nums">7.3h</span><span style="font: 500 14px/18px var(--font-sans); color: var(--ink-muted)">of 8.1h needed</span></div>
+<span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">You slept 90% of what your body asked for.</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span class="nr-eyebrow">Tonight's need · 8.1h</span>
+<div style="display: flex; height: 14px; gap: 3px; border-radius: 7px; overflow: hidden">
+<div style="width: 76.5%; background: var(--brand)"></div><div style="width: 11.1%; background: var(--effort)"></div><div style="flex-grow: 1; background: var(--state-low)"></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px 16px; font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--brand)"></span>Baseline 6.2h</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--effort)"></span>Effort +0.9h</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--state-low)"></span>Debt +1.0h</span>
+</div>
+</div>
+<a href="Alarms.dc.html" class="np-plain" aria-label="Tonight: lights out 21:55, smart wake 06:30 to 07:00. Open alarms" style="display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: var(--radius-md); background: rgba(89, 236, 170, 0.1); border: 1px solid rgba(89, 236, 170, 0.3)">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="nr-eyebrow" style="color: var(--brand)">Tonight</span><span style="font: 600 13px/18px var(--font-sans); color: var(--brand)">Alarm ›</span></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; font: 500 11px/14px var(--font-sans); color: var(--ink-muted)">
+<span>Lights out<br><b style="font: 700 20px/24px var(--font-display); font-variant-numeric: lining-nums; color: var(--ink)">21:55</b></span>
+<span>Smart wake<br><b style="font: 700 20px/24px var(--font-display); font-variant-numeric: lining-nums; color: var(--ink)">06:30–07:00</b></span>
+<span>Alarm<br><b style="font: 700 20px/24px var(--font-display); color: var(--brand)">On</b></span>
+</div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">Banks 8.1h and clears most of tonight's debt. Wind-down reminder at 21:25.</span>
+</a>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-radius: var(--radius-md); background: rgba(12, 22, 28, 0.4)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font: 500 14px/18px var(--font-sans)">Body-clock low</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">From overnight skin temperature</span></span><span style="font: 700 18px/22px var(--font-display); color: var(--data-energy)">about 04:10</span></div>
+</section>
+
+<section aria-label="Sleep stages" class="nr-glass" style="border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Sleep stages</h2><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">22:10 – 06:02 · 7h 18m asleep</span></div>
+<span class="nr-chip" style="text-transform: none; letter-spacing: 0; font: 600 12px/16px var(--font-sans); white-space: nowrap; color: var(--state-low); border-color: rgba(243, 154, 91, 0.4)">4 wakes</span>
+</div>
+<div style="position: relative; height: 100px">
+<span style="position: absolute; left: 0; top: 5px; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)">Awake</span>
+<span style="position: absolute; left: 0; top: 29px; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)">REM</span>
+<span style="position: absolute; left: 0; top: 53px; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)">Light</span>
+<span style="position: absolute; left: 0; top: 77px; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)">Deep</span>
+<div style="position: absolute; left: 50px; right: 0; top: 0; bottom: 0; border-radius: 8px; background: rgba(170, 205, 220, 0.04)"></div>
+<sc-for list="{{ hyp }}" as="h" hint-placeholder-count="19"><span style="{{ h }}"></span></sc-for>
+<div style="position: absolute; left: 50px; right: 0; top: 0; bottom: 0"><div style="{{ hypSc.pad }}" onPointerMove="{{ hypSc.move }}" onPointerDown="{{ hypSc.down }}" onPointerLeave="{{ hypSc.leave }}" aria-hidden="true"></div><sc-if value="{{ hypSc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ hypSc.line }}"></span><sc-if value="{{ hypSc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ hypSc.dot }}"></span></sc-if><span style="{{ hypSc.tip }}"><b style="{{ hypSc.vSt }}">{{ hypSc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ hypSc.d }}</span></span></sc-if></div>
+</div>
+<div style="position: relative; height: 14px; margin-top: -6px; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)">
+<span style="position: absolute; left: 50px">22:10</span><span style="position: absolute; left: 98px">00:00</span><span style="position: absolute; left: 167px">02:00</span><span style="position: absolute; left: 235px">04:00</span><span style="position: absolute; right: 0">06:02</span>
+</div>
+<div style="display: flex; height: 14px; gap: 2px; border-radius: 7px; overflow: hidden" aria-hidden="true"><sc-for list="{{ stages }}" as="s" hint-placeholder-count="4"><span style="{{ s.seg }}"></span></sc-for></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{ stages }}" as="s" hint-placeholder-count="4">
+<button type="button" onClick="{{ s.pick }}" aria-pressed="{{ s.on }}" style="{{ s.btn }}">
+<span style="display: flex; align-items: center; gap: 7px"><span style="{{ s.dot }}"></span><span style="font: 600 13px/16px var(--font-sans)">{{ s.name }}</span></span>
+<span style="display: flex; align-items: baseline; gap: 6px"><span style="font: 700 20px/24px var(--font-display); font-variant-numeric: lining-nums">{{ s.dur }}</span><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">{{ s.pct }}</span></span>
+<span style="{{ s.vsStyle }}">{{ s.vs }}</span>
+</button>
+</sc-for>
+</div>
+</section>
+
+<section aria-label="Stage breakdown" class="nr-glass" style="border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Stage breakdown</h2><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">{{ comp.lead }}</span></div>
+<div style="display: flex; flex-direction: column; gap: 16px">
+<sc-for list="{{ comp.rows }}" as="r" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span style="font: 600 14px/18px var(--font-sans)">{{ r.title }}</span><sc-if value="{{ comp.isBench }}" hint-placeholder-val="{{ true }}"><span style="{{ r.chip }}">{{ r.chipText }}</span></sc-if><sc-if value="{{ comp.isAvg }}" hint-placeholder-val="{{ false }}"><span style="{{ r.dStyle }}">{{ r.dText }}</span></sc-if></div>
+<div style="position: relative; height: 22px; border-radius: 11px; background: rgba(170, 205, 220, 0.1)">
+<sc-if value="{{ comp.isBench }}" hint-placeholder-val="{{ true }}"><span style="{{ r.range }}"></span></sc-if>
+<span style="{{ r.fill }}"></span>
+<sc-if value="{{ comp.isAvg }}" hint-placeholder-val="{{ false }}"><span style="{{ r.mark }}"></span></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px; font: 500 12px/16px var(--font-sans); color: var(--ink-muted)"><span style="{{ comp.legendIc }}"></span>{{ comp.legend }}</div>
+<div role="group" aria-label="Compare against" style="display: flex; gap: 8px">
+<sc-for list="{{ comp.modes }}" as="m" hint-placeholder-count="2"><button type="button" onClick="{{ m.pick }}" aria-pressed="{{ m.on }}" style="{{ m.style }}"><sc-if value="{{ m.on }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if>{{ m.label }}</button></sc-for>
+</div>
+</section>
+
+
+<section aria-label="Why last night" class="nr-glass" style="border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 14px; border-color: rgba(184, 163, 255, 0.35); background: linear-gradient(160deg, rgba(184, 163, 255, 0.12), rgba(170, 205, 220, 0.05) 60%)">
+<div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Why last night</h2></div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; gap: 12px"><span style="flex-shrink: 0; width: 52px; font: 700 18px/22px var(--font-display); font-variant-numeric: lining-nums; color: #b8a3ff">−14m</span><span style="font: 400 14px/21px var(--font-sans); color: var(--ink-muted)"><span style="color: var(--ink); font-weight: 600">REM ran short.</span> 1h 36m against your 1h 50m average; the last REM block ended when you woke at 06:02.</span></div>
+<div style="display: flex; gap: 12px"><span style="flex-shrink: 0; width: 52px; font: 700 18px/22px var(--font-display); font-variant-numeric: lining-nums; color: #f39a5b">+15m</span><span style="font: 400 14px/21px var(--font-sans); color: var(--ink-muted)"><span style="color: var(--ink); font-weight: 600">Bedtime drifted.</span> Lights out at 22:10, 15 minutes after your 21:55 target. Late nights have gone with shorter REM on 4 of your last 5.</span></div>
+<div style="display: flex; gap: 12px"><span style="flex-shrink: 0; width: 52px; font: 700 18px/22px var(--font-display); font-variant-numeric: lining-nums; color: #3f6fe0">1h 22m</span><span style="font: 400 14px/21px var(--font-sans); color: var(--ink-muted)"><span style="color: var(--ink); font-weight: 600">Deep sleep held up.</span> Inside your normal range, and 70 of those minutes came before 01:30.</span></div>
+</div>
+<p style="margin: 0; padding-top: 12px; border-top: 1px solid var(--glass-stroke); font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">These are patterns in your own nights, not proven causes. Stages are estimated from strap motion and heart rate.</p>
+</section>
+
+<section aria-label="Bedtime and wake" class="nr-glass" style="border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Bedtime &amp; Wake</h2><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Target 22:00 – 06:00</span></div>
+<div style="display: flex; flex-direction: column; align-items: flex-end"><span style="font: 700 26px/30px var(--font-display); font-variant-numeric: lining-nums; color: var(--state-low)">44%</span><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">irregular</span></div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: var(--radius-md); background: var(--glass-fill-strong); border: 1px solid var(--glass-stroke)">
+<span style="font: 600 14px/18px var(--font-sans)">{{ bed.selDay }}</span>
+<span style="font: 600 14px/18px var(--font-sans); font-variant-numeric: tabular-nums; color: var(--ink-muted)">{{ bed.selRange }}</span>
+</div>
+<div style="position: relative; height: 200px">
+<div style="position: absolute; left: 30px; right: 0; top: 34px; height: 104px; border-radius: 8px; background: rgba(89, 236, 170, 0.07); border-top: 1px dashed rgba(89, 236, 170, 0.45); border-bottom: 1px dashed rgba(89, 236, 170, 0.45)"></div>
+<span style="position: absolute; left: 0; top: 27px; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)">22:00</span>
+<span style="position: absolute; left: 0; top: 131px; font: 500 11px/14px var(--font-sans); color: var(--ink-subtle)">06:00</span>
+<div onPointerMove="{{ bedDrag }}" onPointerDown="{{ bedDrag }}" style="position: absolute; left: 30px; right: 0; top: 0; bottom: 0; display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px; touch-action: pan-y">
+<sc-for list="{{ bed.bars }}" as="b" hint-placeholder-count="14">
+<button type="button" onClick="{{ b.pick }}" aria-label="{{ b.aria }}" aria-pressed="{{ b.on }}" style="position: relative; border: 0; padding: 0; background: transparent; cursor: pointer; height: 200px; min-width: 0"><span style="{{ b.bar }}"></span><span style="{{ b.lab }}">{{ b.label }}</span></button>
+</sc-for>
+</div>
+</div>
+<p style="margin: 0; padding-top: 12px; border-top: 1px solid var(--glass-stroke); font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">5 nights started more than 45 minutes off target. A steadier bedtime is the fastest way to pay the debt down.</p>
+</section>
+
+</div>
+</div>
+</div>
+
+<nav class="nr-glass nr-tabbar" aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 24px; grid-template-columns: repeat(5, minmax(0, 1fr)); z-index: 20">
+<a href="Main.dc.html" class="nr-tab"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"></path></svg></span><span>Today</span></a>
+<a href="Trends.dc.html" class="nr-tab"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20v-6M12 20V6M18 20v-10"></path></svg></span><span>Trends</span></a>
+<a href="Baseline.dc.html" class="nr-tab"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19.5 9 8.5l3.2 5.2L15 9.5l6.5 10zM7.2 11.6l1.8 1.4 1.4-1.3"></path></svg></span><span>Baseline</span></a>
+<a href="Sleep.dc.html" class="nr-tab is-active" aria-current="page"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"></path></svg></span><span>Sleep</span></a>
+<a href="More.dc.html" class="nr-tab"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle></svg></span><span>Hub</span></a>
+</nav>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { dsel: 13, bsel: 13, stage: null, cmp: 'bench' }; }
+renderVals() {
+var self = this, s = this.state;
+var mkScrub = function (key, n, xAt, yAt, val, when, o) {
+var cur = s.scrub && s.scrub.k === key ? Math.min(s.scrub.i, n - 1) : -1;
+var pick = function (e) { var r = e.currentTarget.getBoundingClientRect(); if (!r.width) return; var px = (e.clientX - r.left) / r.width * o.w, best = 0, bd = 1e9; for (var i = 0; i < n; i++) { var dd = Math.abs(xAt(i) - px); if (dd < bd) { bd = dd; best = i; } } var c = self.state.scrub; if (!c || c.k !== key || c.i !== best) self.setState({ scrub: { k: key, i: best } }); };
+var on = cur >= 0, xp = on ? Math.round(xAt(cur) / o.w * 1000) / 10 : 0, yp = on && yAt ? Math.round(yAt(cur) / o.h * 1000) / 10 : 0;
+var tx = xp < 18 ? '0' : xp > 82 ? '-100%' : '-50%', col = o.c || '#f5efe4';
+return { move: pick, down: pick, leave: function () { self.setState({ scrub: null }); }, on: on, hasDot: on && !!yAt,
+pad: 'position: absolute; inset: 0; touch-action: pan-y; cursor: crosshair; z-index: 2;',
+line: 'position: absolute; top: ' + (o.top || 0) + 'px; bottom: ' + (o.bot || 0) + 'px; left: ' + xp + '%; width: 1.5px; margin-left: -0.75px; background: rgba(245,239,228,0.55); pointer-events: none; z-index: 1;',
+dot: 'position: absolute; left: ' + xp + '%; top: ' + yp + '%; width: 10px; height: 10px; margin: -7px 0 0 -7px; border-radius: 50%; background: #131f26; border: 2px solid ' + col + '; box-shadow: 0 0 10px ' + col + '; pointer-events: none; z-index: 1;',
+tip: 'position: absolute; left: ' + xp + '%; top: ' + (o.tip != null ? o.tip : -40) + 'px; transform: translateX(' + tx + '); padding: 5px 10px; border-radius: 10px; background: rgba(12,22,28,0.94); border: 1px solid rgba(190,220,235,0.28); box-shadow: 0 6px 18px rgba(0,0,0,0.4); white-space: nowrap; pointer-events: none; z-index: 3; display: flex; flex-direction: column; gap: 1px; align-items: ' + (tx === '0' ? 'flex-start' : tx === '-100%' ? 'flex-end' : 'center') + ';',
+vSt: 'font: 700 14px/18px "Playfair Display", Georgia, serif; font-variant-numeric: lining-nums; color: ' + col + ';',
+v: on ? val(cur) : '', d: on ? when(cur) : '' };
+};
+var dates = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+var dow = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var dayName = function (i) { return dow[i % 7] + ', ' + dates[i] + ' Sep'; };
+var fmt = function (m) { var h = Math.floor(m / 60), r = m % 60; return h ? h + 'h ' + (r < 10 ? '0' : '') + r + 'm' : r + 'm'; };
+var debtM = [45, 120, null, 30, 237, 90, 60, null, 75, 150, 8, null, 110, 59];
+var dScale = Math.max(120, Math.max.apply(null, debtM.filter(function (x) { return x != null; })));
+var dbars = debtM.map(function (m, i) {
+var on = s.dsel === i, h = m == null ? 0 : Math.max(6, Math.round(m / dScale * 104));
+return {
+label: String(dates[i]), on: on, aria: dayName(i) + ': ' + (m == null ? 'not tracked' : fmt(m) + ' debt'),
+pick: function () { self.setState({ dsel: i }); },
+tube: m == null ? 'position: absolute; left: 50%; width: 14px; margin-left: -7px; bottom: 32px; height: 104px; border-radius: 7px; border: 1px dashed rgba(190,220,235,' + (on ? 0.5 : 0.18) + ');' : 'display: none;',
+fill: 'position: absolute; left: 50%; width: 12px; margin-left: -6px; bottom: 33px; height: ' + h + 'px; border-radius: 6px; background: ' + (m > 180 ? 'linear-gradient(180deg,#ffb27a,#c4571f)' : 'linear-gradient(180deg,#8ff3c6,#1f8a5e)') + '; opacity: ' + (on ? 1 : 0.75) + ';' + (on ? ' box-shadow: 0 0 12px rgba(89,236,170,0.5);' : ''),
+lab: 'position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font: ' + (on ? '700' : '500') + ' 11px/14px Inter, sans-serif; color: ' + (on ? '#f5efe4' : '#9dadb6') + ';'
+};
+});
+var dm = debtM[s.dsel];
+var bedT = [22.1, 23.4, 21.9, 22.0, 0.6, 22.3, 23.2, 22.0, 21.8, 23.9, 22.2, 22.4, 1.1, 21.95];
+var wakeT = [6.1, 6.0, 6.2, 5.9, 7.4, 6.1, 6.3, 6.0, 6.0, 7.1, 6.2, 6.5, 8.0, 6.85];
+var toY = function (t) { var x = t < 12 ? t + 24 : t; return Math.round((x - 21) / 13 * 172) + 0; };
+var clock = function (t) { var h = Math.floor(t), m = Math.round((t - h) * 60); if (m === 60) { h += 1; m = 0; } h = h % 24; return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m; };
+var bbars = bedT.map(function (b, i) {
+var on = s.bsel === i, y1 = toY(b), y2 = toY(wakeT[i]);
+var off = Math.abs((b < 12 ? b + 24 : b) - 22) > 0.75;
+return {
+label: String(dates[i]), on: on, aria: dayName(i) + ': ' + clock(b) + ' to ' + clock(wakeT[i]) + (off ? ', off target' : ''),
+pick: function () { self.setState({ bsel: i }); },
+bar: 'position: absolute; left: 50%; width: 12px; margin-left: -6px; top: ' + y1 + 'px; height: ' + (y2 - y1) + 'px; border-radius: 6px; background: ' + (off ? 'linear-gradient(180deg,#f39a5b,#9a4a1c)' : 'linear-gradient(180deg,#8ff3c6,#1f8a5e)') + '; opacity: ' + (on ? 1 : 0.7) + ';' + (on ? ' box-shadow: 0 0 0 2px #f5efe4;' : ''),
+lab: 'position: absolute; left: 0; right: 0; bottom: 0; text-align: center; font: ' + (on ? '700' : '500') + ' 11px/14px Inter, sans-serif; color: ' + (on ? '#f5efe4' : '#9dadb6') + ';'
+};
+});
+var SC = { awake: '#f39a5b', rem: '#b8a3ff', light: '#58d7c9', deep: '#3f6fe0' }, ROW = { awake: 0, rem: 1, light: 2, deep: 3 };
+var seq = [['awake', 10], ['light', 25], ['deep', 40], ['light', 20], ['rem', 18], ['light', 30], ['deep', 30], ['light', 25], ['awake', 6], ['rem', 22], ['light', 35], ['deep', 12], ['light', 30], ['rem', 26], ['light', 28], ['awake', 8], ['rem', 30], ['light', 33], ['awake', 10]];
+var tot = 472, acc = 0, PW = 268;
+var hyp = seq.map(function (p) {
+var st = acc; acc += p[1];
+var dim = s.stage && s.stage !== p[0];
+return 'position: absolute; left: ' + (50 + Math.round(st / tot * PW * 10) / 10) + 'px; width: ' + Math.max(2, Math.round(p[1] / tot * PW * 10) / 10) + 'px; top: ' + (ROW[p[0]] * 24 + 4) + 'px; height: 16px; border-radius: 4px; background: ' + SC[p[0]] + '; opacity: ' + (dim ? 0.18 : 1) + ';' + (dim ? '' : ' box-shadow: 0 0 8px ' + SC[p[0]] + '55;');
+});
+var drag = function (key) { return function (e) { var r = e.currentTarget.getBoundingClientRect(); if (!r.width) return; var i = Math.max(0, Math.min(13, Math.floor((e.clientX - r.left) / r.width * 14))); if (self.state[key] !== i) { var o = {}; o[key] = i; self.setState(o); } }; };
+var hstart = [], hacc = 0; seq.forEach(function (p) { hstart.push(hacc); hacc += p[1]; });
+var hclock = function (m) { var t = (22 * 60 + 10 + m) % 1440, h = Math.floor(t / 60), mm = t % 60; return (h < 10 ? '0' : '') + h + ':' + (mm < 10 ? '0' : '') + mm; };
+var SN = { awake: 'Awake', rem: 'REM', light: 'Light', deep: 'Deep' };
+var hypSc = mkScrub('hyp', seq.length, function (i) { return (hstart[i] + seq[i][1] / 2) / tot * PW; }, function (i) { return ROW[seq[i][0]] * 24 + 12; }, function (i) { return SN[seq[i][0]] + ' · ' + seq[i][1] + 'm'; }, function (i) { return hclock(hstart[i]) + '–' + hclock(hstart[i] + seq[i][1]); }, { w: PW, h: 100, tip: -40, c: '#f5efe4' });
+var hm = function (m) { var h = Math.floor(m / 60), r = m % 60; return h ? h + 'h ' + (r < 10 ? '0' : '') + r + 'm' : r + 'm'; };
+var stages = [['deep', 'Deep', 82, 78], ['rem', 'REM', 96, 110], ['light', 'Light', 226, 214], ['awake', 'Awake', 34, 26]].map(function (x) {
+var on = s.stage === x[0], d = x[2] - x[3], dim = s.stage && !on;
+var goodDir = x[0] === 'awake' ? d <= 0 : x[0] === 'light' ? true : d >= 0;
+return {
+name: x[1], dur: hm(x[2]), pct: Math.round(x[2] / tot * 100) + '%', on: on,
+vs: (d === 0 ? 'Same as' : (d > 0 ? '+' : '−') + Math.abs(d) + 'm vs') + ' 14-night avg',
+vsStyle: 'font: 500 12px/16px Inter, sans-serif; color: ' + (Math.abs(d) < 8 ? '#9dadb6' : goodDir ? '#59ecaa' : '#f39a5b') + ';',
+pick: function () { self.setState({ stage: on ? null : x[0] }); },
+dot: 'width: 10px; height: 10px; border-radius: 3px; background: ' + SC[x[0]] + ';',
+seg: 'width: ' + (x[2] / tot * 100) + '%; background: ' + SC[x[0]] + '; opacity: ' + (dim ? 0.25 : 1) + ';',
+btn: 'display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px; min-height: 84px; border-radius: 16px; cursor: pointer; text-align: left; color: #f5efe4; border: 1px solid ' + (on ? SC[x[0]] : 'rgba(190,220,235,0.16)') + '; background: ' + (on ? 'rgba(245,239,228,0.07)' : 'rgba(170,205,220,0.05)') + ';'
+};
+});
+
+var CM = [['awake', 'Total awake', 34, 26, [4, 12]], ['rem', 'REM', 96, 110, [18, 26]], ['light', 'Light', 226, 214, [38, 50]], ['deep', 'Deep', 82, 78, [10, 18]]];
+var cTot = 438, aTot = 428, SCALE = 70, isBench = s.cmp === 'bench';
+var cRows = CM.map(function (x) {
+var pct = Math.round(x[2] / cTot * 100), apct = Math.round(x[3] / aTot * 100), col = SC[x[0]];
+var st = pct < x[4][0] ? 'low' : pct > x[4][1] ? 'high' : 'typ';
+var good = x[0] === 'awake' ? st !== 'high' : x[0] === 'light' ? st === 'typ' : st !== 'low';
+var cc = st === 'typ' ? ['Typical', '#59ecaa', 'rgba(89,236,170,0.14)', 'rgba(89,236,170,0.4)'] : [st === 'high' ? 'Higher than usual' : 'Lower than usual', good ? '#59ecaa' : '#f3b25b', good ? 'rgba(89,236,170,0.14)' : 'rgba(243,178,91,0.14)', good ? 'rgba(89,236,170,0.4)' : 'rgba(243,178,91,0.4)'];
+var dd = x[2] - x[3];
+return {
+title: x[1] + ' \u2022 ' + pct + '% \u2022 ' + (x[2] >= 60 ? hm(x[2]) : x[2] + ' min'),
+chipText: cc[0], chip: 'flex-shrink: 0; padding: 3px 10px; border-radius: 999px; font: 600 11px/14px Inter, sans-serif; color: ' + cc[1] + '; background: ' + cc[2] + '; border: 1px solid ' + cc[3] + ';',
+dText: Math.abs(dd) < 4 ? 'Same as avg' : (dd > 0 ? '+' : '\u2212') + Math.abs(dd) + 'm vs avg', dStyle: 'font: 500 12px/16px Inter, sans-serif; color: #9dadb6;',
+fill: 'position: absolute; left: 0; top: 0; bottom: 0; width: ' + Math.max(8, Math.round(pct / SCALE * 1000) / 10) + '%; border-radius: 11px; background: ' + col + '; box-shadow: 0 0 12px ' + col + '55;',
+range: 'position: absolute; top: -4px; bottom: -4px; left: ' + Math.round(x[4][0] / SCALE * 1000) / 10 + '%; width: ' + Math.round((x[4][1] - x[4][0]) / SCALE * 1000) / 10 + '%; border-radius: 15px; border: 1.5px dashed rgba(245,239,228,0.7); background: rgba(245,239,228,0.14); pointer-events: none;',
+mark: 'position: absolute; top: 50%; left: ' + Math.round(apct / SCALE * 1000) / 10 + '%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #131f26; border: 2px solid #f5efe4; box-shadow: 0 0 8px rgba(245,239,228,0.45);'
+};
+});
+var mpill = function (on) { return 'display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px; border-radius: 999px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; ' + (on ? 'color: #59ecaa; background: rgba(89,236,170,0.14); border: 1px solid rgba(89,236,170,0.45);' : 'color: #f5efe4; background: transparent; border: 1px solid rgba(190,220,235,0.28);'); };
+var comp = {
+lead: 'You spent 7h 18m in bed, with a sleep efficiency of 92%. Your sleep efficiency is in range.',
+rows: cRows, isBench: isBench, isAvg: !isBench,
+legend: isBench ? 'Typical range for people like you' : 'Your 30-day average',
+legendIc: isBench ? 'width: 22px; height: 12px; border-radius: 6px; border: 1.5px dashed rgba(245,239,228,0.7); background: rgba(245,239,228,0.14);' : 'width: 10px; height: 10px; border-radius: 50%; background: #131f26; border: 2px solid #f5efe4;',
+modes: [['bench', 'Benchmarks'], ['avg', '30 day average']].map(function (m) { return { label: m[1], on: s.cmp === m[0], style: mpill(s.cmp === m[0]), pick: function () { self.setState({ cmp: m[0] }); } }; })
+};
+return {
+comp: comp, hyp: hyp, stages: stages, hypSc: hypSc, debtDrag: drag('dsel'), bedDrag: drag('bsel'),
+debt: { big: dm == null ? '—' : fmt(dm), cap: (s.dsel === 13 ? 'last night' : dayName(s.dsel)) + (dm == null ? ' · not tracked' : ''), bars: dbars },
+bed: { bars: bbars, selDay: dayName(s.bsel), selRange: clock(bedT[s.bsel]) + ' – ' + clock(wakeT[s.bsel]) }
+};
+}
+}
+</script>
+</body>
+</html>

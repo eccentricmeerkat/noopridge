@@ -1,0 +1,6 @@
+case,nights,age,needHours
+under_7_nights,3,35,8.000000
+21_nights_adult,21,35,8.000000
+21_nights_teen,21,16,9.000000
+long_sleeper_capped,14,35,9.500000
+age_unknown,21,null,8.000000

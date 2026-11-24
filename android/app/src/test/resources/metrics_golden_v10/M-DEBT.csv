@@ -1,0 +1,6 @@
+case,nights,needHours,balanceMin,countedNights
+on_target,3,8.000000,-0.000000,3
+three_short_nights,3,8.000000,-89.200000,3
+gap_skipped,5,8.000000,-89.200000,3
+recovery_night_clears,3,8.000000,-0.000000,3
+16_nights_window_14,16,8.000000,-97.800000,14

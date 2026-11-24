@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Devices — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%; background: radial-gradient(120% 40% at 50% 0%, rgba(47, 154, 98, 0.2), rgba(19, 31, 38, 0) 70%)">
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 120px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex-grow: 1; margin: 0; font: 700 30px/34px var(--font-display)">Devices</h1>
+</header>
+
+<sc-for list="{{ devices }}" as="d" hint-placeholder-count="2">
+<section class="nr-glass" style="{{ d.card }}">
+<div style="display: flex; align-items: center; gap: 14px">
+<x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="battery" value="{{ d.batt }}" size="64" glow="false" aria-label="{{ d.battAria }}" style="display: block; flex-shrink: 0"></x-import>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="font: 700 20px/24px var(--font-display)">{{ d.name }}</span>
+<span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">{{ d.sub }}</span>
+</div>
+<button type="button" aria-label="{{ d.menuAria }}" onClick="{{ d.menu }}" style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; border: 1px solid var(--glass-stroke); background: var(--glass-fill); color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 6h.01M12 12h.01M12 18h.01"></path></svg></button>
+</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<sc-for list="{{ d.chips }}" as="c" hint-placeholder-count="2"><span style="{{ c.style }}">{{ c.label }}</span></sc-for>
+</div>
+<sc-if value="{{ d.isActive }}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{ syncNow }}" class="nr-btn nr-btn-secondary" style="width: 100%; display: inline-flex; justify-content: center; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 4v4h4M4 13a8 8 0 0 0 14.3 4.9L20 16M20 20v-4h-4"></path></svg>{{ syncLabel }}</button>
+</sc-if>
+</section>
+</sc-for>
+
+<p style="margin: 0; padding: 0 4px; font: 400 13px/19px var(--font-sans); color: var(--ink-subtle)">The active device feeds Charge, Effort and Rest. Others can still stream live heart rate during workouts.</p>
+
+</div>
+</div>
+</div>
+
+<button type="button" onClick="{{ openAdd }}" class="nr-btn nr-btn-primary" style="position: absolute; left: 16px; right: 16px; bottom: 28px; z-index: 20; display: inline-flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add device</button>
+
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 50%; top: 84px; transform: translateX(-50%); z-index: 50; padding: 10px 16px; border-radius: 999px; background: var(--ink); color: var(--ink-on-liquid); font: 600 13px/18px var(--font-sans); white-space: nowrap; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4)">{{ toast }}</div>
+</sc-if>
+
+<sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end">
+<button type="button" aria-label="Close" onClick="{{ close }}" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(6, 11, 15, 0.62); cursor: pointer"></button>
+<div style="position: relative; border-radius: 28px 28px 0 0; background: var(--bg-400); border-top: 1px solid var(--glass-stroke); padding: 10px 20px 34px; display: flex; flex-direction: column; gap: 14px">
+<div style="width: 40px; height: 4px; border-radius: 2px; background: rgba(245, 239, 228, 0.25); margin: 0 auto"></div>
+
+<sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+<div class="nr-eyebrow">{{ menuName }}</div>
+<div style="display: flex; flex-direction: column">
+<sc-for list="{{ menuItems }}" as="m" hint-placeholder-count="4"><button type="button" onClick="{{ m.act }}" style="{{ m.style }}">{{ m.label }}</button></sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAdd }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; gap: 6px" aria-label="{{ stepAria }}">
+<sc-for list="{{ steps }}" as="st" hint-placeholder-count="4"><span style="{{ st }}"></span></sc-for>
+</div>
+<sc-if value="{{ stType }}" hint-placeholder-val="{{ true }}">
+<h2 style="margin: 0; font: 700 26px/30px var(--font-display)">What are you adding?</h2>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{ types }}" as="t" hint-placeholder-count="3"><button type="button" onClick="{{ t.pick }}" aria-pressed="{{ t.on }}" style="{{ t.style }}"><span style="font: 600 15px/20px var(--font-sans)">{{ t.name }}</span><span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">{{ t.sub }}</span></button></sc-for>
+</div>
+<button type="button" onClick="{{ next }}" class="nr-btn nr-btn-primary" style="width: 100%">Continue</button>
+</sc-if>
+<sc-if value="{{ stPrep }}" hint-placeholder-val="{{ false }}">
+<h2 style="margin: 0; font: 700 26px/30px var(--font-display)">Get it ready</h2>
+<ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font: 400 15px/22px var(--font-sans); color: var(--ink-muted)">
+<li>Unpair it from the official app first, or it may refuse to connect.</li>
+<li>Wake it: put it on, or tap it twice.</li>
+<li>Keep it within a metre of your phone.</li>
+</ol>
+<div style="display: flex; gap: 8px"><button type="button" onClick="{{ back }}" class="nr-btn nr-btn-secondary" style="flex: 1">Back</button><button type="button" onClick="{{ next }}" class="nr-btn nr-btn-primary" style="flex: 1">Scan</button></div>
+</sc-if>
+<sc-if value="{{ stPick }}" hint-placeholder-val="{{ false }}">
+<h2 style="margin: 0; font: 700 26px/30px var(--font-display)">Choose your device</h2>
+<span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">Found nearby · strongest signal first</span>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{ found }}" as="f" hint-placeholder-count="3"><button type="button" onClick="{{ f.pick }}" aria-pressed="{{ f.on }}" style="{{ f.style }}"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px; text-align: left"><span style="font: 600 15px/20px var(--font-sans)">{{ f.name }}</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">{{ f.id }}</span></span><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">{{ f.rssi }}</span></button></sc-for>
+</div>
+<div style="display: flex; gap: 8px"><button type="button" onClick="{{ back }}" class="nr-btn nr-btn-secondary" style="flex: 1">Back</button><button type="button" onClick="{{ next }}" class="nr-btn nr-btn-primary" style="flex: 1">Pair</button></div>
+</sc-if>
+<sc-if value="{{ stDone }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 8px 0; text-align: center">
+<span style="width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: rgba(89, 236, 170, 0.16); border: 1px solid rgba(89, 236, 170, 0.5)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+<h2 style="margin: 0; font: 700 26px/30px var(--font-display)">{{ pickedName }} paired</h2>
+<span style="font: 400 14px/20px var(--font-sans); color: var(--ink-muted)">It's ready for live heart rate. Make it active to use it for scores.</span>
+</div>
+<button type="button" onClick="{{ finish }}" class="nr-btn nr-btn-primary" style="width: 100%">Done</button>
+</sc-if>
+</sc-if>
+
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { list: [{ id: 'whoop', name: 'WHOOP 4.0', batt: 74, kind: 'Strap', fw: 'Firmware 41.16.6' }, { id: 'polar', name: 'Polar H10', batt: 88, kind: 'Chest strap', fw: 'Heart rate only' }], active: 'whoop', sheet: null, menuFor: null, step: 0, type: 'whoop', pick: 0, synced: '3m ago', syncing: false, toast: '' };
+}
+flash(t) { var self = this; this.setState({ toast: t }); setTimeout(function () { self.setState({ toast: '' }); }, 1700); }
+renderVals() {
+var self = this, s = this.state;
+var chip = function (t, live) { return { label: t, style: 'display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 999px; font: 600 12px/16px Inter, sans-serif; ' + (live ? 'color: #59ecaa; border: 1px solid rgba(89,236,170,0.4); background: rgba(89,236,170,0.1);' : 'color: #b6c3ca; border: 1px solid rgba(190,220,235,0.18); background: rgba(170,205,220,0.06);') }; };
+var devices = s.list.map(function (d) {
+var act = s.active === d.id;
+return {
+name: d.name, batt: String(d.batt), battAria: d.name + ' battery ' + d.batt + '%', isActive: act,
+sub: d.kind + ' · ' + d.batt + '% · ' + d.fw,
+chips: act ? [chip('Active', true), chip('Synced ' + s.synced, false)] : [chip('Connected', false), chip('Live HR only', false)],
+menuAria: 'Options for ' + d.name, menu: function () { self.setState({ sheet: 'menu', menuFor: d.id }); },
+card: 'border-radius: 24px; padding: 18px; display: flex; flex-direction: column; gap: 14px;' + (act ? ' border-color: rgba(89,236,170,0.4); background: linear-gradient(160deg, rgba(47,154,98,0.18), rgba(170,205,220,0.06) 65%);' : '')
+};
+});
+var md = s.list.filter(function (d) { return d.id === s.menuFor; })[0] || s.list[0];
+var mi = function (label, fn, danger, first) { return { label: label, act: fn, style: 'display: flex; align-items: center; min-height: 54px; border: 0; background: none; padding: 0 4px; cursor: pointer; text-align: left; font: 500 16px/22px Inter, sans-serif; color: ' + (danger ? '#f7777d' : '#f5efe4') + ';' + (first ? '' : ' border-top: 1px solid rgba(190,220,235,0.14);') }; };
+var menuItems = [];
+if (s.active !== md.id) menuItems.push(mi('Make active', function () { self.setState({ active: md.id, sheet: null }); self.flash(md.name + ' is now active'); }, false, true));
+menuItems.push(mi('Buzz to find', function () { self.setState({ sheet: null }); self.flash(md.name + ' buzzed'); }, false, menuItems.length === 0));
+menuItems.push(mi('Rename', function () { self.setState({ sheet: null }); self.flash('Rename opens here'); }));
+menuItems.push(mi('Forget device', function () { var l = s.list.filter(function (d) { return d.id !== md.id; }); self.setState({ list: l, sheet: null, active: s.active === md.id && l.length ? l[0].id : s.active }); self.flash(md.name + ' forgotten'); }, true));
+var types = [['whoop', 'WHOOP strap', '4.0 or MG · full scores'], ['hr', 'Heart-rate strap', 'Polar, Garmin, Wahoo · live HR'], ['watch', 'Watch via Health Connect', 'Steps, workouts, sleep']].map(function (t) { var on = s.type === t[0]; return { name: t[1], sub: t[2], on: on, pick: function () { self.setState({ type: t[0] }); }, style: 'display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 14px 16px; min-height: 64px; border-radius: 16px; cursor: pointer; text-align: left; color: #f5efe4; border: 1px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.18)') + '; background: ' + (on ? 'rgba(89,236,170,0.12)' : 'rgba(170,205,220,0.06)') + ';' }; });
+var F = { whoop: [['WHOOP 5.0 MG', '4A3F…91C2', 'Strong'], ['WHOOP 4.0', '7B10…0E44', 'Fair']], hr: [['Garmin HRM-Pro', 'C2:19:…:7A', 'Strong'], ['Wahoo TICKR', 'E0:4B:…:12', 'Weak']], watch: [['Pixel Watch 3', 'Health Connect', 'Linked'], ['Galaxy Watch 7', 'Health Connect', 'Linked']] }[s.type];
+var found = F.map(function (f, i) { var on = s.pick === i; return { name: f[0], id: f[1], rssi: f[2], on: on, pick: function () { self.setState({ pick: i }); }, style: 'display: flex; align-items: center; gap: 12px; padding: 12px 16px; min-height: 60px; border-radius: 16px; cursor: pointer; color: #f5efe4; border: 1px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.18)') + '; background: ' + (on ? 'rgba(89,236,170,0.12)' : 'rgba(170,205,220,0.06)') + ';' }; });
+var steps = [0, 1, 2, 3].map(function (i) { return 'flex: 1; height: 4px; border-radius: 2px; background: ' + (i <= s.step ? '#59ecaa' : 'rgba(190,220,235,0.18)') + ';'; });
+return {
+devices: devices, toast: s.toast,
+syncLabel: s.syncing ? 'Syncing…' : 'Sync now',
+syncNow: function () { if (s.syncing) return; self.setState({ syncing: true }); setTimeout(function () { self.setState({ syncing: false, synced: 'just now' }); self.flash('Synced 3 nights'); }, 1200); },
+sheetOpen: !!s.sheet, isMenu: s.sheet === 'menu', isAdd: s.sheet === 'add', close: function () { self.setState({ sheet: null }); },
+menuName: md.name, menuItems: menuItems,
+openAdd: function () { self.setState({ sheet: 'add', step: 0, pick: 0 }); },
+steps: steps, stepAria: 'Step ' + (s.step + 1) + ' of 4',
+stType: s.step === 0, stPrep: s.step === 1, stPick: s.step === 2, stDone: s.step === 3,
+types: types, found: found, pickedName: F[s.pick][0],
+next: function () { self.setState({ step: Math.min(3, s.step + 1) }); }, back: function () { self.setState({ step: Math.max(0, s.step - 1) }); },
+finish: function () { var f = F[s.pick]; self.setState({ sheet: null, list: s.list.concat([{ id: 'n' + Date.now(), name: f[0], batt: 100, kind: s.type === 'whoop' ? 'Strap' : s.type === 'hr' ? 'Chest strap' : 'Watch', fw: 'New' }]) }); self.flash(f[0] + ' added'); }
+};
+}
+}
+</script>
+</body>
+</html>

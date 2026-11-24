@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Workout — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+.np-card{border-radius:var(--radius-lg);padding:18px;display:flex;flex-direction:column;gap:12px}
+.np-h2{margin:0;font:700 21px/26px var(--font-display)}
+.np-sub{font:400 13px/18px Inter,sans-serif;color:#b6c3ca}
+.np-tile{padding:12px;border-radius:16px;background:rgba(170,205,220,.08);border:1px solid rgba(190,220,235,.14);display:flex;flex-direction:column;gap:4px}
+.np-tile b{font:700 20px/24px 'Playfair Display',serif;font-variant-numeric:lining-nums}
+.np-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;min-height:40px;font:500 13px/18px Inter,sans-serif;border-top:1px solid rgba(190,220,235,.14)}
+.np-note{width:100%;box-sizing:border-box;min-height:72px;border-radius:14px;border:1px solid rgba(190,220,235,.2);background:rgba(170,205,220,.06);color:#f5efe4;padding:12px;font:400 14px/20px Inter,sans-serif;resize:none;outline:none}
+.np-note:focus{border-color:#59ecaa}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%; background: radial-gradient(120% 40% at 50% 0%, rgba(107, 161, 253, 0.18), rgba(19, 31, 38, 0) 70%)">
+<div style="position: relative; display: flex; flex-direction: column; gap: 14px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="{{ back.href }}" aria-label="{{ back.label }}" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span class="nr-eyebrow">{{ w.date }}</span><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">{{ w.name }}</h1></div>
+<span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: rgba(107, 161, 253, 0.16); border: 1px solid rgba(107, 161, 253, 0.4)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6ba1fd" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ w.icon }}"></path></svg></span>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{ w.sources }}" as="c" hint-placeholder-count="2"><span class="nr-chip" style="text-transform: none; letter-spacing: 0; height: 28px; font: 500 12px/16px var(--font-sans)">{{ c }}</span></sc-for></div>
+
+<section aria-label="Summary" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{ w.tiles }}" as="t" hint-placeholder-count="6"><div class="np-tile"><span class="nr-eyebrow" style="font-size: 9px">{{ t.k }}</span><b style="{{ t.st }}">{{ t.v }}</b></div></sc-for>
+</section>
+
+<sc-if value="{{ w.hasTarget }}" hint-placeholder-val="{{ true }}">
+<section aria-label="Stimulus check" class="nr-glass np-card" style="border-color: rgba(89, 236, 170, 0.4)">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow" style="color: var(--brand)">Did it hit the target?</span><h2 class="np-h2">{{ w.target.title }}</h2><span class="np-sub">{{ w.target.sub }}</span></div>
+<div style="height: 8px; border-radius: 4px; background: rgba(190, 220, 235, 0.12)"><div style="{{ w.target.bar }}"></div></div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">{{ w.target.note }}</span>
+</section>
+</sc-if>
+
+<section aria-label="Heart rate over time" class="nr-glass np-card">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">Heart rate over time</span><h2 class="np-h2">{{ hr.title }}</h2></div>
+<div style="position: relative"><svg width="322" height="200" viewBox="0 0 322 200" role="img" aria-label="{{ hr.aria }}" style="display: block; overflow: visible">
+<sc-for list="{{ hr.bands }}" as="b" hint-placeholder-count="5"><rect x="26" y="{{ b.y }}" width="296" height="{{ b.h }}" fill="{{ b.c }}" fill-opacity="{{ b.o }}"></rect><text x="0" y="{{ b.ty }}" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="{{ b.c }}">{{ b.z }}</text></sc-for>
+<sc-for list="{{ hr.reps }}" as="r" hint-placeholder-count="5"><rect x="{{ r.x }}" y="172" width="{{ r.w }}" height="5" rx="2" fill="#f5efe4" fill-opacity="0.7"></rect></sc-for>
+<path d="{{ hr.line }}" fill="none" stroke="#ff8198" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="{{ hr.peakX }}" cy="{{ hr.peakY }}" r="4" fill="#131f26" stroke="#ff8198" stroke-width="2"></circle>
+<text x="{{ hr.peakX }}" y="{{ hr.peakLY }}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#f5efe4">{{ hr.peak }}</text>
+<text x="26" y="194" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">0:00</text>
+<text x="174" y="194" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ hr.mid }}</text>
+<text x="322" y="194" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ hr.end }}</text>
+</svg><div style="{{ hr.sc.pad }}" onPointerMove="{{ hr.sc.move }}" onPointerDown="{{ hr.sc.down }}" onPointerLeave="{{ hr.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ hr.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ hr.sc.line }}"></span><sc-if value="{{ hr.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ hr.sc.dot }}"></span></sc-if><span style="{{ hr.sc.tip }}"><b style="{{ hr.sc.vSt }}">{{ hr.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ hr.sc.d }}</span></span></sc-if></div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">{{ hr.legend }}</span>
+</section>
+
+<section aria-label="Time in heart-rate zones" class="nr-glass np-card">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">Time in zones</span><h2 class="np-h2">{{ zn.title }}</h2></div><span class="np-sub">{{ zn.total }}</span></div>
+<sc-for list="{{ zn.rows }}" as="z" hint-placeholder-count="5">
+<button type="button" onClick="{{ z.pick }}" aria-pressed="{{ z.on }}" aria-label="{{ z.aria }}" style="{{ z.row }}">
+<span style="display: flex; flex-direction: column; gap: 1px; width: 74px; flex-shrink: 0; text-align: left"><span style="{{ z.nameSt }}">{{ z.name }}</span><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">{{ z.range }}</span></span>
+<span style="flex-grow: 1; height: 10px; border-radius: 5px; background: rgba(190, 220, 235, 0.1)"><span style="{{ z.bar }}"></span></span>
+<span style="width: 74px; flex-shrink: 0; text-align: right; font: 600 13px/18px var(--font-sans); font-variant-numeric: tabular-nums">{{ z.time }} · {{ z.pct }}</span>
+</button>
+</sc-for>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">Zones from estimated max HR 188 bpm. <a href="Settings.dc.html">Set a measured max ›</a></span>
+</section>
+
+<sc-if value="{{ w.hasIntervals }}" hint-placeholder-val="{{ true }}">
+<section aria-label="Intervals" class="nr-glass np-card">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">Intervals · timed</span><h2 class="np-h2">Held intensity; recovery slowed after rep 3</h2></div>
+<svg width="322" height="132" viewBox="0 0 322 132" role="img" aria-label="Peak heart rate in each rep and heart-rate drop during the rest after it, for five reps" style="display: block">
+<line x1="0" x2="322" y1="110" y2="110" stroke="#bedceb" stroke-opacity="0.22"></line>
+<sc-for list="{{ rounds }}" as="r" hint-placeholder-count="5">
+<rect x="{{ r.x1 }}" y="{{ r.yP }}" width="24" height="{{ r.hP }}" rx="3" fill="#ff8198"></rect>
+<rect x="{{ r.x2 }}" y="{{ r.yD }}" width="24" height="{{ r.hD }}" rx="3" fill="#58d7c9" fill-opacity="0.6"></rect>
+<text x="{{ r.x1c }}" y="{{ r.tyP }}" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#f5efe4">{{ r.peak }}</text>
+<text x="{{ r.x2c }}" y="{{ r.tyD }}" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#f5efe4">{{ r.drop }}</text>
+<text x="{{ r.lx }}" y="126" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ r.label }}</text>
+</sc-for>
+</svg>
+<div style="display: flex; gap: 14px; font: 500 12px/16px var(--font-sans); color: var(--ink-muted)"><span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: #ff8198; margin-right: 6px"></span>peak HR in rep</span><span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: rgba(88, 215, 201, 0.6); margin-right: 6px"></span>HR drop in 2-min rest</span></div>
+</section>
+</sc-if>
+
+<sc-if value="{{ w.hasPace }}" hint-placeholder-val="{{ true }}">
+<section aria-label="Pace" class="nr-glass np-card">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">{{ pace.eyebrow }}</span><h2 class="np-h2">{{ pace.title }}</h2></div>
+<svg width="322" height="130" viewBox="0 0 322 130" role="img" aria-label="{{ pace.aria }}" style="display: block">
+<line x1="0" x2="322" y1="106" y2="106" stroke="#bedceb" stroke-opacity="0.22"></line>
+<sc-for list="{{ pace.splits }}" as="p" hint-placeholder-count="8">
+<rect x="{{ p.x }}" y="{{ p.y }}" width="{{ pace.bw }}" height="{{ p.h }}" rx="3" fill="#6ba1fd" fill-opacity="{{ p.o }}"></rect>
+<text x="{{ p.cx }}" y="{{ p.ty }}" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#f5efe4">{{ p.v }}</text>
+<text x="{{ p.cx }}" y="122" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#9dadb6">{{ p.k }}</text>
+</sc-for>
+</svg>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">{{ pace.note }}</span>
+</section>
+</sc-if>
+
+<sc-if value="{{ w.noPace }}" hint-placeholder-val="{{ false }}">
+<div class="nr-glass" style="border-radius: var(--radius-md); padding: 14px 16px; display: flex; align-items: center; gap: 12px"><span style="flex-grow: 1; font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">No route for this session. Record with your phone or import a GPX, TCX or FIT file to see pace.</span><a href="YourData.dc.html" style="font: 600 13px/18px var(--font-sans); white-space: nowrap">Import ›</a></div>
+</sc-if>
+
+<sc-if value="{{ w.hasHrr }}" hint-placeholder-val="{{ true }}">
+<section aria-label="Heart-rate recovery" class="nr-glass np-card">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px"><div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">Heart-rate recovery · 60 s</span><h2 class="np-h2">{{ w.hrr.title }}</h2><span class="np-sub">{{ w.hrr.sub }}</span></div><span style="font: 700 30px/34px var(--font-display); color: var(--brand); white-space: nowrap">{{ w.hrr.v }}</span></div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">Shown only when a session ends above Zone 3, so values stay comparable. <a href="Baseline.dc.html">Trend on Baseline ›</a></span>
+</section>
+</sc-if>
+
+<section aria-label="Recovery cost" class="nr-glass np-card" style="border-color: rgba(232, 184, 79, 0.35)">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow" style="color: var(--charge)">What it costs</span><h2 class="np-h2">{{ w.cost.title }}</h2></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; font: 500 11px/14px var(--font-sans); color: var(--ink-muted)">
+<span>Next-morning Charge<br><b style="font: 700 18px/22px var(--font-display); color: var(--ink)">{{ w.cost.range }}</b></span>
+<span>Back to normal<br><b style="font: 700 18px/22px var(--font-display); color: var(--ink)">{{ w.cost.back }}</b></span>
+<span>Effort added<br><b style="font: 700 18px/22px var(--font-display); color: var(--effort)">{{ w.effort }}</b></span>
+</div>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">{{ w.cost.note }} <a href="Sleep.dc.html">Plan tonight ›</a></span>
+</section>
+
+<sc-if value="{{ w.hasCmp }}" hint-placeholder-val="{{ true }}">
+<section aria-label="Comparison" class="nr-glass np-card">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">{{ w.cmp.eyebrow }}</span><h2 class="np-h2">{{ w.cmp.title }}</h2></div>
+<div style="display: flex; flex-direction: column">
+<div class="np-row" style="border-top: 0; color: var(--ink-subtle); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase"><span></span><span>{{ w.cmp.then }}</span><span>This</span><span>Δ</span></div>
+<sc-for list="{{ w.cmp.rows }}" as="c" hint-placeholder-count="3"><div class="np-row"><span>{{ c.k }}</span><span style="color: var(--ink-muted)">{{ c.a }}</span><span style="font-weight: 700">{{ c.b }}</span><span style="{{ c.dst }}">{{ c.d }}</span></div></sc-for>
+</div>
+</section>
+</sc-if>
+
+<section aria-label="How it felt" class="nr-glass np-card">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">How hard did it feel?</span><h2 class="np-h2">{{ rpeTitle }}</h2></div></div>
+<div role="radiogroup" aria-label="Rate of perceived exertion" style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px"><sc-for list="{{ rpe }}" as="p" hint-placeholder-count="10"><button type="button" role="radio" aria-checked="{{ p.on }}" onClick="{{ p.pick }}" style="{{ p.st }}">{{ p.n }}</button></sc-for></div>
+<textarea class="np-note" aria-label="Notes" placeholder="Notes: how it went, conditions, anything odd">{{ w.note }}</textarea>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button type="button" onClick="{{ flashEdit }}" class="nr-btn nr-btn-secondary">Edit</button>
+<button type="button" onClick="{{ flashMerge }}" class="nr-btn nr-btn-secondary">Merge</button>
+<a href="Coach.dc.html" class="nr-btn nr-btn-primary np-plain" style="display: inline-flex; justify-content: center; align-items: center">Ask Sage</a>
+</div>
+
+</div>
+</div>
+</div>
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}"><div role="status" style="position: absolute; left: 50%; top: 84px; transform: translateX(-50%); z-index: 50; padding: 10px 16px; border-radius: 999px; background: var(--ink); color: var(--ink-on-liquid); font: 600 13px/18px var(--font-sans); white-space: nowrap">{{ toast }}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+var id = 'run7', from = 'workouts';
+try { var h = String(window.location.hash || ''); var a = h.match(/w=([a-z0-9]+)/); if (a) id = a[1]; var b = h.match(/from=([a-z]+)/); if (b) from = b[1]; } catch (e) {}
+this.state = { id: id, from: from, zone: -1, rpe: null, toast: '' };
+}
+flash(t) { var self = this; this.setState({ toast: t }); setTimeout(function () { self.setState({ toast: '' }); }, 1600); }
+renderVals() {
+var self = this, s = this.state;
+var mkScrub = function (key, n, xAt, yAt, val, when, o) {
+var cur = s.scrub && s.scrub.k === key ? Math.min(s.scrub.i, n - 1) : -1;
+var pick = function (e) { var r = e.currentTarget.getBoundingClientRect(); if (!r.width) return; var px = (e.clientX - r.left) / r.width * o.w, best = 0, bd = 1e9; for (var i = 0; i < n; i++) { var dd = Math.abs(xAt(i) - px); if (dd < bd) { bd = dd; best = i; } } var c = self.state.scrub; if (!c || c.k !== key || c.i !== best) self.setState({ scrub: { k: key, i: best } }); };
+var on = cur >= 0, xp = on ? Math.round(xAt(cur) / o.w * 1000) / 10 : 0, yp = on && yAt ? Math.round(yAt(cur) / o.h * 1000) / 10 : 0;
+var tx = xp < 18 ? '0' : xp > 82 ? '-100%' : '-50%', col = o.c || '#f5efe4';
+return { move: pick, down: pick, leave: function () { self.setState({ scrub: null }); }, on: on, hasDot: on && !!yAt,
+pad: 'position: absolute; inset: 0; touch-action: pan-y; cursor: crosshair; z-index: 2;',
+line: 'position: absolute; top: ' + (o.top || 0) + 'px; bottom: ' + (o.bot || 0) + 'px; left: ' + xp + '%; width: 1.5px; margin-left: -0.75px; background: rgba(245,239,228,0.55); pointer-events: none; z-index: 1;',
+dot: 'position: absolute; left: ' + xp + '%; top: ' + yp + '%; width: 10px; height: 10px; margin: -7px 0 0 -7px; border-radius: 50%; background: #131f26; border: 2px solid ' + col + '; box-shadow: 0 0 10px ' + col + '; pointer-events: none; z-index: 1;',
+tip: 'position: absolute; left: ' + xp + '%; top: ' + (o.tip != null ? o.tip : -40) + 'px; transform: translateX(' + tx + '); padding: 5px 10px; border-radius: 10px; background: rgba(12,22,28,0.94); border: 1px solid rgba(190,220,235,0.28); box-shadow: 0 6px 18px rgba(0,0,0,0.4); white-space: nowrap; pointer-events: none; z-index: 3; display: flex; flex-direction: column; gap: 1px; align-items: ' + (tx === '0' ? 'flex-start' : tx === '-100%' ? 'flex-end' : 'center') + ';',
+vSt: 'font: 700 14px/18px "Playfair Display", Georgia, serif; font-variant-numeric: lining-nums; color: ' + col + ';',
+v: on ? val(cur) : '', d: on ? when(cur) : '' };
+};
+var f = function (n) { return Math.round(n * 10) / 10; };
+var ICON = { run: 'M15 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M13 8.5l-3 4 3 2.5-1.5 5M10 12.5l-4 .5M13 8.5l2.5 2.5H19M13 15l3.5 1.5L15 20', padel: 'M10 3a6 6 0 0 1 6 6c0 3.3-2.7 6-6 6s-6-2.7-6-6 2.7-6 6-6M14.5 13.5 20 19M19 15.5a1.5 1.5 0 1 0 0 3', strength: 'M3 10v4M6 7v10M18 7v10M21 10v4M6 12h12', cycle: 'M5.5 17.5a3.5 3.5 0 1 0 0-.01M18.5 17.5a3.5 3.5 0 1 0 0-.01M5.5 17.5 9 9h5l4.5 8.5M9 9l3 8.5M13 5h2' };
+// id: name, date, kind, secs, km, avg, max, kcal, effort, rpe, gps, intervals, hrr, cost[range, back, title], cmp
+var W = {
+walk20: ['Walk', 'Today · Sun 20 Sep · 08:30', 'run', 2400, 3.4, 104, 121, 168, 12, 3, true, false, null, ['0 to −2', 'Same day', 'Barely moves tomorrow\'s Charge'], null],
+padel10: ['Padel', 'Thu 10 Sep · 16:30', 'padel', 5400, 0, 131, 168, 1362, 68, 7, false, false, null, ['−6 to −12', '~1–2 days', 'Expect Charge about 9 lower tomorrow'], ['vs your last padel · 2 Sep', 'Longer, at a similar heart rate', '2 Sep', [['Duration', '1:15', '1:30', '+0:15', 0], ['Avg HR', '128', '131', '+3', 0], ['Effort', '66', '68', '+2', 0]]]],
+run7: ['Running · intervals', 'Mon 7 Sep · 06:40', 'run', 3130, 8.4, 148, 176, 612, 60, 7, true, true, ['−34 bpm', '176 → 142 bpm', 'Your typical: −29 bpm over 12 runs'], ['−4 to −10', '~1 day', 'Expect Charge about 7 lower tomorrow'], ['vs your last run · 23 Aug', 'Faster at a lower heart rate', '23 Aug', [['Avg pace', '6:19', '6:13', '−0:06', 1], ['Avg HR', '145', '148', '+3', 0], ['HRR 60 s', '−29', '−34', '+5', 1]]]],
+strength5: ['Strength training', 'Sat 5 Sep · 18:05', 'strength', 2720, 0, 112, 151, 318, 39, 6, false, false, null, ['−1 to −4', 'Same day', 'A small dent in tomorrow\'s Charge'], null],
+padel2: ['Padel', 'Wed 2 Sep · 19:00', 'padel', 4500, 0, 128, 163, 1104, 66, 6, false, false, null, ['−5 to −11', '~1 day', 'Expect Charge about 8 lower tomorrow'], null],
+run23: ['Running', 'Sun 23 Aug · 07:10', 'run', 2465, 6.5, 145, 171, 480, 54, 6, true, false, ['−29 bpm', '171 → 142 bpm', 'Your typical: −29 bpm over 11 runs'], ['−3 to −8', '~1 day', 'Expect Charge about 5 lower tomorrow'], null],
+cycle1: ['Cycling', 'Sat 1 Aug · 06:30', 'cycle', 6600, 34, 134, 162, 980, 62, 5, true, false, null, ['−5 to −10', '~1 day', 'Expect Charge about 7 lower tomorrow'], null]
+};
+var d = W[s.id] || W.run7, kind = d[2], T = d[3];
+var mmss = function (x) { x = Math.round(x); var hh = Math.floor(x / 3600), m = Math.floor((x % 3600) / 60), r = x % 60; return (hh ? hh + ':' + (m < 10 ? '0' : '') : '') + m + ':' + (r < 10 ? '0' : '') + r; };
+// heart-rate trace
+var seed = s.id.length * 13 + 7, rnd = function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+var plan = d[11] ? [[600, 132], [180, 168], [120, 130], [180, 170], [120, 131], [180, 172], [120, 133], [180, 174], [120, 134], [180, 175], [1150, 138]] : kind === 'padel' ? [[T * 0.12, d[5] - 18], [T * 0.76, d[5] + 4], [T * 0.12, d[5] - 14]] : kind === 'strength' ? [[T * 0.15, d[5] - 10], [T * 0.75, d[5] + 2], [T * 0.1, d[5] - 8]] : [[T * 0.12, d[5] - 14], [T * 0.78, d[5] + 3], [T * 0.1, d[5] - 6]];
+var pts = [], hr = d[5] - 30, t = 0, reps = [], peak = 0, peakT = 0;
+var X = function (x) { return f(26 + x / T * 296); }, Y = function (b) { return f(168 - (b - 85) / (195 - 85) * 160); };
+plan.forEach(function (p, i) {
+if (d[11] && p[1] >= 168) reps.push({ x: X(t), w: f(p[0] / T * 296) });
+for (var k = 0; k < p[0]; k += 20) { var wob = kind === 'padel' ? Math.sin((t + k) / 70) * 12 : kind === 'strength' ? Math.sin((t + k) / 90) * 14 : 0; hr += (p[1] + wob - hr) * 0.2 + (rnd() - 0.5) * 4; var v = Math.min(d[6], hr); pts.push([t + k, v]); if (v > peak) { peak = v; peakT = t + k; } }
+t += p[0];
+});
+pts.forEach(function (p) { if (p[0] === peakT) p[1] = d[6]; }); peak = d[6];
+var ZB = [['Z5', 170, 188, '#f7777d'], ['Z4', 151, 169, '#f39a5b'], ['Z3', 132, 150, '#e8c46a'], ['Z2', 113, 131, '#59ecaa'], ['Z1', 94, 112, '#58d7c9']];
+var zsec = [0, 0, 0, 0, 0];
+pts.forEach(function (p) { var v = p[1], zi = v >= 170 ? 0 : v >= 151 ? 1 : v >= 132 ? 2 : v >= 113 ? 3 : 4; zsec[zi] += 20; });
+var scale = T / zsec.reduce(function (a, b) { return a + b; }, 0); zsec = zsec.map(function (x) { return x * scale; });
+var top = zsec.indexOf(Math.max.apply(null, zsec));
+var bands = ZB.map(function (z, i) { var y0 = Y(Math.min(195, z[2] + (i === 0 ? 7 : 1))), y1 = Y(z[1]); var on = s.zone === i; return { z: z[0], c: z[3], y: y0, h: f(y1 - y0), ty: f((y0 + y1) / 2 + 4), o: on ? 0.28 : 0.09 }; });
+var line = 'M' + pts.map(function (p) { return X(p[0]) + ' ' + Y(p[1]); }).join(' L');
+var hrTitle = d[11] ? 'Five clean peaks' : kind === 'padel' ? 'Bursts through the match' : kind === 'strength' ? 'Rises with each set' : 'Steady from start to finish';
+var zn = { total: mmss(T) + ' total', title: 'Most time in ' + ['Zone 5', 'Zone 4', 'Zone 3', 'Zone 2', 'Zone 1'][top],
+rows: ZB.map(function (z, i) { var on = s.zone === i, pc = Math.round(zsec[i] / T * 100); return { name: 'Zone ' + (5 - i), range: z[1] + '–' + z[2] + ' bpm', time: mmss(zsec[i]), pct: pc + '%', on: on, aria: 'Zone ' + (5 - i) + ', ' + mmss(zsec[i]) + ', ' + pc + ' percent. Highlight on chart', pick: function () { self.setState({ zone: on ? -1 : i }); }, nameSt: 'font: 600 13px/18px Inter, sans-serif; color: ' + z[3] + ';', bar: 'display: block; height: 10px; border-radius: 5px; width: ' + Math.max(2, pc) + '%; background: ' + z[3] + ';', row: 'width: 100%; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 4px 8px; border-radius: 12px; cursor: pointer; color: #f5efe4; border: 1px solid ' + (on ? z[3] : 'transparent') + '; background: ' + (on ? 'rgba(170,205,220,0.08)' : 'transparent') + ';' }; }) };
+// tiles
+var tiles = [['Duration', mmss(T)], d[4] ? ['Distance', d[4] + ' km'] : ['Max HR', d[6] + ' bpm'], ['Effort', String(d[8]), 'color: #6ba1fd;'], ['Avg HR', d[5] + ' bpm'], d[4] ? ['Max HR', d[6] + ' bpm'] : ['Zone 4+', Math.round((zsec[0] + zsec[1]) / 60) + ' min'], ['Calories', d[7].toLocaleString() + ' est.']].map(function (x) { return { k: x[0], v: x[1], st: x[2] || '' }; });
+// intervals
+var R = [[171, 38], [173, 36], [174, 31], [175, 28], [176, 27]];
+var rounds = R.map(function (r, i) { var x = 14 + i * 62, hP = (r[0] - 120) / 60 * 86, hD = r[1] / 60 * 86; return { x1: x, x2: x + 26, x1c: x + 12, x2c: x + 38, lx: x + 25, label: 'Rep ' + (i + 1), yP: f(110 - hP), hP: f(hP), yD: f(110 - hD), hD: f(hD), tyP: f(106 - hP), tyD: f(106 - hD), peak: String(r[0]), drop: '−' + r[1] }; });
+// pace / speed
+var pace = null;
+if (d[10]) {
+var n = Math.max(1, Math.round(kind === 'cycle' ? 8 : d[4])), avgSec = T / d[4], sp = [];
+for (var k2 = 0; k2 < n; k2++) { var v2; if (d[11]) v2 = [385, 372, 261, 268, 256, 262, 360, 390][k2] || 380; else v2 = avgSec * (1 + (rnd() - 0.5) * 0.08); sp.push(v2); }
+var bw = Math.min(30, f(300 / n * 0.7)), fmt = function (sec) { return kind === 'cycle' ? f(3600 / (sec / (d[4] / n) * (d[4] / n) / (d[4] / n)) ).toFixed(0) : mmss(sec); };
+var lo = Math.min.apply(null, sp), hi = Math.max.apply(null, sp);
+pace = { eyebrow: kind === 'cycle' ? 'Speed · per segment' : 'Pace · per km', bw: bw,
+title: d[11] ? 'Reps at 4:22 /km · target 4:25' : kind === 'cycle' ? 'Averaging ' + f(d[4] / (T / 3600)) + ' km/h' : 'Averaging ' + mmss(avgSec) + ' /km',
+splits: sp.map(function (v, i) { var hgt = 30 + (hi - v) / ((hi - lo) || 1) * 60, x = 8 + i * (306 / n); return { x: f(x), cx: f(x + bw / 2), y: f(106 - hgt), h: f(hgt), ty: f(102 - hgt), o: d[11] && v < 300 ? 1 : 0.5, v: kind === 'cycle' ? String(Math.round(3600 / v)) : mmss(v), k: kind === 'cycle' ? String(i + 1) : 'km ' + (i + 1) }; }),
+note: kind === 'cycle' ? 'Bar height = speed, km/h per segment. Route from phone GPS.' : 'Bar height = speed (taller is faster). Route from phone GPS.' + (d[11] ? ' Solid bars contain a work rep.' : ''),
+aria: (kind === 'cycle' ? 'Speed' : 'Pace') + ' per split for ' + n + ' splits' };
+}
+// target
+var z4 = zsec[0] + zsec[1];
+var target = d[11] ? { title: 'Yes · 91% of work time in Zone 4+', sub: 'Planned: 5 × 3 min in Zone 4 (151–169 bpm) · achieved 13:40 of 15:00', bar: 'height: 8px; border-radius: 4px; width: 91%; background: #59ecaa;', note: 'Rep 1 took 50 s to reach Zone 4: optical heart rate lags at the start of a hard effort.' } : null;
+if (s.id === 'walk20') target = { title: 'Yes · kept it light', sub: 'Planned for a Depleted day: Effort under 38, mostly Zone 1–2 · achieved Effort 12', bar: 'height: 8px; border-radius: 4px; width: 100%; background: #59ecaa;', note: 'From Sage\'s suggestion this morning.' };
+var cmp = d[14] ? { eyebrow: d[14][0], title: d[14][1], then: d[14][2], rows: d[14][3].map(function (r) { return { k: r[0], a: r[1], b: r[2], d: r[3], dst: 'font-weight: 700; color: ' + (r[4] ? '#59ecaa' : '#b6c3ca') + ';' }; }) } : null;
+var rv = s.rpe == null ? d[9] : s.rpe, RW = ['', 'Very easy', 'Easy', 'Easy', 'Moderate', 'Moderate', 'Somewhat hard', 'Hard', 'Very hard', 'Very hard', 'Maximal'];
+var rpe = []; for (var q = 1; q <= 10; q++) (function (q) { var on = q === rv; rpe.push({ n: String(q), on: on, pick: function () { self.setState({ rpe: q }); }, st: 'height: 36px; border-radius: 10px; cursor: pointer; font: 700 13px/16px Inter, sans-serif; border: 1px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.2)') + '; background: ' + (on ? '#59ecaa' : 'transparent') + '; color: ' + (on ? '#0c161c' : '#b6c3ca') + ';' }); })(q);
+var src = ['HR: WHOOP 4.0']; if (d[10]) src.push('Route: phone GPS'); if (d[11]) src.push('Intervals: timer');
+return {
+back: s.from === 'today' ? { href: 'Main.dc.html', label: 'Back to Today' } : { href: 'Workouts.dc.html', label: 'Back to Workouts' },
+w: { name: d[0], date: d[1], icon: ICON[kind], sources: src, tiles: tiles, effort: String(d[8]), hasTarget: !!target, target: target || {}, hasIntervals: !!d[11], hasPace: !!d[10], noPace: !d[10] && kind !== 'strength', hasHrr: !!d[12], hrr: d[12] ? { v: d[12][0], title: d[12][1], sub: d[12][2] } : {}, cost: { range: d[13][0], back: d[13][1], title: d[13][2], note: 'From your own history for this sport. Sleep tonight changes it most.' }, hasCmp: !!cmp, cmp: cmp || { rows: [] }, note: '' },
+hr: { sc: mkScrub('whr', pts.length, function (i) { return X(pts[i][0]); }, function (i) { return Y(pts[i][1]); }, function (i) { return Math.round(pts[i][1]) + ' bpm'; }, function (i) { var v = pts[i][1]; return mmss(pts[i][0]) + ' · Zone ' + (v >= 170 ? 5 : v >= 151 ? 4 : v >= 132 ? 3 : v >= 113 ? 2 : 1); }, { w: 322, h: 200, bot: 22, c: '#ff8198' }), title: hrTitle, bands: bands, reps: reps, line: line, peakX: X(peakT), peakY: Y(peak), peakLY: f(Y(peak) - 9), peak: String(Math.round(peak)), mid: mmss(T / 2), end: mmss(T), legend: 'Line = heart rate · bands = zones' + (d[11] ? ' · white marks = work reps' : '') + '. Tap a zone below to highlight it.', aria: 'Heart rate over ' + mmss(T) + ', average ' + d[5] + ', peak ' + d[6] + ' bpm, over five zone bands' },
+zn: zn, rounds: rounds, pace: pace || { splits: [] },
+rpe: rpe, rpeTitle: 'RPE ' + rv + ' · ' + RW[rv],
+toast: s.toast, flashEdit: function () { self.flash('Edit session: time, sport, notes'); }, flashMerge: function () { self.flash('Pick a session to merge with'); }
+};
+}
+}
+</script>
+</body>
+</html>

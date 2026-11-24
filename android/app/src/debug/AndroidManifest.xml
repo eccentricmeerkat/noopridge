@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug builds only: the Ridge metric inspector (R1a, J-01e) gets its own launcher entry. Release builds never
+     merge this file, so the activity does not exist there. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+            android:name="com.noop.debug.MetricInspectorActivity"
+            android:exported="true"
+            android:label="@string/metric_inspector_label"
+            android:taskAffinity="com.noop.debug.inspector">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- Side quest #2: the backdrop lab (three seeds, draw time), launched by adb only, no launcher entry. -->
+        <activity
+            android:name="com.noop.debug.BackdropLabActivity"
+            android:exported="true"
+            android:taskAffinity="com.noop.debug.backdrops" />
+    </application>
+</manifest>

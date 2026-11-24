@@ -1,0 +1,4 @@
+case,vitality,bodyAge,factorsUsed
+average_inputs,50.000000,40.000000,5
+healthy_inputs,61.597629,35.360949,5
+two_inputs_not_enough,null,null,null

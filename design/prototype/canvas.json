@@ -1,0 +1,461 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "About.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "About NOOP",
+      "w": 390,
+      "x": 2350,
+      "y": 7000
+    },
+    "Alarms.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Alarms",
+      "w": 390,
+      "x": 1410,
+      "y": 7000
+    },
+    "Automations.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Automations",
+      "w": 390,
+      "x": 940,
+      "y": 7000
+    },
+    "Backup.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Backup and sync",
+      "w": 390,
+      "x": 470,
+      "y": 7000
+    },
+    "Baseline.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Baseline",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "Breathe.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Breathe",
+      "w": 390,
+      "x": 2820,
+      "y": 5600
+    },
+    "ChargeBreakdown.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Charge breakdown",
+      "w": 390,
+      "x": 0,
+      "y": 1400
+    },
+    "Coach.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Sage · AI coach",
+      "w": 390,
+      "x": 0,
+      "y": 2800
+    },
+    "Cycle.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Cycle tracker",
+      "w": 390,
+      "x": 1880,
+      "y": 5600
+    },
+    "Devices.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Devices",
+      "w": 390,
+      "x": 1410,
+      "y": 2800
+    },
+    "Hydration.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Hydration",
+      "w": 390,
+      "x": 1410,
+      "y": 5600
+    },
+    "Insights.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Insights · Explore, Compare, Intelligence",
+      "w": 390,
+      "x": 1410,
+      "y": 4200
+    },
+    "Intervals.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Interval timer",
+      "w": 390,
+      "x": 3290,
+      "y": 5600
+    },
+    "Journal.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Journal",
+      "w": 390,
+      "x": 470,
+      "y": 4200
+    },
+    "LabBook.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Lab book",
+      "w": 390,
+      "x": 940,
+      "y": 5600
+    },
+    "LabTools.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Lab tools",
+      "w": 390,
+      "x": 2820,
+      "y": 7000
+    },
+    "Live.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Live",
+      "w": 390,
+      "x": 940,
+      "y": 2800
+    },
+    "LiveSession.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Live session",
+      "w": 390,
+      "x": 3760,
+      "y": 5600
+    },
+    "Main.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Today",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "More.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Hub",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "NextPass.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Not built yet",
+      "w": 390,
+      "x": 2350,
+      "y": 2800
+    },
+    "Notifications.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Notifications and power",
+      "w": 390,
+      "x": 1880,
+      "y": 7000
+    },
+    "Rhythm.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Rhythm",
+      "w": 390,
+      "x": 2350,
+      "y": 5600
+    },
+    "ScoringGuide.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "How your scores work",
+      "w": 390,
+      "x": 470,
+      "y": 1400
+    },
+    "Settings.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Settings",
+      "w": 390,
+      "x": 1880,
+      "y": 2800
+    },
+    "Sleep.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Sleep",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Stress.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Stress",
+      "w": 390,
+      "x": 470,
+      "y": 5600
+    },
+    "Trends.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Trends",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "WhatMovesYou.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "What moves you",
+      "w": 390,
+      "x": 940,
+      "y": 4200
+    },
+    "WorkoutDetail.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Workout detail",
+      "w": 390,
+      "x": 1880,
+      "y": 4200
+    },
+    "Workouts.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Workouts",
+      "w": 390,
+      "x": 470,
+      "y": 2800
+    },
+    "YourData.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Your data",
+      "w": 390,
+      "x": 0,
+      "y": 7000
+    },
+    "BodyMore.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "More · body tools",
+      "w": 390,
+      "x": 0,
+      "y": 5600
+    },
+    "Welcome.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Wizard 1 · Welcome",
+      "w": 390,
+      "x": 0,
+      "y": 8400
+    },
+    "Onboarding.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Wizard 3–10 · Onboarding",
+      "w": 390,
+      "x": 940,
+      "y": 8400
+    },
+    "Intro.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 32,
+      "title": "Wizard 2 · Intro",
+      "w": 390,
+      "x": 470,
+      "y": 8400
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-10T18:05:00Z",
+    "v": 1
+  },
+  "designSystems": [
+    {
+      "artifact": "https://claude.ai/artifact/65KsWsBuh4e342V9ph8GST",
+      "copiedAt": "2026-11-10T18:05:00Z",
+      "namespace": "noopridge",
+      "title": "Noop Ridge",
+      "version": "1790786060-e856"
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  },
+  "noteOrder": [
+    "rowTabs",
+    "rowToday",
+    "rowMore",
+    "rowInsights",
+    "rowBody",
+    "rowData",
+    "rowWizard",
+    "howTo"
+  ],
+  "notes": {
+    "howTo": {
+      "fill": "teal",
+      "text": "Press Play on Today to use the prototype. Every v10 screen is now built: More groups them under Insights, Body, Data and App, and each row opens a hub that leads to the rest. The onboarding wizard starts at Welcome; terms are step 5.",
+      "w": 360,
+      "x": 2360,
+      "y": 0
+    },
+    "rowBody": {
+      "kind": "title1",
+      "maxW": 4150,
+      "text": "Body · opened from More",
+      "w": 240,
+      "x": 0,
+      "y": 5300
+    },
+    "rowData": {
+      "kind": "title1",
+      "maxW": 3210,
+      "text": "Data and App",
+      "w": 240,
+      "x": 0,
+      "y": 6700
+    },
+    "rowInsights": {
+      "kind": "title1",
+      "maxW": 2270,
+      "text": "Insights",
+      "w": 240,
+      "x": 0,
+      "y": 3900
+    },
+    "rowMore": {
+      "kind": "title1",
+      "maxW": 2740,
+      "text": "Opened from More",
+      "w": 240,
+      "x": 0,
+      "y": 2500
+    },
+    "rowTabs": {
+      "kind": "title1",
+      "maxW": 2270,
+      "text": "The five Ridge tabs",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "rowToday": {
+      "kind": "title1",
+      "maxW": 1330,
+      "text": "Opened from Today",
+      "w": 240,
+      "x": 0,
+      "y": 1100
+    },
+    "rowWizard": {
+      "kind": "title1",
+      "maxW": 2270,
+      "text": "Onboarding wizard (draft)",
+      "w": 240,
+      "x": 0,
+      "y": 8100
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Trends.dc.html",
+    "Baseline.dc.html",
+    "Sleep.dc.html",
+    "More.dc.html",
+    "ChargeBreakdown.dc.html",
+    "ScoringGuide.dc.html",
+    "Coach.dc.html",
+    "Workouts.dc.html",
+    "WorkoutDetail.dc.html",
+    "Live.dc.html",
+    "Devices.dc.html",
+    "Settings.dc.html",
+    "NextPass.dc.html",
+    "Journal.dc.html",
+    "WhatMovesYou.dc.html",
+    "Insights.dc.html",
+    "BodyMore.dc.html",
+    "Stress.dc.html",
+    "LabBook.dc.html",
+    "Hydration.dc.html",
+    "Cycle.dc.html",
+    "Rhythm.dc.html",
+    "Breathe.dc.html",
+    "Intervals.dc.html",
+    "LiveSession.dc.html",
+    "YourData.dc.html",
+    "Backup.dc.html",
+    "Automations.dc.html",
+    "Alarms.dc.html",
+    "Notifications.dc.html",
+    "About.dc.html",
+    "LabTools.dc.html",
+    "Welcome.dc.html",
+    "Intro.dc.html",
+    "Onboarding.dc.html"
+  ],
+  "pages": [],
+  "title": "Noop Ridge — Interactive Prototype"
+}

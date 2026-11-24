@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How your scores work — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.nr-orb-num,.nr-tile-value{font-variant-numeric:lining-nums}
+.np-plain{text-decoration:none;color:inherit}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="{{ bgStyle }}">
+<div style="position: relative; display: flex; flex-direction: column; gap: 18px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<span style="font: 600 16px/22px var(--font-sans)">How your numbers work</span>
+</header>
+
+<div role="tablist" aria-label="Score" class="np-hs" style="display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="9"><button type="button" role="tab" onClick="{{ t.pick }}" aria-selected="{{ t.on }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+</div>
+
+<section style="display: flex; align-items: center; gap: 18px">
+<x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="{{ g.liquid }}" value="{{ g.value }}" max="{{ g.max }}" display="{{ g.display }}" size="108" style="display: block; flex-shrink: 0"></x-import>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<h1 style="margin: 0; font: 700 32px/36px var(--font-display)">{{ g.title }}</h1>
+<span style="font: 500 14px/20px var(--font-sans); color: var(--ink-muted)">{{ g.scale }}</span>
+</div>
+</section>
+
+<p style="margin: 0; font: 400 16px/25px var(--font-sans); color: var(--ink)">{{ g.what }}</p>
+
+<section aria-label="Bands" class="nr-glass" style="border-radius: var(--radius-lg); padding: 6px 18px">
+<sc-for list="{{ g.bands }}" as="b" hint-placeholder-count="4">
+<div style="{{ b.row }}">
+<span style="{{ b.sw }}"></span>
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 600 15px/20px var(--font-sans)">{{ b.name }}</span><span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">{{ b.note }}</span></span>
+<span style="font: 700 16px/20px var(--font-display); font-variant-numeric: lining-nums; white-space: nowrap">{{ b.range }}</span>
+</div>
+</sc-for>
+</section>
+
+<section aria-label="Inputs" style="display: flex; flex-direction: column; gap: 10px">
+<div class="nr-eyebrow" style="padding: 0 4px">What goes in</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{ g.inputs }}" as="i" hint-placeholder-count="4"><span class="nr-chip" style="text-transform: none; letter-spacing: 0; font: 500 13px/16px var(--font-sans); height: 34px">{{ i }}</span></sc-for>
+</div>
+</section>
+
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px">
+<div class="nr-eyebrow">Confidence</div>
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">A Calibrating tag means NOOP is still learning your baseline (fewer than 14 nights of full data) or the estimate is not final yet, so it can swing more. No tag means the number is settled.</p>
+</section>
+
+<section aria-label="Metric dictionary" class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px 6px; display: flex; flex-direction: column">
+<div class="nr-eyebrow">One number, one meaning</div>
+<p style="margin: 6px 0 4px; font: 400 13px/19px var(--font-sans); color: var(--ink-muted)">Every screen, Sage and export uses these definitions and today's values. Sunday 20 September.</p>
+<sc-for list="{{ dict }}" as="d" hint-placeholder-count="9">
+<div style="{{ d.row }}"><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font: 600 14px/19px var(--font-sans)">{{ d.name }}</span><span style="font: 400 12px/17px var(--font-sans); color: var(--ink-muted)">{{ d.def }}</span></span><span style="font: 700 16px/20px var(--font-display); font-variant-numeric: lining-nums; white-space: nowrap; text-align: right">{{ d.today }}</span></div>
+</sc-for>
+</section>
+
+</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { tab: 'charge' }; }
+renderVals() {
+var self = this, s = this.state;
+var G = {
+charge: { label: 'Charge', liquid: 'charge', value: '8', max: '100', display: '8', title: 'Charge', scale: '0–100 · how ready your body is', glow: 'rgba(232,184,79,0.16)',
+what: 'Charge reads overnight HRV, resting heart rate, sleep and temperature against your own 30-day baseline. High Charge means you can take on more; low Charge means your body is still paying off yesterday.',
+bands: [['Depleted', '0–19', 'Prioritise rest and easy movement', '#f7777d'], ['Low', '20–39', 'Light activity only', '#f39a5b'], ['Steady', '40–59', 'Train, but keep it moderate', '#e8c46a'], ['Strong', '60–79', 'Ready for a hard session', '#59ecaa'], ['Peak', '80–100', 'A day to go for it', '#6ba1fd']],
+inputs: ['HRV', 'Resting HR', 'Sleep performance', 'Respiratory rate', 'Skin temperature'] },
+effort: { label: 'Effort', liquid: 'effort', value: '16', max: '100', display: '16', title: 'Effort', scale: '0–100 · cardiovascular load today', glow: 'rgba(107,161,253,0.16)',
+what: 'Effort grows with time spent at elevated heart rate. It gets harder to climb the higher you go, so moving from 85 to 90 takes far more work than moving from 20 to 25.',
+bands: [['Light', '0–44', 'Active recovery, daily movement', '#58d7c9'], ['Moderate', '45–66', 'Steady training stimulus', '#6ba1fd'], ['High', '67–85', 'Hard session, builds fitness', '#e8c46a'], ['All out', '86–100', 'Needs a strong Charge to absorb', '#f7777d']],
+inputs: ['Heart rate', 'HR zones', 'Duration', 'Max HR'] },
+rest: { label: 'Rest', liquid: 'rest', value: '90', max: '100', display: '90%', title: 'Rest', scale: '0–100% · sleep you got vs needed', glow: 'rgba(89,236,170,0.16)',
+what: 'Rest compares the sleep you got with what you needed: your baseline, plus extra for yesterday\'s Effort and any debt carried in.',
+bands: [['Poor', '0–69%', 'Large shortfall, expect low Charge', '#f39a5b'], ['Sufficient', '70–84%', 'Close to need', '#e8c46a'], ['Optimal', '85–100%', 'Fully met your need', '#59ecaa']],
+inputs: ['Sleep duration', 'Sleep need', 'Sleep debt', 'Consistency', 'Disturbances'] },
+stress: { label: 'Stress', liquid: 'charge', value: '27', max: '100', display: '0.8', title: 'Stress', scale: '0–3 · daytime load on your nervous system', glow: 'rgba(232,196,106,0.16)',
+what: 'Stress reads your heart rate and HRV while you are still during the day, against your own 30-day baseline. Workouts are left out, so exercise never counts as stress. It reflects physical and mental load together and is not a diagnosis.',
+bands: [['Settled', '0–1.0', 'Close to your usual resting state', '#59ecaa'], ['Raised', '1.1–2.0', 'Busier than usual; a short breathing session helps', '#e8c46a'], ['High', '2.1–3.0', 'Sustained load; worth easing off if it lasts', '#f39a5b']],
+inputs: ['Heart rate at rest', 'HRV', 'Motion (to exclude workouts)', '30-day baseline'] },
+debt: { label: 'Sleep debt', liquid: 'rest', value: '25', max: '100', display: '59m', title: 'Sleep debt', scale: 'minutes · rolling 14 tracked nights', glow: 'rgba(89,236,170,0.16)',
+what: 'Each tracked night adds what you needed minus what you slept. Extra sleep pays it back. It never goes below zero, and nights without data are skipped, not counted as zero.',
+bands: [['Low', 'Under 1h', 'Little to catch up on', '#59ecaa'], ['Building', '1–3h', 'An earlier night or two clears it', '#e8c46a'], ['High', 'Over 3h', 'Expect lower Charge until it comes down', '#f39a5b']],
+inputs: ['Sleep need', 'Time asleep', '14 tracked nights'] },
+vo2: { label: 'VO₂ max', liquid: 'brand', value: '68', max: '100', display: '47.4', title: 'VO₂ max', scale: 'ml/kg/min · wrist estimate, ±3–5', glow: 'rgba(89,236,170,0.16)',
+what: 'VO₂ max is how much oxygen your body can use at full effort. NOOP estimates it weekly from how your heart rate responds to pace on outdoor runs and walks with GPS, plus resting heart rate, age and sex. Small week-to-week changes are within the margin of error; the monthly average is the number to watch.',
+bands: [['Below typical', 'Under 38', 'For your age', '#f39a5b'], ['Typical', '38–42', 'Around the average for 40', '#e8c46a'], ['Above typical', '43–48', 'Better than most people your age', '#59ecaa'], ['High', 'Over 48', 'Well above your age group', '#6ba1fd']],
+inputs: ['Heart rate vs pace', 'Phone GPS', 'Resting HR', 'Age and sex', 'Max HR'] },
+bodyage: { label: 'Body age', liquid: 'brand', value: '60', max: '100', display: '34', title: 'Body age', scale: 'years · shown as a range (32–36)', glow: 'rgba(89,236,170,0.16)',
+what: 'Body age compares 28 measures with age norms and turns the gaps into years. Five drivers carry most of the weight, and each can move it by up to 5 years either way. It updates weekly and needs at least 14 of the 28 inputs; below that you see a first-week state instead of a number.',
+bands: [['Cardio fitness (VO₂ max)', '−2.6 yr', 'Biggest lever', '#59ecaa'], ['Weekly activity', '−1.8 yr', '4.1 h a week', '#59ecaa'], ['Resting heart rate', '−1.4 yr', '55 bpm average', '#59ecaa'], ['Sleep regularity', '−0.8 yr', '56% consistent', '#59ecaa'], ['Heart-rate variability', '+0.6 yr', 'Below age norm', '#f39a5b']],
+inputs: ['VO₂ max', 'Resting HR', 'HRV', 'Sleep regularity', 'Weekly activity', '+23 more'] },
+fitage: { label: 'Fitness age', liquid: 'brand', value: '68', max: '100', display: '32', title: 'Fitness age', scale: 'years · from VO₂ max alone', glow: 'rgba(89,236,170,0.16)',
+what: 'Fitness age is the age at which your VO₂ max would be typical. It uses one input, so it moves with your cardio fitness and can differ from body age, which blends 14 or more.',
+bands: [['Younger than calendar age', 'Under 40', 'You are here: 32', '#59ecaa'], ['Same as calendar age', '40', 'Typical fitness for your age', '#e8c46a'], ['Older than calendar age', 'Over 40', 'Room to build aerobic fitness', '#f39a5b']],
+inputs: ['VO₂ max', 'Age', 'Sex'] },
+base: { label: 'Baselines', liquid: 'brand', value: '50', max: '100', display: ' ', title: 'Your normal', scale: 'HRV, resting HR, breathing · last 60 nights', glow: 'rgba(184,163,255,0.16)',
+what: 'Your normal range for each overnight signal comes from your own last 60 nights, not population averages. It is the shaded band on every chart. A single night outside it is common; several in a row is what moves Charge.',
+bands: [['HRV', '44–54 ms', 'Overnight rMSSD; higher is usually better', '#b8a3ff'], ['Resting heart rate', '53–57 bpm', 'Lowest steady overnight rate', '#ff8198'], ['Breathing rate', '14.2–15.0 rpm', 'Very stable; a jump is worth noticing', '#58d7c9'], ['Skin temperature', '±0.3 °C', 'Relative to your own average', '#ffb45e']],
+inputs: ['60 nights of data', 'Tracked nights only', 'Calibrating under 14 nights'] }
+};
+var g = G[s.tab];
+var tabs = ['charge', 'effort', 'rest', 'stress', 'debt', 'vo2', 'bodyage', 'fitage', 'base'].map(function (k) { var on = s.tab === k; return { label: G[k].label, on: on, pick: function () { self.setState({ tab: k }); }, style: 'flex-shrink: 0; height: 36px; padding: 0 14px; border-radius: 999px; cursor: pointer; white-space: nowrap; font: 600 13px/16px Inter, sans-serif; border: 1px solid ' + (on ? '#59ecaa' : 'rgba(190,220,235,0.2)') + '; background: ' + (on ? '#59ecaa' : 'rgba(170,205,220,0.06)') + '; color: ' + (on ? '#0c161c' : '#b6c3ca') + ';' }; });
+var bands = g.bands.map(function (b, i) { return { name: b[0], range: b[1], note: b[2], row: 'display: flex; align-items: center; gap: 14px; min-height: 60px;' + (i ? ' border-top: 1px solid rgba(190,220,235,0.14);' : ''), sw: 'width: 12px; height: 32px; border-radius: 6px; flex-shrink: 0; background: ' + b[3] + ';' }; });
+var dict = [
+['Charge', '0–100 · Synthesis bands: Depleted 0–19, Low 20–39, Steady 40–59, Strong 60–79, Peak 80–100 · vs your 30-day baseline', '8'],
+['Effort', '0–100 · Light 0–44, Moderate 45–66, High 67–85, All out 86–100 · resets at midnight', '16'],
+['Rest', 'Sleep you got ÷ sleep you needed · Poor, Sufficient, Optimal', '90%'],
+['Sleep debt', 'Need minus sleep over 14 tracked nights, never below zero', '59 m'],
+['HRV', 'Overnight rMSSD · normal band from your last 60 nights: 44–54 ms', '35 ms'],
+['Resting HR', 'Lowest steady overnight heart rate · normal 53–57 bpm over 60 nights', '60 bpm'],
+['Stress', '0–3 · Settled, Raised, High · daytime, workouts excluded, vs 30 days', '0.8'],
+['Body age', 'Model estimate from 14 of 28 inputs, shown as a range · weekly', '32–36'],
+['Fitness age', 'From VO₂ max (47.4) alone · weekly · differs from body age', '32']
+].map(function (r, i) { return { name: r[0], def: r[1], today: r[2], row: 'display: flex; align-items: center; gap: 12px; padding: 10px 0;' + (i ? ' border-top: 1px solid rgba(190,220,235,0.14);' : '') }; });
+return {
+dict: dict,
+tabs: tabs,
+g: { liquid: g.liquid, value: g.value, max: g.max, display: g.display, title: g.title, scale: g.scale, what: g.what, bands: bands, inputs: g.inputs },
+bgStyle: 'position: relative; min-height: 100%; background: radial-gradient(120% 45% at 50% 0%, ' + g.glow + ', rgba(19,31,38,0) 70%);'
+};
+}
+}
+</script>
+</body>
+</html>

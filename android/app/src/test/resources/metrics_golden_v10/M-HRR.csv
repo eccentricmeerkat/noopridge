@@ -1,0 +1,4 @@
+case,endHr,after1Min,after2Min,after5Min
+hard_session,168,10,20,50
+easy_session_ineligible,null,null,null,null
+no_post_data,null,null,null,null

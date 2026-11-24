@@ -1,0 +1,632 @@
+<!doctype html>
+<meta charset="utf-8"><style data-dc-design-system-vars>@layer{:root{--bg-000:#0c161c;--bg-100:#131f26;--bg-200:#172630;--bg-300:#1f313b;--bg-400:#283d48;--glass-fill:#aacddc0f;--glass-fill-strong:#aacddc1a;--glass-stroke:#bedceb24;--glass-highlight:#ffffff24;--ink:#f5efe4;--ink-muted:#b6c3ca;--ink-subtle:#9dadb6;--ink-on-liquid:#0c161c;--brand:#59ecaa;--brand-deep:#1f8a5e;--charge:#e8b84f;--charge-deep:#9a6a18;--effort:#6ba1fd;--effort-deep:#2c5bbd;--rest:#59ecaa;--rest-deep:#1f8a5e;--battery:#2f9a62;--battery-deep:#15512f;--state-depleted:#f7777d;--state-low:#f39a5b;--state-moderate:#e8c46a;--state-good:#a6dc7e;--state-ready:#59ecaa;--data-hrv:#b8a3ff;--data-heart:#ff8198;--data-energy:#ffb45e;--data-breath:#58d7c9;--focus-ring:#f5efe4;--shadow-card:0 12px 32px rgba(2, 6, 16, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);--glow-charge:0 0 28px rgba(232, 184, 79, 0.35);--glow-effort:0 0 28px rgba(107, 161, 253, 0.35);--glow-rest:0 0 28px rgba(89, 236, 170, 0.35);--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--radius-sm:10px;--radius-md:18px;--radius-lg:24px;--radius-xl:32px;--radius-pill:999px;--radius-orb:50%;--blur-glass:20px;--font-display:"Playfair Display", Georgia, serif;--font-sans:Inter, "SF Pro Display", system-ui, sans-serif;--font-script:Allura, "Snell Roundhand", cursive;--text-numeral-xl:700 60px/1 var(--font-display);--text-numeral-lg:700 44px/1 var(--font-display);--text-title-xl:700 40px/44px var(--font-display);--text-title-lg:700 30px/34px var(--font-display);--text-numeral-md:700 28px/32px var(--font-display);--text-body:400 15px/22px var(--font-sans);--text-body-sm:500 13px/18px var(--font-sans);--text-label:600 13px/16px var(--font-sans);--text-eyebrow:600 11px/14px var(--font-sans);--text-button:600 14px/20px var(--font-sans);--text-tab:500 11px/14px var(--font-sans);--text-wordmark:300 22px/24px var(--font-sans);--text-tagline:500 10px/14px var(--font-sans);--text-script:400 26px/26px var(--font-script);}}</style>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Trends — Noop Ridge</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+.np-card{border-radius:var(--radius-lg);padding:18px;display:flex;flex-direction:column;gap:12px}
+.np-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.np-h2{margin:0;font:700 21px/26px var(--font-display)}
+.np-sub{font:400 13px/18px Inter,sans-serif;color:#b6c3ca}
+.np-go{width:36px;height:36px;flex-shrink:0;border-radius:50%;border:1px solid rgba(190,220,235,.18);display:grid;place-items:center;color:#9dadb6;text-decoration:none}
+.np-go:hover{color:#f5efe4}
+.np-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font:500 12px/16px Inter,sans-serif;color:#b6c3ca}
+.np-leg i{display:inline-block;vertical-align:middle;margin-right:6px}
+.np-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-top:12px;border-top:1px solid rgba(190,220,235,.14)}
+.np-stat{display:flex;flex-direction:column;gap:2px;font:500 11px/14px Inter,sans-serif;color:#9dadb6;letter-spacing:.04em}
+.np-stat b{font:700 20px/24px 'Playfair Display',serif;font-variant-numeric:lining-nums;letter-spacing:0;color:#f5efe4}
+.np-tile{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:16px;text-decoration:none;color:#f5efe4;background:rgba(12,22,28,.35);border:1px solid rgba(190,220,235,.14)}
+.np-tile:hover{color:#f5efe4;border-color:rgba(190,220,235,.3)}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%">
+<img src="./assets/78bf32f1f23a7ccfac55c88185a3a22a.png" alt="" style="position: absolute; left: 0; top: -84px; width: 390px; height: 926px; object-fit: cover; object-position: top; opacity: 0.6">
+<div style="position: absolute; left: 0; top: 380px; width: 390px; height: 546px; background: linear-gradient(180deg, rgba(19, 31, 38, 0), #131f26 70%)"></div>
+
+<div style="position: relative; display: flex; flex-direction: column; gap: 14px; padding: 28px 16px 132px">
+
+<header style="display: flex; flex-direction: column; gap: 4px">
+<div class="nr-eyebrow" style="color: var(--ink-muted)">Day to day</div>
+<h1 style="margin: 0; font: 700 40px/44px var(--font-display); letter-spacing: -0.01em">Trends</h1>
+</header>
+
+<div role="group" aria-label="Range for every card" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: var(--radius-pill); background: var(--glass-fill); border: 1px solid var(--glass-stroke)">
+<sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3"><button type="button" onClick="{{ r.pick }}" aria-pressed="{{ r.on }}" style="{{ r.style }}">{{ r.label }}</button></sc-for>
+</div>
+
+
+
+<section aria-label="Effort" class="nr-glass np-card">
+<div class="np-head">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><div class="nr-eyebrow">Effort · daily</div><h2 class="np-h2">{{ eff.title }}</h2><span class="np-sub">{{ eff.sub }}</span></div>
+<a href="Insights.dc.html#m=effort" class="np-go" aria-label="Open Effort in Insights"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+</div>
+<div style="position: relative"><svg width="322" height="132" viewBox="0 0 322 132" role="img" aria-label="{{ eff.aria }}" style="display: block; overflow: visible">
+<rect x="0" y="{{ eff.bandY }}" width="322" height="{{ eff.bandH }}" fill="#bedceb" fill-opacity="0.08"></rect>
+<text x="4" y="{{ eff.bandTextY }}" font-family="Inter, sans-serif" font-size="10" fill="#9dadb6">your normal {{ eff.bandLabel }}</text>
+<line x1="0" x2="322" y1="112" y2="112" stroke="#bedceb" stroke-opacity="0.22"></line>
+<sc-for list="{{ eff.pts }}" as="p" hint-placeholder-count="40"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ dotR }}" fill="#6ba1fd" fill-opacity="0.45"></circle></sc-for>
+<path d="{{ eff.line }}" fill="none" stroke="#6ba1fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(107, 161, 253, 0.45))"></path>
+<circle cx="{{ eff.lastX }}" cy="{{ eff.lastY }}" r="5" fill="#131f26" stroke="#6ba1fd" stroke-width="2.5"></circle>
+<text x="0" y="128" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ axStart }}</text>
+<text x="161" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ axMid }}</text>
+<text x="322" y="128" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">Today</text>
+</svg><div style="{{ eff.sc.pad }}" onPointerMove="{{ eff.sc.move }}" onPointerDown="{{ eff.sc.down }}" onPointerLeave="{{ eff.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ eff.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ eff.sc.line }}"></span><sc-if value="{{ eff.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ eff.sc.dot }}"></span></sc-if><span style="{{ eff.sc.tip }}"><b style="{{ eff.sc.vSt }}">{{ eff.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ eff.sc.d }}</span></span></sc-if></div>
+<div class="np-leg"><span><i style="width: 7px; height: 7px; border-radius: 50%; background: rgba(107, 161, 253, 0.6)"></i>daily</span><span><i style="width: 16px; height: 3px; border-radius: 2px; background: #6ba1fd"></i>7-day mean</span><span><i style="width: 14px; height: 9px; background: rgba(190, 220, 235, 0.14)"></i>your normal</span></div>
+<div class="np-stats">
+<span class="np-stat">TODAY<b style="color: #6ba1fd">{{ eff.today }}</b></span>
+<span class="np-stat">AVERAGE<b style="color: #8fb3f5">{{ eff.avg }}</b></span>
+<span class="np-stat">HARD DAYS<b>{{ eff.hard }}</b></span>
+</div>
+</section>
+
+<section aria-label="Calories burned" class="nr-glass np-card">
+<div class="np-head">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><div class="nr-eyebrow">Calories · daily</div><h2 class="np-h2">{{ kc.title }}</h2><span class="np-sub">{{ kc.sub }}</span></div>
+<a href="Insights.dc.html#m=calories" class="np-go" aria-label="Open Calories in Insights"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+</div>
+<div style="position: relative"><svg width="322" height="132" viewBox="0 0 322 132" role="img" aria-label="{{ kc.aria }}" style="display: block; overflow: visible">
+<sc-for list="{{ kc.grid }}" as="g" hint-placeholder-count="3"><line x1="0" x2="322" y1="{{ g.y }}" y2="{{ g.y }}" stroke="#bedceb" stroke-opacity="0.08"></line><text x="322" y="{{ g.ty }}" text-anchor="end" font-family="Inter, sans-serif" font-size="10" fill="#9dadb6">{{ g.t }}</text></sc-for>
+<line x1="0" x2="322" y1="112" y2="112" stroke="#bedceb" stroke-opacity="0.22"></line>
+<sc-for list="{{ kc.bars }}" as="b" hint-placeholder-count="14"><rect x="{{ b.x }}" y="{{ b.yB }}" width="{{ kc.bw }}" height="{{ b.hB }}" rx="{{ kc.rx }}" fill="#9fb4c2" fill-opacity="{{ b.op }}"></rect><rect x="{{ b.x }}" y="{{ b.yA }}" width="{{ kc.bw }}" height="{{ b.hA }}" rx="{{ kc.rx }}" fill="#ffb45e" fill-opacity="{{ b.opA }}"></rect></sc-for>
+<text x="0" y="128" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ axStart }}</text>
+<text x="161" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ axMid }}</text>
+<text x="322" y="128" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">Today</text>
+</svg><div style="{{ kc.sc.pad }}" onPointerMove="{{ kc.sc.move }}" onPointerDown="{{ kc.sc.down }}" onPointerLeave="{{ kc.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ kc.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ kc.sc.line }}"></span><span style="{{ kc.sc.tip }}"><b style="{{ kc.sc.vSt }}">{{ kc.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ kc.sc.d }}</span></span></sc-if></div>
+<div class="np-leg"><span><i style="width: 10px; height: 10px; border-radius: 3px; background: rgba(159, 180, 194, 0.55)"></i>Base · resting and everyday</span><span><i style="width: 10px; height: 10px; border-radius: 3px; background: #ffb45e"></i>Active · workouts</span></div>
+<div class="np-stats">
+<span class="np-stat">AVG / DAY<b>{{ kc.avg }}</b></span>
+<span class="np-stat">ACTIVE AVG<b style="color: #ffb45e">{{ kc.act }}</b></span>
+<span class="np-stat">TODAY SO FAR<b>{{ kc.today }}</b></span>
+</div>
+</section>
+
+<section aria-label="Load and recovery" class="nr-glass np-card">
+<div class="np-head">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><div class="nr-eyebrow">Load &amp; recovery</div><h2 class="np-h2">{{ load.title }}</h2><span class="np-sub" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">{{ load.sub }}<span style="{{ load.pillSt }}">{{ load.pill }}</span></span></div>
+<a href="Insights.dc.html#m=effort" class="np-go" aria-label="Open Effort in Insights"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+</div>
+<div style="position: relative"><svg width="322" height="188" viewBox="0 0 322 188" role="img" aria-label="{{ load.aria }}" style="display: block; overflow: visible">
+<sc-for list="{{ load.ramps }}" as="r" hint-placeholder-count="1"><rect x="{{ r.x }}" y="10" width="{{ r.w }}" height="150" fill="#e8c46a" fill-opacity="0.1"></rect></sc-for>
+<sc-for list="{{ load.ticks }}" as="t" hint-placeholder-count="6"><line x1="30" x2="322" y1="{{ t.y }}" y2="{{ t.y }}" stroke="#bedceb" stroke-opacity="0.12"></line></sc-for>
+<line x1="26" x2="26" y1="10" y2="160" stroke="#bedceb" stroke-opacity="0.22"></line>
+<sc-for list="{{ load.bars }}" as="b" hint-placeholder-count="40"><rect x="{{ b.x }}" y="{{ b.y }}" width="{{ load.bw }}" height="{{ b.h }}" rx="1" fill="#6ba1fd" fill-opacity="0.28"></rect></sc-for>
+<line x1="26" x2="322" y1="160" y2="160" stroke="#bedceb" stroke-opacity="0.22"></line>
+<path d="{{ load.chronic }}" fill="none" stroke="#b6c3ca" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"></path>
+<path d="{{ load.acute }}" fill="none" stroke="#6ba1fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(107, 161, 253, 0.5))"></path>
+<circle cx="{{ load.ex }}" cy="{{ load.cy }}" r="4" fill="#b6c3ca"></circle>
+<circle cx="{{ load.ex }}" cy="{{ load.ay }}" r="4.5" fill="#131f26" stroke="#6ba1fd" stroke-width="2.5"></circle>
+<sc-for list="{{ load.xl }}" as="x" hint-placeholder-count="6"><text x="{{ x.x }}" y="178" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ x.t }}</text></sc-for>
+</svg><sc-for list="{{ load.ticks }}" as="t" hint-placeholder-count="6"><span style="{{ t.lst }}">{{ t.v }}</span></sc-for><div style="{{ load.sc.pad }}" onPointerMove="{{ load.sc.move }}" onPointerDown="{{ load.sc.down }}" onPointerLeave="{{ load.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ load.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ load.sc.line }}"></span><sc-if value="{{ load.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ load.sc.dot }}"></span></sc-if><span style="{{ load.sc.tip }}"><b style="{{ load.sc.vSt }}">{{ load.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ load.sc.d }}</span></span></sc-if></div>
+<div class="np-leg"><span><i style="width: 16px; height: 3px; border-radius: 2px; background: #6ba1fd"></i>7-day load ({{ load.a7 }})</span><span><i style="width: 16px; height: 0; border-top: 2px dashed #b6c3ca"></i>28-day load ({{ load.c28 }})</span><span><i style="width: 6px; height: 10px; background: rgba(107, 161, 253, 0.4)"></i>Daily effort</span><span><i style="width: 10px; height: 10px; border-radius: 2px; background: rgba(232, 196, 106, 0.35); border: 1px solid rgba(232, 196, 106, 0.6)"></i>Ramp (&gt; +10%)</span></div>
+<button type="button" onClick="{{ openScat }}" aria-label="Open Charge versus yesterday's Effort" style="width: 100%; display: flex; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid rgba(190, 220, 235, 0.16); border-radius: 16px; background: rgba(170, 205, 220, 0.04); cursor: pointer; color: var(--ink); text-align: left">
+<svg width="96" height="66" viewBox="0 0 96 66" role="img" aria-label="{{ load.scAria }}" style="flex-shrink: 0">
+<line x1="6" y1="62" x2="94" y2="62" stroke="#bedceb" stroke-opacity="0.3"></line><line x1="6" y1="4" x2="6" y2="62" stroke="#bedceb" stroke-opacity="0.3"></line>
+<sc-for list="{{ load.scatter }}" as="p" hint-placeholder-count="30"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="2.2" fill="#e8b84f" fill-opacity="0.7"></circle></sc-for>
+<sc-if value="{{ load.fit }}" hint-placeholder-val="{{ true }}"><line x1="{{ load.fx1 }}" y1="{{ load.fy1 }}" x2="{{ load.fx2 }}" y2="{{ load.fy2 }}" stroke="#f5efe4" stroke-width="1.5" stroke-dasharray="3 2"></line></sc-if>
+</svg>
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font: 600 14px/18px var(--font-sans)">Charge vs yesterday's effort</span><span style="font: 400 12px/17px var(--font-sans); color: var(--ink-muted)">{{ load.scText }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-subtle)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M9 5l7 7-7 7"></path></svg>
+</button>
+</section>
+
+<section aria-label="Intensity" class="nr-glass np-card">
+<div class="np-head">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><div class="nr-eyebrow">Intensity · last 30 days</div><h2 class="np-h2">{{ int.title }}</h2></div>
+<a href="Workouts.dc.html" class="np-go" aria-label="Open Workouts"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+</div>
+<div style="position: relative"><svg width="322" height="128" viewBox="0 0 322 128" role="img" aria-label="{{ int.aria }}" style="display: block; overflow: visible">
+<sc-for list="{{ int.weeks }}" as="w" hint-placeholder-count="13">
+<rect x="{{ w.x }}" y="{{ w.yL }}" width="{{ int.bw }}" height="{{ w.hL }}" fill="#6ba1fd"></rect>
+<rect x="{{ w.x }}" y="{{ w.yM }}" width="{{ int.bw }}" height="{{ w.hM }}" fill="#e8c46a"></rect>
+<rect x="{{ w.x }}" y="{{ w.yH }}" width="{{ int.bw }}" height="{{ w.hH }}" rx="1.5" fill="#f7777d"></rect>
+</sc-for>
+<line x1="0" x2="322" y1="110" y2="110" stroke="#bedceb" stroke-opacity="0.22"></line>
+<text x="0" y="125" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ int.start }}</text>
+<text x="322" y="125" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">This week</text>
+</svg><div style="{{ int.sc.pad }}" onPointerMove="{{ int.sc.move }}" onPointerDown="{{ int.sc.down }}" onPointerLeave="{{ int.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ int.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ int.sc.line }}"></span><sc-if value="{{ int.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ int.sc.dot }}"></span></sc-if><span style="{{ int.sc.tip }}"><b style="{{ int.sc.vSt }}">{{ int.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ int.sc.d }}</span></span></sc-if></div>
+<div class="np-leg"><span><i style="width: 10px; height: 10px; border-radius: 2px; background: #6ba1fd"></i>Low · Z1–2 · {{ int.pL }}</span><span><i style="width: 10px; height: 10px; border-radius: 2px; background: #e8c46a"></i>Moderate · Z3 · {{ int.pM }}</span><span><i style="width: 10px; height: 10px; border-radius: 2px; background: #f7777d"></i>High · Z4–5 · {{ int.pH }}</span></div>
+</section>
+
+<section aria-label="Heart health" class="nr-glass np-card">
+<div class="np-head">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><div class="nr-eyebrow">Heart health</div><h2 class="np-h2">{{ heart.title }}</h2></div>
+<a href="Insights.dc.html#m=hrv" class="np-go" aria-label="Open HRV in Insights"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span style="font: 600 14px/18px var(--font-sans); color: #ff8198">Resting HR · nightly</span><span style="display: flex; align-items: center; gap: 10px"><span style="white-space: nowrap"><b style="font: 700 26px/30px var(--font-display); font-variant-numeric: lining-nums">{{ heart.r.now }}</b> <span style="font: 500 13px/16px var(--font-sans); color: var(--ink-muted)">bpm</span></span><span style="{{ heart.r.pillSt }}">{{ heart.r.pill }}</span></span></div>
+<div style="position: relative"><svg width="322" height="118" viewBox="0 0 322 118" role="img" aria-label="{{ heart.r.aria }}" style="display: block; overflow: visible">
+<defs><linearGradient id="grr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff8198" stop-opacity="0.32"></stop><stop offset="100%" stop-color="#ff8198" stop-opacity="0"></stop></linearGradient></defs>
+<rect x="30" y="{{ heart.r.bandY }}" width="292" height="{{ heart.r.bandH }}" fill="#ff8198" fill-opacity="0.08"></rect>
+<sc-for list="{{ heart.r.ticks }}" as="t" hint-placeholder-count="4"><line x1="30" x2="322" y1="{{ t.y }}" y2="{{ t.y }}" stroke="#bedceb" stroke-opacity="0.1" stroke-dasharray="3 4"></line></sc-for>
+<path d="{{ heart.r.line }}" fill="none" stroke="#ff8198" stroke-opacity="0.45" stroke-width="1.5" stroke-linejoin="round"></path>
+<sc-for list="{{ heart.r.dots }}" as="d" hint-placeholder-count="14"><circle cx="{{ d.x }}" cy="{{ d.y }}" r="4" fill="#ff8198" fill-opacity="{{ d.o }}"></circle></sc-for>
+<circle cx="{{ heart.r.lx }}" cy="{{ heart.r.ly }}" r="4.5" fill="#f5efe4" stroke="#ff8198" stroke-width="2.5"></circle>
+</svg><sc-for list="{{ heart.r.ticks }}" as="t" hint-placeholder-count="4"><span style="{{ t.lst }}">{{ t.v }}</span></sc-for><div style="{{ heart.r.sc.pad }}" onPointerMove="{{ heart.r.sc.move }}" onPointerDown="{{ heart.r.sc.down }}" onPointerLeave="{{ heart.r.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ heart.r.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ heart.r.sc.line }}"></span><sc-if value="{{ heart.r.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ heart.r.sc.dot }}"></span></sc-if><span style="{{ heart.r.sc.tip }}"><b style="{{ heart.r.sc.vSt }}">{{ heart.r.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ heart.r.sc.d }}</span></span></sc-if></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span style="font: 600 14px/18px var(--font-sans); color: #b8a3ff">HRV · nightly</span><span style="display: flex; align-items: center; gap: 10px"><span style="white-space: nowrap"><b style="font: 700 26px/30px var(--font-display); font-variant-numeric: lining-nums">{{ heart.h.now }}</b> <span style="font: 500 13px/16px var(--font-sans); color: var(--ink-muted)">ms</span></span><span style="{{ heart.h.pillSt }}">{{ heart.h.pill }}</span></span></div>
+<div style="position: relative"><svg width="322" height="118" viewBox="0 0 322 118" role="img" aria-label="{{ heart.h.aria }}" style="display: block; overflow: visible">
+<defs><linearGradient id="grh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b8a3ff" stop-opacity="0.32"></stop><stop offset="100%" stop-color="#b8a3ff" stop-opacity="0"></stop></linearGradient></defs>
+<rect x="30" y="{{ heart.h.bandY }}" width="292" height="{{ heart.h.bandH }}" fill="#b8a3ff" fill-opacity="0.08"></rect>
+<sc-for list="{{ heart.h.ticks }}" as="t" hint-placeholder-count="4"><line x1="30" x2="322" y1="{{ t.y }}" y2="{{ t.y }}" stroke="#bedceb" stroke-opacity="0.1" stroke-dasharray="3 4"></line></sc-for>
+<path d="{{ heart.h.line }}" fill="none" stroke="#b8a3ff" stroke-opacity="0.45" stroke-width="1.5" stroke-linejoin="round"></path>
+<sc-for list="{{ heart.h.dots }}" as="d" hint-placeholder-count="14"><circle cx="{{ d.x }}" cy="{{ d.y }}" r="4" fill="#b8a3ff" fill-opacity="{{ d.o }}"></circle></sc-for>
+<circle cx="{{ heart.h.lx }}" cy="{{ heart.h.ly }}" r="4.5" fill="#f5efe4" stroke="#b8a3ff" stroke-width="2.5"></circle>
+</svg><sc-for list="{{ heart.h.ticks }}" as="t" hint-placeholder-count="4"><span style="{{ t.lst }}">{{ t.v }}</span></sc-for><div style="{{ heart.h.sc.pad }}" onPointerMove="{{ heart.h.sc.move }}" onPointerDown="{{ heart.h.sc.down }}" onPointerLeave="{{ heart.h.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ heart.h.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ heart.h.sc.line }}"></span><sc-if value="{{ heart.h.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ heart.h.sc.dot }}"></span></sc-if><span style="{{ heart.h.sc.tip }}"><b style="{{ heart.h.sc.vSt }}">{{ heart.h.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ heart.h.sc.d }}</span></span></sc-if></div>
+</div>
+<div style="position: relative; height: 16px; margin-left: 30px; font: 500 11px/14px var(--font-sans); color: #9dadb6"><sc-for list="{{ heart.xl }}" as="x" hint-placeholder-count="6"><span style="{{ x.st }}">{{ x.t }}</span></sc-for></div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid rgba(190, 220, 235, 0.14); font: 500 12px/16px var(--font-sans); color: var(--ink-subtle)"><span>Dot = one night · Bright = outside normal · Band = normal range</span><span style="white-space: nowrap; color: var(--ink-muted)">{{ heart.cover }}</span></div>
+</section>
+
+<section aria-label="Synthesis calendar" class="nr-glass np-card">
+<div class="np-head">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><div class="nr-eyebrow">Synthesis · calendar</div><h2 class="np-h2">{{ syn.title }}</h2><span class="np-sub">{{ syn.sub }}</span></div>
+<span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted); white-space: nowrap">{{ syn.days }}</span>
+</div>
+<div style="display: flex; gap: 6px">
+<div style="{{ syn.labGrid }}"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<div style="display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); column-gap: 3px; height: 14px"><sc-for list="{{ syn.months }}" as="m" hint-placeholder-count="20"><span style="{{ m.st }}">{{ m.t }}</span></sc-for></div>
+<div style="{{ syn.grid }}">
+<sc-for list="{{ syn.cells }}" as="c" hint-placeholder-count="140"><a href="Main.dc.html" aria-label="{{ c.aria }}" class="np-plain" style="{{ c.st }}" onPointerDown="{{ c.down }}" onPointerUp="{{ c.up }}" onPointerLeave="{{ c.up }}" onPointerCancel="{{ c.up }}" onClick="{{ c.click }}" onContextMenu="{{ c.ctx }}"></a></sc-for>
+<sc-if value="{{ syn.tip.on }}" hint-placeholder-val="{{ false }}"><span role="status" style="{{ syn.tip.st }}"><b style="font: 700 14px/18px 'Playfair Display', Georgia, serif; color: #f5efe4">{{ syn.tip.title }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ syn.tip.sub }}</span></span></sc-if>
+</div>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; font: 500 13px/16px var(--font-sans); color: var(--ink-muted)"><span>Depleted</span><span style="flex-grow: 1; height: 6px; border-radius: 3px; background: linear-gradient(90deg, #f7777d, #f39a5b 28%, #e8c46a 50%, #59ecaa 76%, #6ba1fd)"></span><span>Peak</span></div>
+<div class="np-stats">
+<sc-for list="{{ syn.stats }}" as="t" hint-placeholder-count="3"><span class="np-stat"><span style="display: flex; flex-direction: column; gap: 4px"><b style="font: 700 20px/24px var(--font-display); font-variant-numeric: lining-nums; color: {{ t.c }}">{{ t.v }}</b><span>{{ t.k }}</span><span style="height: 4px; border-radius: 2px; background: rgba(190, 220, 235, 0.12)"><span style="{{ t.bar }}"></span></span></span></span></sc-for>
+</div>
+</section>
+
+<section aria-label="Sleep" class="nr-glass np-card">
+<div class="np-head">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><div class="nr-eyebrow">Sleep · {{ sleep.unit }}</div><h2 class="np-h2">{{ sleep.title }}</h2></div>
+<a href="Sleep.dc.html" class="np-go" aria-label="Open Sleep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+</div>
+<div style="position: relative"><svg width="322" height="176" viewBox="0 0 322 176" role="img" aria-label="{{ sleep.aria }}" style="display: block; overflow: visible">
+<sc-for list="{{ sleep.ticks }}" as="t" hint-placeholder-count="6"><line x1="30" x2="322" y1="{{ t.y }}" y2="{{ t.y }}" stroke="#bedceb" stroke-opacity="0.12"></line></sc-for>
+<sc-for list="{{ sleep.bars }}" as="b" hint-placeholder-count="13">
+<rect x="{{ b.x }}" y="{{ b.yD }}" width="{{ sleep.bw }}" height="{{ b.hD }}" fill="#4a2fb0"></rect>
+<rect x="{{ b.x }}" y="{{ b.yC }}" width="{{ sleep.bw }}" height="{{ b.hC }}" fill="#7b5cf0"></rect>
+<rect x="{{ b.x }}" y="{{ b.yL }}" width="{{ sleep.bw }}" height="{{ b.hL }}" fill="#aeb4f5"></rect>
+<rect x="{{ b.x }}" y="{{ b.yR }}" width="{{ sleep.bw }}" height="{{ b.hR }}" rx="2" fill="#3fe3a0"></rect>
+<rect x="{{ b.x }}" y="{{ b.yE }}" width="{{ sleep.bw }}" height="{{ b.hE }}" rx="2" fill="none" stroke="#9dadb6" stroke-dasharray="2 2"></rect>
+</sc-for>
+<path d="{{ sleep.need }}" fill="none" stroke="#59ecaa" stroke-width="1.75" stroke-dasharray="5 4"></path>
+<line x1="30" x2="322" y1="150" y2="150" stroke="#bedceb" stroke-opacity="0.22"></line>
+<sc-for list="{{ sleep.xl }}" as="x" hint-placeholder-count="6"><text x="{{ x.x }}" y="168" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ x.t }}</text></sc-for>
+</svg><sc-for list="{{ sleep.ticks }}" as="t" hint-placeholder-count="6"><span style="{{ t.lst }}">{{ t.v }}</span></sc-for><div style="{{ sleep.sc.pad }}" onPointerMove="{{ sleep.sc.move }}" onPointerDown="{{ sleep.sc.down }}" onPointerLeave="{{ sleep.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ sleep.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ sleep.sc.line }}"></span><sc-if value="{{ sleep.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ sleep.sc.dot }}"></span></sc-if><span style="{{ sleep.sc.tip }}"><b style="{{ sleep.sc.vSt }}">{{ sleep.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ sleep.sc.d }}</span><span style="font: 500 11px/14px Inter, sans-serif; color: #f5efe4">{{ sleep.stTip }}</span></span></sc-if></div>
+<div class="np-leg"><span><i style="width: 10px; height: 10px; border-radius: 2px; background: #4a2fb0"></i>Deep</span><span><i style="width: 10px; height: 10px; border-radius: 2px; background: #7b5cf0"></i>Core</span><span><i style="width: 10px; height: 10px; border-radius: 2px; background: #aeb4f5"></i>Light</span><span><i style="width: 10px; height: 10px; border-radius: 2px; background: #3fe3a0"></i>REM</span><span><i style="width: 14px; height: 0; border-top: 2px dashed #59ecaa"></i>Need</span></div>
+<div class="np-stats">
+<span class="np-stat">AVG SLEPT<b>{{ sleep.avg }}</b></span>
+<span class="np-stat">REGULARITY<b>56%</b></span>
+<span class="np-stat">REST AVG<b style="color: #59ecaa">{{ sleep.restAvg }}</b></span>
+</div>
+</section>
+
+<section aria-label="Other daily signals" class="nr-glass np-card">
+<div style="display: flex; flex-direction: column; gap: 4px"><div class="nr-eyebrow">Other daily signals</div><h2 class="np-h2">Stress and breathing steady</h2></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<a href="Stress.dc.html" class="np-tile"><span class="nr-eyebrow" style="font-size: 10px; color: #e8c46a">Stress</span><span><b style="font: 700 22px/26px var(--font-display); font-variant-numeric: lining-nums">0.8</b> <span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">of 3</span></span><svg width="100%" height="24" viewBox="0 0 140 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 12 L14 11 L28 9 L42 10 L56 10 L70 8 L84 9 L98 8 L112 11 L126 12 L140 14" fill="none" stroke="#e8c46a" stroke-width="2" vector-effect="non-scaling-stroke"></path></svg><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">Settled · in normal</span></a>
+<a href="Insights.dc.html#m=resp" class="np-tile"><span class="nr-eyebrow" style="font-size: 10px; color: #58d7c9">Breathing rate</span><span><b style="font: 700 22px/26px var(--font-display); font-variant-numeric: lining-nums">14.8</b> <span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">rpm</span></span><svg width="100%" height="24" viewBox="0 0 140 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 13 L14 12 L28 13 L42 12 L56 14 L70 13 L84 11 L98 12 L112 10 L126 12 L140 11" fill="none" stroke="#58d7c9" stroke-width="2" vector-effect="non-scaling-stroke"></path></svg><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">overnight · in normal</span></a>
+<a href="Insights.dc.html#m=skin" class="np-tile"><span class="nr-eyebrow" style="font-size: 10px; color: #ffb45e">Skin temp</span><span><b style="font: 700 22px/26px var(--font-display); font-variant-numeric: lining-nums">+0.6</b> <span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">°C</span></span><svg width="100%" height="24" viewBox="0 0 140 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 16 L14 15 L28 17 L42 14 L56 16 L70 15 L84 13 L98 12 L112 9 L126 7 L140 6" fill="none" stroke="#ffb45e" stroke-width="2" vector-effect="non-scaling-stroke"></path></svg><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">vs baseline · rising</span></a>
+<a href="Insights.dc.html#m=spo2" class="np-tile"><span class="nr-eyebrow" style="font-size: 10px; color: #6ba1fd">Blood O₂ · est.</span><span><b style="font: 700 22px/26px var(--font-display); font-variant-numeric: lining-nums">96</b> <span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">%</span></span><svg width="100%" height="24" viewBox="0 0 140 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 12 L14 11 L28 12 L42 13 L56 12 L70 11 L84 12 L98 12 L112 13 L126 12 L140 12" fill="none" stroke="#6ba1fd" stroke-width="2" vector-effect="non-scaling-stroke"></path></svg><span style="font: 400 11px/14px var(--font-sans); color: var(--ink-subtle)">strap estimate</span></a>
+</div>
+</section>
+
+<section aria-label="Charge" class="nr-glass np-card">
+<div class="np-head">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><div class="nr-eyebrow">Charge · daily</div><h2 class="np-h2">{{ chg.title }}</h2><span class="np-sub">{{ chg.sub }}</span></div>
+<a href="Insights.dc.html#m=charge" class="np-go" aria-label="Open Charge in Insights"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+</div>
+<div style="position: relative"><svg width="322" height="132" viewBox="0 0 322 132" role="img" aria-label="{{ chg.aria }}" style="display: block; overflow: visible">
+<rect x="0" y="{{ chg.bandY }}" width="322" height="{{ chg.bandH }}" fill="#bedceb" fill-opacity="0.08"></rect>
+<text x="4" y="{{ chg.bandTextY }}" font-family="Inter, sans-serif" font-size="10" fill="#9dadb6">your normal {{ chg.bandLabel }}</text>
+<line x1="0" x2="322" y1="112" y2="112" stroke="#bedceb" stroke-opacity="0.22"></line>
+<sc-for list="{{ chg.pts }}" as="p" hint-placeholder-count="40"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ dotR }}" fill="#e8b84f" fill-opacity="0.45"></circle></sc-for>
+<path d="{{ chg.line }}" fill="none" stroke="#e8b84f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(232, 184, 79, 0.45))"></path>
+<circle cx="{{ chg.lastX }}" cy="{{ chg.lastY }}" r="5" fill="#131f26" stroke="#e8b84f" stroke-width="2.5"></circle>
+<text x="0" y="128" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ axStart }}</text>
+<text x="161" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">{{ axMid }}</text>
+<text x="322" y="128" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">Today</text>
+</svg><div style="{{ chg.sc.pad }}" onPointerMove="{{ chg.sc.move }}" onPointerDown="{{ chg.sc.down }}" onPointerLeave="{{ chg.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ chg.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ chg.sc.line }}"></span><sc-if value="{{ chg.sc.hasDot }}" hint-placeholder-val="{{ false }}"><span style="{{ chg.sc.dot }}"></span></sc-if><span style="{{ chg.sc.tip }}"><b style="{{ chg.sc.vSt }}">{{ chg.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ chg.sc.d }}</span></span></sc-if></div>
+<div class="np-leg"><span><i style="width: 7px; height: 7px; border-radius: 50%; background: rgba(232, 184, 79, 0.6)"></i>daily</span><span><i style="width: 16px; height: 3px; border-radius: 2px; background: #e8b84f"></i>7-day mean</span><span><i style="width: 14px; height: 9px; background: rgba(190, 220, 235, 0.14)"></i>your normal</span></div>
+<div class="np-stats">
+<span class="np-stat">TODAY<b style="color: #e8b84f">{{ chg.today }}</b></span>
+<span class="np-stat">EFFORT AVG<b style="color: #8fb3f5">{{ chg.effAvg }}</b></span>
+<span class="np-stat">REST AVG<b style="color: #59ecaa">{{ chg.restAvg }}</b></span>
+</div>
+</section>
+
+<section aria-label="Consistency" class="nr-glass np-card">
+<div style="display: flex; flex-direction: column; gap: 4px"><div class="nr-eyebrow">Consistency</div><h2 class="np-h2">{{ cal.title }}</h2></div>
+<div style="display: flex; gap: 6px">
+<div style="{{ cal.labGrid }}"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div>
+<div style="{{ cal.grid }}">
+<sc-for list="{{ cal.cells }}" as="c" hint-placeholder-count="91"><a href="Main.dc.html" aria-label="{{ c.aria }}" class="np-plain" style="{{ c.st }}" onPointerDown="{{ c.down }}" onPointerUp="{{ c.up }}" onPointerLeave="{{ c.up }}" onPointerCancel="{{ c.up }}" onClick="{{ c.click }}" onContextMenu="{{ c.ctx }}"><sc-if value="{{ c.moon }}" hint-placeholder-val="{{ false }}"><svg width="{{ cal.ic }}" height="{{ cal.ic }}" viewBox="0 0 24 24" fill="{{ c.mf }}" aria-hidden="true"><path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"></path></svg></sc-if></a></sc-for>
+<sc-if value="{{ cal.tip.on }}" hint-placeholder-val="{{ false }}"><span role="status" style="{{ cal.tip.st }}"><b style="font: 700 14px/18px 'Playfair Display', Georgia, serif; color: #f5efe4">{{ cal.tip.title }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ cal.tip.sub }}</span></span></sc-if>
+</div>
+</div>
+<div class="np-leg"><span><i style="width: 10px; height: 10px; border-radius: 3px; background: rgba(12, 22, 28, 0.35); border: 1px solid rgba(190, 220, 235, 0.3); box-sizing: border-box"></i>Rest day</span><span><i style="width: 10px; height: 10px; border-radius: 3px; background: #3f5c9c"></i>Light–Moderate</span><span><i style="width: 10px; height: 10px; border-radius: 3px; background: #6ba1fd"></i>High+</span><span><svg width="11" height="11" viewBox="0 0 24 24" fill="#f5efe4" aria-hidden="true" style="margin-right: 5px; vertical-align: -1px"><path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"></path></svg>Slept on target</span><span><i style="width: 10px; height: 10px; border-radius: 3px; border: 2px solid #58d7c9; box-sizing: border-box"></i>Breathe day</span></div>
+</section>
+
+<a href="Insights.dc.html" class="nr-glass np-plain" style="display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 18px; border-radius: var(--radius-md); border-color: rgba(89, 236, 170, 0.35)">
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font: 600 15px/20px var(--font-sans)">Open Insights</span><span style="font: 400 12px/16px var(--font-sans); color: var(--ink-muted)">Explore · compare · intelligence</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+</a>
+
+</div>
+</div>
+</div>
+
+<sc-if value="{{ scat.open }}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end">
+<button type="button" aria-label="Close" onClick="{{ scat.close }}" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(6, 11, 15, 0.62); cursor: pointer"></button>
+<div class="np-scroll" style="position: relative; max-height: 88%; overflow-y: auto; border-radius: 28px 28px 0 0; background: var(--bg-400); border-top: 1px solid var(--glass-stroke); padding: 10px 20px 34px; display: flex; flex-direction: column; gap: 14px">
+<div style="width: 40px; height: 4px; border-radius: 2px; background: rgba(245, 239, 228, 0.25); margin: 0 auto"></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="nr-eyebrow">Charge vs yesterday's Effort · 60 days</span><h2 style="margin: 0; font: 700 24px/28px var(--font-display)">{{ scat.title }}</h2><span style="font: 400 13px/18px var(--font-sans); color: var(--ink-muted)">{{ scat.sub }}</span></div>
+<div role="group" aria-label="Lag" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)"><sc-for list="{{ scat.lags }}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{ l.pick }}" aria-pressed="{{ l.on }}" style="{{ l.style }}">{{ l.label }}</button></sc-for></div>
+<div style="position: relative">
+<svg width="350" height="240" viewBox="0 0 350 240" role="img" aria-label="{{ scat.aria }}" style="display: block; overflow: visible">
+<line x1="30" y1="210" x2="350" y2="210" stroke="#bedceb" stroke-opacity="0.3"></line><line x1="30" y1="6" x2="30" y2="210" stroke="#bedceb" stroke-opacity="0.3"></line>
+<text x="0" y="14" font-family="Inter, sans-serif" font-size="10" fill="#9dadb6">100</text><text x="6" y="210" font-family="Inter, sans-serif" font-size="10" fill="#9dadb6">0</text>
+<text x="190" y="232" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">Effort the day before (0–100)</text>
+<text x="-108" y="12" transform="rotate(-90)" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#9dadb6">Next-morning Charge</text>
+<sc-if value="{{ scat.fit }}" hint-placeholder-val="{{ true }}"><line x1="{{ scat.fx1 }}" y1="{{ scat.fy1 }}" x2="{{ scat.fx2 }}" y2="{{ scat.fy2 }}" stroke="#f5efe4" stroke-width="2" stroke-dasharray="5 4"></line></sc-if>
+<sc-for list="{{ scat.pts }}" as="p" hint-placeholder-count="60"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ p.r }}" fill="#e8b84f" fill-opacity="{{ p.o }}" stroke="{{ p.st }}" stroke-width="2"></circle></sc-for>
+</svg>
+<div style="{{ scat.sc.pad }}" onPointerMove="{{ scat.sc.move }}" onPointerDown="{{ scat.sc.down }}" onPointerLeave="{{ scat.sc.leave }}" aria-hidden="true"></div><sc-if value="{{ scat.sc.on }}" hint-placeholder-val="{{ false }}"><span style="{{ scat.sc.tip }}"><b style="{{ scat.sc.vSt }}">{{ scat.sc.v }}</b><span style="font: 500 11px/14px Inter, sans-serif; color: #9dadb6">{{ scat.sc.d }}</span></span></sc-if>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding-top: 12px; border-top: 1px solid var(--glass-stroke); font: 500 11px/14px var(--font-sans); color: var(--ink-muted)"><span>Correlation<br><b style="font: 700 20px/24px var(--font-display); color: var(--ink)">{{ scat.r }}</b></span><span>Per 10 Effort<br><b style="font: 700 20px/24px var(--font-display); color: var(--ink)">{{ scat.slope }}</b></span><span>Days<br><b style="font: 700 20px/24px var(--font-display); color: var(--ink)">{{ scat.n }}</b></span></div>
+<p style="margin: 0; font: 400 13px/19px var(--font-sans); color: var(--ink-subtle)">An association in your own data, not proof that Effort causes it. Sleep and stress also move Charge. Hold and drag across the chart to read a day.</p>
+<button type="button" onClick="{{ scat.close }}" class="nr-btn nr-btn-secondary" style="width: 100%">Done</button>
+</div>
+</div>
+</sc-if>
+
+<nav class="nr-glass nr-tabbar" aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 24px; grid-template-columns: repeat(5, minmax(0, 1fr)); z-index: 20">
+<a href="Main.dc.html" class="nr-tab"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"></path></svg></span><span>Today</span></a>
+<a href="Trends.dc.html" class="nr-tab is-active" aria-current="page"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20v-6M12 20V6M18 20v-10"></path></svg></span><span>Trends</span></a>
+<a href="Baseline.dc.html" class="nr-tab"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19.5 9 8.5l3.2 5.2L15 9.5l6.5 10zM7.2 11.6l1.8 1.4 1.4-1.3"></path></svg></span><span>Baseline</span></a>
+<a href="Sleep.dc.html" class="nr-tab"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"></path></svg></span><span>Sleep</span></a>
+<a href="More.dc.html" class="nr-tab"><span class="nr-tab-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle></svg></span><span>Hub</span></a>
+</nav>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { range: 14, scat: false, lag: 1, calTip: null, synTip: null }; }
+renderVals() {
+var self = this, s = this.state;
+var mkScrub = function (key, n, xAt, yAt, val, when, o) {
+var cur = s.scrub && s.scrub.k === key ? Math.min(s.scrub.i, n - 1) : -1;
+var pick = function (e) { var r = e.currentTarget.getBoundingClientRect(); if (!r.width) return; var px = (e.clientX - r.left) / r.width * o.w, best = 0, bd = 1e9; for (var i = 0; i < n; i++) { var dd = Math.abs(xAt(i) - px); if (dd < bd) { bd = dd; best = i; } } var c = self.state.scrub; if (!c || c.k !== key || c.i !== best) self.setState({ scrub: { k: key, i: best } }); };
+var on = cur >= 0, xp = on ? Math.round(xAt(cur) / o.w * 1000) / 10 : 0, yp = on && yAt ? Math.round(yAt(cur) / o.h * 1000) / 10 : 0;
+var tx = xp < 18 ? '0' : xp > 82 ? '-100%' : '-50%', col = o.c || '#f5efe4';
+return { move: pick, down: pick, leave: function () { self.setState({ scrub: null }); }, on: on, hasDot: on && !!yAt,
+pad: 'position: absolute; inset: 0; touch-action: pan-y; cursor: crosshair; z-index: 2;',
+line: 'position: absolute; top: ' + (o.top || 0) + 'px; bottom: ' + (o.bot || 0) + 'px; left: ' + xp + '%; width: 1.5px; margin-left: -0.75px; background: rgba(245,239,228,0.55); pointer-events: none; z-index: 1;',
+dot: 'position: absolute; left: ' + xp + '%; top: ' + yp + '%; width: 10px; height: 10px; margin: -7px 0 0 -7px; border-radius: 50%; background: #131f26; border: 2px solid ' + col + '; box-shadow: 0 0 10px ' + col + '; pointer-events: none; z-index: 1;',
+tip: 'position: absolute; left: ' + xp + '%; top: ' + (o.tip != null ? o.tip : -40) + 'px; transform: translateX(' + tx + '); padding: 5px 10px; border-radius: 10px; background: rgba(12,22,28,0.94); border: 1px solid rgba(190,220,235,0.28); box-shadow: 0 6px 18px rgba(0,0,0,0.4); white-space: nowrap; pointer-events: none; z-index: 3; display: flex; flex-direction: column; gap: 1px; align-items: ' + (tx === '0' ? 'flex-start' : tx === '-100%' ? 'flex-end' : 'center') + ';',
+vSt: 'font: 700 14px/18px "Playfair Display", Georgia, serif; font-variant-numeric: lining-nums; color: ' + col + ';',
+v: on ? val(cur) : '', d: on ? when(cur) : '' };
+};
+var f = function (n) { return Math.round(n * 10) / 10; };
+var seed = 7, rnd = function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+var TOTAL = 365, T = TOTAL - 1;
+// Last 14 days match Intelligence (Charge, Effort 0-100, Rest %); last 30 nights match Insights.
+var C14 = [49, 52, 70, 63, 44, 59, 66, 48, 55, 72, 61, 46, 34, 8];
+var E14 = [60, 60, 35, 68, 68, 75, 39, 52, 63, 46, 70, 58, 77, 16];
+var R14 = [78, 81, 90, 88, 72, 84, 93, 80, 76, 91, 85, 79, 88, 90];
+var HRV30 = [52, 50, 53, 49, 51, 54, 50, 48, 52, 51, 49, 47, 50, 48, 46, 44, 49, 41, 45, 43, 40, 44, 38, 42, 39, 37, 36, 41, 39, 35];
+var RHR30 = [54, 55, 54, 53, 55, 54, 56, 55, 54, 55, 53, 54, 56, 55, 56, 57, 55, 58, 57, 59, 58, 57, 59, 58, 60, 59, 58, 57, 58, 60];
+var E = [], C = [], R = [], HV = [], RH = [], TR = [], NEED = [], SLEPT = [];
+for (var i = 0; i < TOTAL; i++) {
+var dow = (i + 6) % 7, k = i - (TOTAL - 14), k30 = i - (TOTAL - 30);
+var e;
+if (k >= 0) e = E14[k]; else { var restDay = dow === 3 || rnd() < 0.22; e = restDay ? 15 + rnd() * 14 : 46 + rnd() * 26 + (rnd() < 0.15 ? 10 : 0); e = Math.round(e); }
+E.push(e);
+var c;
+if (k >= 0) c = C14[k]; else { var pe = i ? E[i - 1] : 55; c = 62 + Math.sin(i / 9) * 7 - (pe - 55) * 0.45 + (rnd() - 0.5) * 18; c = Math.round(Math.max(14, Math.min(94, c))); }
+C.push(c);
+var rr = k >= 0 ? R14[k] : Math.round(76 + rnd() * 19);
+R.push(rr);
+HV.push(k30 >= 0 ? HRV30[k30] : Math.round(49 + (rnd() - 0.5) * 9));
+RH.push(k30 >= 0 ? RHR30[k30] : Math.round(55 + (rnd() - 0.5) * 3.4));
+TR.push(!(i === T - 11 || i === T - 6 || i === T - 2 || (k < 0 && rnd() < 0.06)));
+var need = i === T ? 8.1 : 7.5 + ((i ? E[i - 1] : 55) - 50) / 100 * 1.2;
+NEED.push(need); SLEPT.push(i === T ? 7.3 : need * rr / 100);
+}
+var N = s.range, S = TOTAL - N, nW = 4; // Intensity and Consistency always cover the last 4 weeks (~30 days)
+var idx = []; for (var q = S; q <= T; q++) idx.push(q);
+var xs = function (j, n) { return f(4 + j / ((n || N) - 1) * 314); };
+var mean = function (a) { return a.length ? a.reduce(function (x, y) { return x + y; }, 0) / a.length : 0; };
+var tracked = function (arr, a, b) { var o = []; for (var z = a; z <= b; z++) if (TR[z]) o.push(arr[z]); return o; };
+var roll = function (arr, i, useTr) { var o = []; for (var z = Math.max(0, i - 6); z <= i; z++) if (!useTr || TR[z]) o.push(arr[z]); return mean(o); };
+var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var dl = function (i) { var d = new Date(2026, 8, 20 - (T - i)); return d.getDate() + ' ' + MON[d.getMonth()]; };
+var dotR = N > 100 ? 1.2 : N > 30 ? 1.9 : 2.6;
+var pathOf = function (pts) { return 'M' + pts.map(function (p) { return p.x + ' ' + p.y; }).join(' L'); };
+
+// Charge
+var cy = function (v) { return f(112 - v); };
+var baseC = C.slice(T - 37, T - 7), bm = mean(baseC), bsd = Math.sqrt(mean(baseC.map(function (v) { return (v - bm) * (v - bm); })));
+var bLo = Math.round(bm - bsd * 0.75), bHi = Math.round(bm + bsd * 0.75);
+var thisWk = Math.round(mean(C.slice(T - 6))), dW = Math.round(mean(C.slice(T - 6)) - mean(C.slice(T - 13, T - 6)));
+var restTr = tracked(R, S, T);
+var chg = {
+title: 'Averaging ' + Math.round(mean(C.slice(S))),
+sub: 'This week ' + thisWk + ' · ' + (dW < 0 ? 'down ' + Math.abs(dW) : 'up ' + dW) + ' on last week · today ringed',
+pts: idx.map(function (i, j) { return { x: xs(j), y: cy(C[i]) }; }),
+line: pathOf(idx.map(function (i, j) { return { x: xs(j), y: cy(roll(C, i)) }; })),
+lastX: xs(N - 1), lastY: cy(C[T]),
+bandY: cy(bHi), bandH: f(bHi - bLo), bandTextY: f(cy(bHi) + 12), bandLabel: bLo + '–' + bHi,
+today: String(C[T]), effAvg: String(Math.round(mean(E.slice(S)))), restAvg: Math.round(mean(restTr)) + '%',
+aria: 'Daily Charge over the last ' + N + ' days with a seven-day mean. Averaging ' + Math.round(mean(C.slice(S))) + '; today ' + C[T] + ', below your normal of ' + bLo + ' to ' + bHi + '.'
+};
+
+// Effort · daily (0-100)
+var baseE = E.slice(T - 37, T - 7), em = mean(baseE), esd = Math.sqrt(mean(baseE.map(function (v) { return (v - em) * (v - em); })));
+var eLo = Math.round(em - esd * 0.75), eHi = Math.round(em + esd * 0.75);
+var eWk = Math.round(mean(E.slice(T - 6))), eDW = Math.round(mean(E.slice(T - 6)) - mean(E.slice(T - 13, T - 6)));
+var eff = {
+title: 'Averaging ' + Math.round(mean(E.slice(S))),
+sub: 'This week ' + eWk + ' · ' + (eDW < 0 ? 'down ' + Math.abs(eDW) : 'up ' + eDW) + ' on last week · today ringed',
+pts: idx.map(function (i, j) { return { x: xs(j), y: cy(E[i]) }; }),
+line: pathOf(idx.map(function (i, j) { return { x: xs(j), y: cy(roll(E, i)) }; })),
+lastX: xs(N - 1), lastY: cy(E[T]),
+bandY: cy(eHi), bandH: f(eHi - eLo), bandTextY: f(cy(eHi) + 12), bandLabel: eLo + '–' + eHi,
+today: String(E[T]), avg: String(Math.round(mean(E.slice(S)))), hard: String(E.slice(S).filter(function (v) { return v >= 67; }).length),
+aria: 'Daily Effort over the last ' + N + ' days with a seven-day mean. Averaging ' + Math.round(mean(E.slice(S))) + '; today ' + E[T] + ', your normal is ' + eLo + ' to ' + eHi + '.'
+};
+
+// Calories · daily, stacked base + active (workouts)
+var KB = [], KA = [];
+for (var kq = 0; kq < TOTAL; kq++) {
+var kb = Math.round(1790 + Math.sin(kq / 5) * 35 + (rnd() - 0.5) * 70), ka = E[kq] < 30 ? Math.round(rnd() * 80) : Math.round(E[kq] * 9.5 + (rnd() - 0.5) * 120);
+if (kq === T) { kb = 1180; ka = 140; }
+KB.push(kb); KA.push(Math.max(0, ka));
+}
+var kTot = function (i) { return KB[i] + KA[i]; };
+var kMax = Math.max(3000, Math.ceil(Math.max.apply(null, idx.map(kTot)) / 500) * 500), kY = function (v) { return 100 * v / kMax; };
+var kbw = f(Math.max(2, 314 / N * 0.62)), kfmt = function (v) { return Math.round(v).toLocaleString('en-GB'); };
+var full = idx.filter(function (i) { return i !== T; });
+var kAvg = mean(full.map(kTot)), kAct = mean(full.map(function (i) { return KA[i]; }));
+var kc = {
+title: 'Averaging ' + kfmt(kAvg) + ' kcal a day',
+sub: 'Active is ' + Math.round(kAct / kAvg * 100) + '% of your burn · today in progress',
+bw: kbw, rx: N > 30 ? 1 : 2,
+bars: idx.map(function (i, j) { var hB = kY(KB[i]), hA = kY(KA[i]), x = f(xs(j) - kbw / 2); return { x: x, yB: f(112 - hB), hB: f(hB), yA: f(112 - hB - hA), hA: f(hA), op: i === T ? 0.3 : 0.55, opA: i === T ? 0.55 : 0.95 }; }),
+grid: [1000, 2000, 3000].filter(function (v) { return v <= kMax; }).map(function (v) { return { y: f(112 - kY(v)), ty: f(112 - kY(v) - 3), t: (v / 1000) + 'k' }; }),
+avg: kfmt(kAvg), act: kfmt(kAct), today: kfmt(kTot(T)),
+aria: 'Calories burned per day over the last ' + N + ' days, split into base and active. Averaging ' + kfmt(kAvg) + ' kcal, of which ' + kfmt(kAct) + ' active.'
+};
+
+// Load (C-06) and Charge vs previous-day Effort (C-09)
+var A = [], CH = [], ea = E[0], ec = E[0];
+E.forEach(function (e) { ea += (e - ea) * (2 / 8); ec += (e - ec) * (2 / 29); A.push(ea); CH.push(ec); });
+var ly = function (v) { return f(160 - (Math.max(30, Math.min(80, v)) - 30) * 3); };
+var LN = 45, lidx = []; for (var q3 = TOTAL - LN; q3 < TOTAL; q3++) lidx.push(q3);
+var lx = function (j) { return f(32 + j / (LN - 1) * 284); };
+var bw = Math.max(1, f(284 / LN * 0.62));
+var ramps = [], run = null;
+lidx.forEach(function (i, j) { var on = A[i] > CH[i] * 1.1; if (on && !run) run = { a: j }; if ((!on || j === LN - 1) && run) { var end = on ? j : j - 1; ramps.push({ x: f(lx(run.a) - 284 / LN / 2), w: f(Math.max(4, lx(end) - lx(run.a) + 284 / LN)) }); run = null; } });
+var a7 = Math.round(A[T - 1]), c28 = Math.round(CH[T - 1]), ratio = a7 / c28;
+var sc = [], ex = [], cyv = [];
+for (var t = T - 59; t <= T; t++) { ex.push(E[t - 1]); cyv.push(C[t]); sc.push({ x: f(8 + E[t - 1] / 100 * 84), y: f(60 - C[t] / 100 * 54) }); }
+var mx = mean(ex), my = mean(cyv), sxy = 0, sxx = 0, syy = 0;
+ex.forEach(function (x, j) { sxy += (x - mx) * (cyv[j] - my); sxx += (x - mx) * (x - mx); syy += (cyv[j] - my) * (cyv[j] - my); });
+var r = sxy / Math.sqrt(sxx * syy), slope = sxy / sxx, fy = function (x) { return my + slope * (x - mx); };
+var load = {
+title: ratio > 1.1 ? 'You\'re ramping faster than usual' : ratio < 0.9 ? 'Lighter than your usual' : 'In line with your usual load',
+sub: 'Last 45 days · 7-day load ' + a7 + ' vs 28-day ' + c28, a7: a7, c28: c28,
+pill: (ratio >= 1 ? '+' : '−') + Math.abs(Math.round((ratio - 1) * 100)) + '%',
+pillSt: 'padding: 2px 10px; border-radius: 999px; font: 700 13px/18px Inter, sans-serif; border: 1px solid ' + (ratio > 1.1 ? 'rgba(232,196,106,0.7); color: #e8c46a; background: rgba(232,196,106,0.1)' : 'rgba(190,220,235,0.25); color: #b6c3ca; background: rgba(170,205,220,0.06)') + ';',
+bars: lidx.map(function (i, j) { var y = ly(Math.max(31, E[i])); return { x: f(lx(j) - bw / 2), y: y, h: f(160 - y) }; }), bw: bw,
+acute: pathOf(lidx.map(function (i, j) { return { x: lx(j), y: ly(A[i]) }; })),
+chronic: pathOf(lidx.map(function (i, j) { return { x: lx(j), y: ly(CH[i]) }; })),
+ex: lx(LN - 1), ay: ly(A[lidx[LN - 1]]), cy: ly(CH[lidx[LN - 1]]),
+ticks: [30, 40, 50, 60, 70, 80].map(function (v) { return { v: v, y: ly(v), ty: f(ly(v) + 4), lst: 'position: absolute; left: 0; top: ' + (ly(v) - 7) + 'px; font: 400 11px/14px Inter, sans-serif; color: #9dadb6; pointer-events: none;' }; }),
+xl: [0, 1, 2, 3, 4].map(function (q) { var j = Math.round(q * (LN - 1) / 4); return { x: lx(j), t: dl(lidx[j]) }; }),
+ramps: ramps, hasRamp: ramps.length > 0, rampX: ramps.length ? f(ramps[ramps.length - 1].x + ramps[ramps.length - 1].w / 2) : 0,
+scatter: sc, fit: r < -0.3,
+fx1: f(8 + 10 / 100 * 84), fy1: f(60 - fy(10) / 100 * 54), fx2: f(8 + 90 / 100 * 84), fy2: f(60 - fy(90) / 100 * 54),
+scText: (r < -0.3 ? 'Harder days have gone with lower next-morning Charge' : 'No clear link yet') + ' · 60 days · r = ' + (r < 0 ? '−' : '') + Math.abs(r).toFixed(2),
+scAria: 'Scatter of next-morning Charge against the previous day\'s Effort over 60 days. Correlation ' + r.toFixed(2) + '.',
+aria: 'Training load: 7-day and 28-day lines over daily Effort bars for the last ' + LN + ' days. 7-day load ' + a7 + ', 28-day ' + c28 + '.'
+};
+
+// Intensity (C-07)
+var wk = [], tL = 0, tM = 0, tH = 0;
+for (var w = 0; w < nW; w++) {
+var L = 0, M = 0, H = 0;
+for (var dd = 0; dd < 7; dd++) { var ii = T - nW * 7 + 1 + w * 7 + dd; var ev = E[ii]; if (ev < 30) L += 25; else if (ev < 67) { L += 45; M += 12; H += 4; } else { L += 40; M += 22; H += 22; } }
+tL += L; tM += M; tH += H; wk.push([L, M, H]);
+}
+var maxT = Math.max.apply(null, wk.map(function (x) { return x[0] + x[1] + x[2]; })), ibw = f(Math.max(2, 314 / nW * 0.62)), isc = 98 / maxT, tAll = tL + tM + tH;
+var pct = function (v) { return Math.round(v / tAll * 100) + '%'; };
+var intn = {
+title: tH / tAll >= 0.15 ? 'More hard minutes than usual' : 'Mostly easy, some hard',
+weeks: wk.map(function (x, j) { var hL = x[0] * isc, hM = x[1] * isc, hH = x[2] * isc; return { x: f(4 + (j + 0.5) * 314 / nW - ibw / 2), yL: f(110 - hL), hL: f(hL), yM: f(110 - hL - hM), hM: f(hM), yH: f(110 - hL - hM - hH), hH: f(hH) }; }),
+bw: ibw, pL: pct(tL), pM: pct(tM), pH: pct(tH), start: 'w/c ' + dl(T - nW * 7 + 1),
+aria: 'Weekly minutes by intensity over ' + nW + ' weeks: low ' + pct(tL) + ', moderate ' + pct(tM) + ', high ' + pct(tH) + '.'
+};
+
+// Heart health (C-10)
+var XH = function (j) { return f(32 + j / (N - 1) * 288); };
+var trIdx = idx.filter(function (i) { return TR[i]; });
+var rhr7 = Math.round(mean(tracked(RH, T - 6, T))), hrv7 = Math.round(mean(tracked(HV, T - 6, T)));
+var hc = function (arr, nlo, nhi, step) {
+var m = idx.map(function (i) { return TR[i] ? arr[i] : roll(arr, i, true); });
+var lo = Math.floor(Math.min.apply(null, m.concat([nlo])) - 1), hi = Math.ceil(Math.max.apply(null, m.concat([nhi])) + 1);
+var Y = function (v) { return f(108 - (v - lo) / (hi - lo) * 100); };
+var pts = m.map(function (v, j) { return XH(j) + ' ' + Y(v); });
+var now = Math.round(m[m.length - 1]), avg = mean(m), pc = Math.round((m[m.length - 1] - avg) / avg * 100);
+var ticks = []; for (var q = 0; q < 4; q++) { var v = Math.round(lo + (hi - lo) * q / 3); ticks.push({ v: String(v), y: Y(v), ty: f(Y(v) + 4), lst: 'position: absolute; left: 0; top: ' + (Y(v) - 7) + 'px; font: 400 11px/14px Inter, sans-serif; color: #9dadb6; pointer-events: none;' }); }
+return { m: m, Y: Y, now: String(now), pc: pc, line: 'M' + pts.join(' L'), area: 'M' + pts.join(' L') + ' L' + XH(N - 1) + ' 108 L' + XH(0) + ' 108 Z', bandY: Y(nhi), bandH: f(Y(nlo) - Y(nhi)), ticks: ticks, lx: XH(N - 1), ly: Y(m[m.length - 1]), dots: m.map(function (v, j) { return { x: XH(j), y: Y(v), o: v < nlo || v > nhi ? '1' : '0.45' }; }) };
+};
+var pillSt = function (bad, c) { return 'white-space: nowrap; padding: 3px 9px; border-radius: 999px; font: 700 12px/16px Inter, sans-serif; color: ' + c + '; background: ' + c + '22; border: 1px solid ' + c + '66;'; };
+var RC = hc(RH, 53, 57), HC = hc(HV, 44, 54);
+var xl = []; for (var xq = 0; xq < 6; xq++) { var jj = Math.round(xq / 5 * (N - 1)); xl.push({ t: dl(idx[jj]), st: 'position: absolute; left: ' + f(jj / (N - 1) * 100) + '%; transform: translateX(' + (xq === 0 ? '0' : xq === 5 ? '-100%' : '-50%') + '); white-space: nowrap;' }); }
+var mkH = function (C2, c, unit, name, nlo, nhi, key, arr) { return { now: C2.now, pill: (C2.pc >= 0 ? '↑ +' : '↓ −') + Math.abs(C2.pc) + '%', pillSt: pillSt(0, c), line: C2.line, area: C2.area, bandY: C2.bandY, bandH: C2.bandH, ticks: C2.ticks, dots: C2.dots, lx: C2.lx, ly: C2.ly, aria: name + ', nightly values over ' + N + ' days, now ' + C2.now + ' ' + unit + ' against a normal of ' + nlo + ' to ' + nhi + '.', sc: mkScrub(key, N, function (j) { return XH(j); }, function (j) { return C2.Y(C2.m[j]); }, function (j) { return Math.round(C2.m[j]) + ' ' + unit + (TR[idx[j]] ? '' : ' (7-day avg)'); }, function (j) { return dl(idx[j]) + (TR[idx[j]] ? '' : ' · not tracked'); }, { w: 322, h: 118, c: c, tip: -34 }) }; };
+var heart = {
+title: rhr7 > 57 && hrv7 < 44 ? 'Resting HR up, HRV down this week' : 'Heart signals within your normal',
+r: mkH(RC, '#ff8198', 'bpm', 'Resting heart rate', 53, 57, 'rhr', RH), h: mkH(HC, '#b8a3ff', 'ms', 'Heart-rate variability', 44, 54, 'hrv', HV),
+xl: xl, cover: trIdx.length + ' of ' + N + ' nights'
+};
+
+// Sleep vs need (C-12)
+var sy = function (h) { return f(150 - (Math.max(4, Math.min(9, h)) - 4) / 5 * 140); };
+var groups = [], gl = N <= 30 ? 1 : N <= 91 ? 7 : 28;
+for (var g0 = S; g0 <= T; g0 += gl) groups.push([g0, Math.min(T, g0 + gl - 1)]);
+var GX = function (j) { return f(32 + (j + 0.5) * 288 / groups.length); };
+var sbw = f(Math.max(3, 288 / groups.length * 0.62));
+var sBars = [], sNeed = [], sTot = [], sDots = [];
+var hm = function (h) { var mm = Math.round(h * 60); return Math.floor(mm / 60) + 'h ' + (mm % 60 < 10 ? '0' : '') + (mm % 60) + 'm'; };
+groups.forEach(function (gr, j) {
+var x = GX(j), sl = tracked(SLEPT, gr[0], gr[1]), nd = mean(NEED.slice(gr[0], gr[1] + 1));
+sNeed.push(x + ' ' + sy(nd));
+var bx = f(x - sbw / 2);
+if (sl.length) {
+var h = mean(sl), top = sy(h), H = 150 - top, w = Math.sin(j * 1.7) * 0.03, dF = 0.16 + w, rF = 0.22 - w / 2, cF = 0.42, lF = 1 - dF - rF - cF;
+sBars.push({ x: bx, yD: f(150 - H * dF), hD: f(H * dF), yC: f(150 - H * (dF + cF)), hC: f(H * cF), yL: f(150 - H * (dF + cF + lF)), hL: f(H * lF), yR: f(top), hR: f(H * rF), yE: 0, hE: 0, h: h, st: 'Deep ' + hm(h * dF) + ' · Core ' + hm(h * cF) + ' · Light ' + hm(h * lF) + ' · REM ' + hm(h * rF) });
+sTot.push(x + ' ' + top); sDots.push({ x: x, y: top });
+} else sBars.push({ x: bx, yD: 0, hD: 0, yC: 0, hC: 0, st: '', yL: 0, hL: 0, yR: 0, hR: 0, yE: sy(7), hE: f(150 - sy(7)), h: null });
+});
+var slAvg = mean(tracked(SLEPT, S, T)), ndAvg = mean(NEED.slice(S));
+var sxl = []; var nG = groups.length, stp = Math.max(1, Math.round(nG / 5)); for (var q2 = 0; q2 < nG; q2 += stp) sxl.push({ x: GX(q2), t: dl(groups[q2][0]) });
+var sleep = {
+unit: gl === 1 ? 'nightly' : gl === 7 ? 'weekly average' : '4-week average',
+title: 'Averaging ' + hm(slAvg) + ' of ' + hm(ndAvg) + ' needed', avg: hm(slAvg),
+bars: sBars, bw: sbw, need: 'M' + sNeed.join(' L'), tot: sTot.length > 1 ? 'M' + sTot.join(' L') : '', dots: sDots, xl: sxl,
+ticks: [4, 5, 6, 7, 8, 9].map(function (v) { return { v: v + 'h', y: sy(v), ty: f(sy(v) + 4), lst: 'position: absolute; left: 0; top: ' + (sy(v) - 7) + 'px; font: 400 11px/14px Inter, sans-serif; color: #9dadb6; pointer-events: none;' }; }),
+restAvg: Math.round(mean(restTr)) + '%',
+aria: 'Sleep by stage against need over ' + N + ' nights. Average ' + hm(slAvg) + ' slept of ' + hm(ndAvg) + ' needed.'
+};
+
+// Consistency calendar (C-08)
+var calH = function (cw, cd, title, sub, o) {
+var hold = function () { return false; };
+o.down = function () { clearTimeout(self._lt); clearTimeout(self._ht); self._lp = false; self._lt = setTimeout(function () { self._lp = true; self.setState({ calTip: { cw: cw, cd: cd, title: title, sub: sub } }); }, 350); };
+o.up = function () { clearTimeout(self._lt); if (self._lp) { clearTimeout(self._ht); self._ht = setTimeout(function () { self.setState({ calTip: null }); }, 2200); } };
+o.click = function (e) { if (self._lp) { e.preventDefault(); e.stopPropagation(); self._lp = false; } };
+o.ctx = function (e) { e.preventDefault(); };
+return o;
+};
+var nC = 12, small = false, cellH = 22, gap = 4; // Consistency covers 12 weeks
+var cells = [], nTrain = 0, nTarget = 0, nTr = 0, nBr = 0, nAll = 0;
+for (var cw = 0; cw < nC; cw++) for (var cd = 0; cd < 7; cd++) {
+var ci = T - nC * 7 + 1 + cw * 7 + cd, ev2 = E[ci];
+var br = ci === T - 13 + 13 - 13 + 6 || ci === T || ((ci * 7 + 3) % 10) < 5;
+var tgt = TR[ci] && R[ci] >= 85;
+var band = ev2 < 45 ? 0 : ev2 < 67 ? 1 : 2;
+var fill = ['rgba(12,22,28,0.35)', '#3f5c9c', '#6ba1fd'][band];
+nAll++; if (band) nTrain++; if (TR[ci]) { nTr++; if (tgt) nTarget++; } if (br) nBr++;
+var shadow = []; if (br) shadow.push('0 0 0 2px #58d7c9');
+var bandNames = ['Rest day', 'Light–Moderate', 'High+'];
+cells.push(calH(cw, cd, dl(ci), bandNames[band] + ' · Effort ' + ev2 + (br ? ' · breathing session' : ''), { moon: tgt, mf: band === 2 ? '#0c161c' : '#f5efe4',
+aria: dl(ci) + ': ' + ['rest day', 'light to moderate', 'high or above'][band] + ', Effort ' + ev2 + (tgt ? ', slept on target' : TR[ci] ? ', short sleep' : ', sleep not tracked') + (br ? ', breathing session' : ''),
+st: 'display: grid; place-items: center; height: ' + cellH + 'px; box-sizing: border-box; border-radius: ' + (small ? 2 : 7) + 'px; background: ' + fill + ';' + (band ? '' : ' border: 1px solid rgba(190,220,235,0.3);') + (shadow.length ? ' box-shadow: ' + shadow.join(', ') + ';' : '') + ' -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation;' }));
+}
+var pct = function (a, b) { return b ? Math.round(a / b * 100) : 0; };
+var ct = s.calTip, ctFrac = ct ? (ct.cw + 0.5) / nC : 0;
+var calTipV = ct ? { on: true, title: ct.title, sub: ct.sub, st: 'position: absolute; z-index: 5; left: ' + f(ctFrac * 100) + '%; top: ' + (ct.cd === 0 ? (cellH + gap + 6) : (ct.cd * (cellH + gap) - 50)) + 'px; transform: translateX(' + (ctFrac < 0.22 ? '-8%' : ctFrac > 0.78 ? '-92%' : '-50%') + '); padding: 6px 11px; border-radius: 10px; background: rgba(12,22,28,0.96); border: 1px solid rgba(190,220,235,0.3); box-shadow: 0 6px 18px rgba(0,0,0,0.45); white-space: nowrap; pointer-events: none; display: flex; flex-direction: column; gap: 1px;' } : { on: false, title: '', sub: '', st: '' };
+var cal = {
+tip: calTipV,
+title: (nTrain / nC).toFixed(1) + ' training days a week · ' + nC + ' weeks', cells: cells, ic: cellH > 16 ? 12 : 9,
+grid: 'position: relative; flex-grow: 1; display: grid; grid-template-rows: repeat(7, ' + cellH + 'px); grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: ' + gap + 'px;',
+labGrid: 'display: grid; grid-template-rows: repeat(7, ' + cellH + 'px); gap: ' + gap + 'px; width: 12px; align-items: center; font: 600 ' + (small ? 8 : 11) + 'px/1 Inter, sans-serif; color: #9dadb6;',
+stats: [[pct(nTrain, nAll), 'Training days', '#6ba1fd', 'M3 10v4M6 7v10M18 7v10M21 10v4M6 12h12'], [pct(nTarget, nTr), 'Slept on target', '#59ecaa', 'M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z'], [pct(nBr, nAll), 'Breathe days', '#58d7c9', 'M3 9h11a3 3 0 1 0-3-3M3 15h15a3 3 0 1 1-3 3']].map(function (x) { return { v: x[0] + '%', k: x[1], c: x[2], icon: x[3], bar: 'display: block; height: 4px; border-radius: 2px; width: ' + x[0] + '%; background: ' + x[2] + '; box-shadow: 0 0 6px ' + x[2] + ';' }; })
+};
+// Synthesis calendar (daily Synthesis band from Charge, same bands as the Today card)
+var SB = [['Depleted', 0, '#f7777d'], ['Low', 20, '#f39a5b'], ['Steady', 40, '#e8c46a'], ['Strong', 60, '#59ecaa'], ['Peak', 80, '#6ba1fd']];
+var sbOf = function (v) { var k = 0; SB.forEach(function (b, i) { if (v >= b[1]) k = i; }); return k; };
+var nSW = 20, sCell = 13, sGap = 3, wdT = (new Date(2026, 8, 20).getDay() + 6) % 7, sFirst = T - (nSW - 1) * 7 - wdT;
+var sCells = [], sCnt = [0, 0, 0, 0, 0], sDays = 0, sMon = [], sPrev = -1;
+var synH = function (cw, cd, title, sub, o) {
+o.down = function () { clearTimeout(self._slt); clearTimeout(self._sht); self._slp = false; self._slt = setTimeout(function () { self._slp = true; self.setState({ synTip: { cw: cw, cd: cd, title: title, sub: sub } }); }, 350); };
+o.up = function () { clearTimeout(self._slt); if (self._slp) { clearTimeout(self._sht); self._sht = setTimeout(function () { self.setState({ synTip: null }); }, 2200); } };
+o.click = function (e) { if (self._slp) { e.preventDefault(); e.stopPropagation(); self._slp = false; } };
+o.ctx = function (e) { e.preventDefault(); };
+return o;
+};
+for (var sw = 0; sw < nSW; sw++) {
+var d0 = new Date(2026, 8, 20 - (T - (sFirst + sw * 7))), mo = d0.getMonth();
+sMon.push({ t: mo !== sPrev ? MON[mo] : '', st: 'grid-column: ' + (sw + 1) + '; grid-row: 1; white-space: nowrap; font: 600 11px/14px Inter, sans-serif; color: #9dadb6;' }); sPrev = mo;
+for (var sd = 0; sd < 7; sd++) {
+var si = sFirst + sw * 7 + sd, base = '-webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; box-sizing: border-box; border-radius: 4px; height: ' + sCell + 'px;';
+if (si > T) { sCells.push({ aria: '', st: 'visibility: hidden;', down: null, up: null, click: null, ctx: null }); continue; }
+if (!TR[si]) { sCells.push(synH(sw, sd, dl(si), 'No data', { aria: dl(si) + ': no data', st: base + ' background: rgba(170,205,220,0.07); border: 1px solid rgba(190,220,235,0.1);' })); continue; }
+var bk = sbOf(C[si]); sCnt[bk]++; sDays++;
+sCells.push(synH(sw, sd, dl(si), SB[bk][0] + ' · Charge ' + C[si], { aria: dl(si) + ': Synthesis ' + SB[bk][0] + ', Charge ' + C[si], st: base + ' background: ' + SB[bk][2] + ';' }));
+}
+}
+var stp = s.synTip, stF = stp ? (stp.cw + 0.5) / nSW : 0;
+var synTipV = stp ? { on: true, title: stp.title, sub: stp.sub, st: 'position: absolute; z-index: 5; left: ' + f(stF * 100) + '%; top: ' + (stp.cd === 0 ? (sCell + sGap + 6) : (stp.cd * (sCell + sGap) - 50)) + 'px; transform: translateX(' + (stF < 0.22 ? '-8%' : stF > 0.78 ? '-92%' : '-50%') + '); padding: 6px 11px; border-radius: 10px; background: rgba(12,22,28,0.96); border: 1px solid rgba(190,220,235,0.3); box-shadow: 0 6px 18px rgba(0,0,0,0.45); white-space: nowrap; pointer-events: none; display: flex; flex-direction: column; gap: 1px;' } : { on: false, title: '', sub: '', st: '' };
+var spct = function (n) { return sDays ? Math.round(n / sDays * 100) : 0; };
+var syn = {
+tip: synTipV, cells: sCells, months: sMon, days: sDays + ' days', title: 'Daily Synthesis', sub: 'Last ' + nSW + ' weeks',
+grid: 'position: relative; flex-grow: 1; display: grid; grid-template-rows: repeat(7, ' + sCell + 'px); grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: ' + sGap + 'px;',
+labGrid: 'display: grid; grid-template-rows: repeat(7, ' + sCell + 'px); gap: ' + sGap + 'px; width: 12px; align-items: center; font: 600 10px/1 Inter, sans-serif; color: #9dadb6; margin-top: 18px;',
+monRow: 'display: grid; grid-template-columns: repeat(' + nSW + ', minmax(0, 1fr)); column-gap: ' + sGap + 'px; height: 14px; margin-left: 18px;',
+stats: [[spct(sCnt[3] + sCnt[4]), 'Strong or Peak', '#59ecaa'], [spct(sCnt[2]), 'Steady', '#e8c46a'], [spct(sCnt[0] + sCnt[1]), 'Low or Depleted', '#f39a5b']].map(function (x) { return { v: x[0] + '%', k: x[1], c: x[2], bar: 'display: block; height: 4px; border-radius: 2px; width: ' + x[0] + '%; background: ' + x[2] + '; box-shadow: 0 0 6px ' + x[2] + ';' }; })
+};
+
+eff.sc = mkScrub('eff', N, function (j) { return xs(j); }, function (j) { return cy(E[idx[j]]); }, function (j) { return 'Effort ' + E[idx[j]]; }, function (j) { return dl(idx[j]); }, { w: 322, h: 132, bot: 20, c: '#6ba1fd' });
+kc.sc = mkScrub('kc', N, function (j) { return xs(j); }, null, function (j) { var i = idx[j]; return kfmt(kTot(i)) + ' kcal · ' + kfmt(KB[i]) + ' base + ' + kfmt(KA[i]) + ' active'; }, function (j) { return idx[j] === T ? 'Today so far' : dl(idx[j]); }, { w: 322, h: 132, bot: 20, c: '#ffb45e' });
+chg.sc = mkScrub('chg', N, function (j) { return xs(j); }, function (j) { return cy(C[idx[j]]); }, function (j) { return 'Charge ' + C[idx[j]]; }, function (j) { return dl(idx[j]); }, { w: 322, h: 132, bot: 20, c: '#e8b84f' });
+load.sc = mkScrub('load', LN, function (j) { return lx(j); }, function (j) { return ly(A[lidx[j]]); }, function (j) { return 'Effort ' + E[lidx[j]]; }, function (j) { return dl(lidx[j]) + ' · 7-day load ' + Math.round(A[lidx[j]]); }, { w: 322, h: 188, top: 10, bot: 28, c: '#6ba1fd' });
+intn.sc = mkScrub('int', nW, function (j) { return 4 + (j + 0.5) * 314 / nW; }, function (j) { return intn.weeks[j].yH; }, function (j) { return (wk[j][0] + wk[j][1] + wk[j][2]) + ' min'; }, function (j) { return 'w/c ' + dl(T - nW * 7 + 1 + j * 7) + ' · ' + wk[j][2] + ' min high'; }, { w: 322, h: 128, bot: 18, c: '#e8c46a' });
+sleep.sc = mkScrub('sleep', groups.length, function (j) { return GX(j); }, function (j) { return sBars[j].h ? sy(sBars[j].h) : null; }, function (j) { return sBars[j].h ? hm(sBars[j].h) + ' total' : 'Not tracked'; }, function (j) { return (gl > 1 ? 'w/c ' : '') + dl(groups[j][0]) + ' · need ' + hm(mean(NEED.slice(groups[j][0], groups[j][1] + 1))); }, { w: 322, h: 176, bot: 26, c: '#f5efe4', tip: -56 });
+sleep.stTip = s.scrub && s.scrub.k === 'sleep' && sBars[Math.min(s.scrub.i, sBars.length - 1)] ? sBars[Math.min(s.scrub.i, sBars.length - 1)].st : '';
+var scat = (function () {
+var lag = s.lag == null ? 1 : s.lag, xs2 = [], ys2 = [], dd = [];
+for (var t = T - 59; t <= T; t++) { xs2.push(E[t - lag]); ys2.push(C[t]); dd.push(t); }
+var mx = mean(xs2), my = mean(ys2), a = 0, b = 0, c = 0; xs2.forEach(function (x, j) { a += (x - mx) * (ys2[j] - my); b += (x - mx) * (x - mx); c += (ys2[j] - my) * (ys2[j] - my); });
+var rr = a / Math.sqrt(b * c), sl = a / b, PX = function (x) { return f(30 + x / 100 * 320); }, PY = function (y) { return f(210 - y / 100 * 204); };
+var order = xs2.map(function (x, j) { return j; }).sort(function (p, q) { return xs2[p] - xs2[q]; });
+var cur = s.scrub && s.scrub.k === 'scat' ? order[s.scrub.i] : -1;
+var pill = function (on) { return 'border: 0; border-radius: 999px; height: 34px; cursor: pointer; font: 600 12px/16px Inter, sans-serif; ' + (on ? 'background: #59ecaa; color: #0c161c;' : 'background: transparent; color: #b6c3ca;'); };
+return { open: !!s.scat, close: function () { self.setState({ scat: false, scrub: null }); },
+title: rr < -0.3 ? 'Harder days, lower Charge next morning' : 'No clear link at this lag',
+sub: 'Each dot is one morning. ' + (rr < -0.3 ? 'Charge tends to be about ' + Math.abs(Math.round(sl * 10)) + ' lower for every 10 more Effort the day before.' : 'Try another lag.'),
+lags: [[1, 'Day before'], [2, '2 days before'], [0, 'Same day']].map(function (x) { var on = lag === x[0]; return { label: x[1], on: on, style: pill(on), pick: function () { self.setState({ lag: x[0] }); } }; }),
+pts: xs2.map(function (x, j) { var on = j === cur; return { x: PX(x), y: PY(ys2[j]), r: on ? 6 : 4, o: on ? 1 : 0.6, st: on ? '#f5efe4' : 'none' }; }),
+fit: rr < -0.3, fx1: PX(5), fy1: PY(my + sl * (5 - mx)), fx2: PX(95), fy2: PY(Math.max(0, my + sl * (95 - mx))),
+r: (rr < 0 ? '−' : '') + Math.abs(rr).toFixed(2), slope: (sl < 0 ? '−' : '+') + Math.abs(sl * 10).toFixed(1), n: String(xs2.length),
+aria: 'Scatter of next-morning Charge against Effort ' + (lag ? lag + ' day' + (lag > 1 ? 's' : '') + ' before' : 'the same day') + ', 60 days, correlation ' + rr.toFixed(2),
+sc: mkScrub('scat', order.length, function (i) { return PX(xs2[order[i]]); }, null, function (i) { var j = order[i]; return 'Charge ' + ys2[j] + ' · Effort ' + xs2[j]; }, function (i) { return dl(dd[order[i]]); }, { w: 350, h: 240, tip: -44, c: '#e8b84f' }) };
+})();
+var pill = function (on) { return 'border: 0; border-radius: 999px; height: 36px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; ' + (on ? 'background: #59ecaa; color: #0c161c;' : 'background: transparent; color: #b6c3ca;'); };
+var ranges = [[7, '7 days'], [14, '14 days'], [30, '30 days']].map(function (x) { return { label: x[1], on: s.range === x[0], style: pill(s.range === x[0]), pick: function () { self.setState({ range: x[0] }); } }; });
+return {
+scat: scat, openScat: function () { self.setState({ scat: true }); },
+ranges: ranges, dotR: String(dotR), axStart: dl(S), axMid: dl(S + Math.floor(N / 2)),
+chg: chg, eff: eff, kc: kc, load: load, int: intn, heart: heart, sleep: sleep, cal: cal, syn: syn
+};
+}
+}
+</script>
+</body>
+</html>

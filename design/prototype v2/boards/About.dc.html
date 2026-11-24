@@ -1,0 +1,102 @@
+<!doctype html>
+<meta charset="utf-8"><style data-dc-design-system-vars>@layer{:root{--bg-000:#0c161c;--bg-100:#131f26;--bg-200:#172630;--bg-300:#1f313b;--bg-400:#283d48;--glass-fill:#aacddc0f;--glass-fill-strong:#aacddc1a;--glass-stroke:#bedceb24;--glass-highlight:#ffffff24;--ink:#f5efe4;--ink-muted:#b6c3ca;--ink-subtle:#9dadb6;--ink-on-liquid:#0c161c;--brand:#59ecaa;--brand-deep:#1f8a5e;--charge:#e8b84f;--charge-deep:#9a6a18;--effort:#6ba1fd;--effort-deep:#2c5bbd;--rest:#59ecaa;--rest-deep:#1f8a5e;--battery:#2f9a62;--battery-deep:#15512f;--state-depleted:#f7777d;--state-low:#f39a5b;--state-moderate:#e8c46a;--state-good:#a6dc7e;--state-ready:#59ecaa;--data-hrv:#b8a3ff;--data-heart:#ff8198;--data-energy:#ffb45e;--data-breath:#58d7c9;--focus-ring:#f5efe4;--shadow-card:0 12px 32px rgba(2, 6, 16, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);--glow-charge:0 0 28px rgba(232, 184, 79, 0.35);--glow-effort:0 0 28px rgba(107, 161, 253, 0.35);--glow-rest:0 0 28px rgba(89, 236, 170, 0.35);--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--radius-sm:10px;--radius-md:18px;--radius-lg:24px;--radius-xl:32px;--radius-pill:999px;--radius-orb:50%;--blur-glass:20px;--font-display:"Playfair Display", Georgia, serif;--font-sans:Inter, "SF Pro Display", system-ui, sans-serif;--font-script:Allura, "Snell Roundhand", cursive;--text-numeral-xl:700 60px/1 var(--font-display);--text-numeral-lg:700 44px/1 var(--font-display);--text-title-xl:700 40px/44px var(--font-display);--text-title-lg:700 30px/34px var(--font-display);--text-numeral-md:700 28px/32px var(--font-display);--text-body:400 15px/22px var(--font-sans);--text-body-sm:500 13px/18px var(--font-sans);--text-label:600 13px/16px var(--font-sans);--text-eyebrow:600 11px/14px var(--font-sans);--text-button:600 14px/20px var(--font-sans);--text-tab:500 11px/14px var(--font-sans);--text-wordmark:300 22px/24px var(--font-sans);--text-tagline:500 10px/14px var(--font-sans);--text-script:400 26px/26px var(--font-script);}}</style>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>About NOOP — Noop Ridge</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%; background: radial-gradient(120% 40% at 50% 0%, rgba(89, 236, 170, 0.14), rgba(19, 31, 38, 0) 70%)">
+<div style="position: relative; display: flex; flex-direction: column; gap: 14px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="More.dc.html" aria-label="Back to Hub" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">About NOOP</h1><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Version 10.0.2</span></div>
+</header>
+
+<div role="tablist" aria-label="Section" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-stroke)">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3"><button type="button" role="tab" onClick="{{ t.pick }}" aria-selected="{{ t.on }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+</div>
+
+<sc-if value="{{ isHow }}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">Sleep · scores · recording · where your numbers come from.</p>
+<sc-for list="{{ how }}" as="h" hint-placeholder-count="4">
+<section class="nr-glass" style="border-radius: var(--radius-lg); overflow: hidden">
+<button type="button" onClick="{{ h.toggle }}" aria-expanded="{{ h.open }}" style="width: 100%; display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 16px; border: 0; background: none; cursor: pointer; color: var(--ink); text-align: left"><span style="flex-grow: 1; font: 600 16px/20px var(--font-sans)">{{ h.t }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-subtle)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ h.chev }}"></path></svg></button>
+<sc-if value="{{ h.open }}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 0 16px 16px; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">{{ h.d }}</p></sc-if>
+</section>
+</sc-for>
+<div style="padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid rgba(89, 236, 170, 0.35); background: rgba(89, 236, 170, 0.08); font: 500 14px/20px var(--font-sans)">NOOP never makes up a number. Missing data shows as missing, never as zero.</div>
+</sc-if>
+
+<sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="nr-eyebrow">Release notes</span><h2 style="margin: 0; font: 700 26px/30px var(--font-display)">NOOP 10.0.2</h2></div>
+<sc-for list="{{ notes }}" as="n" hint-placeholder-count="3">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px; display: flex; flex-direction: column; gap: 8px"><span style="font: 600 15px/20px var(--font-sans)">{{ n.t }}</span><sc-for list="{{ n.items }}" as="i" hint-placeholder-count="2"><span style="display: flex; gap: 10px; font: 400 14px/20px var(--font-sans); color: var(--ink-muted)"><span style="width: 6px; height: 6px; margin-top: 7px; flex-shrink: 0; border-radius: 50%; background: var(--brand)"></span>{{ i }}</span></sc-for></section>
+</sc-for>
+<a href="Main.dc.html" class="nr-btn nr-btn-primary np-plain" style="display: inline-flex; justify-content: center; align-items: center; color: var(--ink-on-liquid)">Got it</a>
+</sc-if>
+
+<sc-if value="{{ isLimits }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">Both straps are supported. Here is what NOOP can read from each, and why.</p>
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 4px 16px">
+<div style="display: grid; grid-template-columns: 1fr 64px 64px; gap: 8px; align-items: center; min-height: 44px; font: 600 11px/14px var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-subtle)"><span>What NOOP reads</span><span style="text-align: center">4.0</span><span style="text-align: center">5 / MG</span></div>
+<sc-for list="{{ limits }}" as="l" hint-placeholder-count="8"><div style="display: grid; grid-template-columns: 1fr 64px 64px; gap: 8px; align-items: center; min-height: 48px; border-top: 1px solid var(--glass-stroke)"><span style="font: 500 14px/18px var(--font-sans)">{{ l.f }}</span><span style="{{ l.aS }}">{{ l.a }}</span><span style="{{ l.bS }}">{{ l.b }}</span></div></sc-for>
+</section>
+<div style="display: flex; gap: 14px; flex-wrap: wrap; font: 500 12px/16px var(--font-sans); color: var(--ink-muted); padding: 0 4px"><span><span style="color: var(--brand); font-weight: 700">Live</span> · streamed from the strap</span><span><span style="color: var(--charge); font-weight: 700">Import</span> · from your WHOOP export</span><span><span style="color: var(--ink-subtle); font-weight: 700">—</span> · not available</span></div>
+<div style="padding: 14px 16px; border-radius: var(--radius-md); background: var(--glass-fill); border: 1px solid var(--glass-stroke); font: 400 13px/19px var(--font-sans); color: var(--ink-muted)"><span style="color: var(--ink); font-weight: 600">On a WHOOP 4.0?</span> Turn on HR broadcast in the official app once, so other gym kit can also see your heart rate.</div>
+</sc-if>
+
+<div class="nr-glass" style="border-radius: var(--radius-lg); padding: 4px 16px">
+<a href="Onboarding.dc.html#s=5" class="np-plain" style="display: flex; align-items: center; min-height: 52px"><span style="flex-grow: 1; font: 500 15px/20px var(--font-sans)">Terms and onboarding</span><span style="color: var(--ink-subtle)">›</span></a>
+<a href="LabTools.dc.html" class="np-plain" style="display: flex; align-items: center; min-height: 52px; border-top: 1px solid var(--glass-stroke)"><span style="flex-grow: 1; font: 500 15px/20px var(--font-sans)">Lab tools</span><span class="nr-chip nr-chip-beta" style="height: 22px; font-size: 10px">Advanced</span></a>
+<button type="button" onClick="{{ support }}" style="width: 100%; display: flex; align-items: center; min-height: 52px; border: 0; border-top: 1px solid var(--glass-stroke); background: none; padding: 0; cursor: pointer; color: var(--ink); text-align: left"><span style="flex-grow: 1; font: 500 15px/20px var(--font-sans)">Support &amp; contact</span><span style="font: 500 12px/16px var(--font-sans); color: var(--ink-muted)">{{ supportLine }}</span></button>
+</div>
+<p style="margin: 0; padding: 0 4px; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">Built on open-source Android, Bluetooth and charting libraries. NOOP is not a medical device and is not affiliated with WHOOP.</p>
+
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { tab: 'how', open: 0, sup: false }; }
+renderVals() {
+var self = this, s = this.state;
+var pill = function (on) { return 'border: 0; border-radius: 999px; height: 36px; cursor: pointer; font: 600 13px/16px Inter, sans-serif; ' + (on ? 'background: #59ecaa; color: #0c161c;' : 'background: transparent; color: #b6c3ca;'); };
+var H = [['How your sleep is sorted', 'NOOP finds sleep from stillness and a falling heart rate, then splits it into light, deep and REM using heart-rate variability and motion. Stages are estimates; the strap has no brain sensor.'], ['How your scores are computed', 'Charge, Effort and Rest are calculated on this phone against your own 30-day baseline. Nothing is sent to a server to score you.'], ['What "recording" means', 'While NOOP is connected it stores raw heart rate, HRV, motion and temperature locally. A sync fills any gaps from the strap\'s own memory.'], ['Where your numbers come from', 'Each value carries its source: the live strap, a WHOOP export, Health Connect or something you typed. Your data page shows which source won when they disagree.']];
+var how = H.map(function (h, i) { var open = s.open === i; return { t: h[0], d: h[1], open: open, chev: open ? 'M5 15l7-7 7 7' : 'M5 9l7 7 7-7', toggle: function () { self.setState({ open: open ? -1 : i }); } }; });
+var notes = [['A new look: Ridge', ['Liquid orbs for Charge, Effort and Rest', 'Five tabs, with Baseline for slow-moving markers']], ['Smarter sleep', ['Sleep stages and a "Why last night" explanation', 'Bedtime regularity across 14 nights']], ['Fixes', ['Deep sleep no longer reads 0 minutes after a missed sync', 'Battery orb updates within a minute of charging']]].map(function (n) { return { t: n[0], items: n[1] }; });
+var C = { L: ['Live', '#59ecaa'], I: ['Import', '#e8b84f'], N: ['—', '#9dadb6'] };
+var cell = function (k) { return 'text-align: center; font: 700 12px/16px Inter, sans-serif; color: ' + C[k][1] + ';'; };
+var limits = [['Heart rate', 'L', 'L'], ['HRV', 'L', 'L'], ['Sleep stages', 'L', 'L'], ['Skin temperature', 'L', 'L'], ['Blood oxygen', 'I', 'L'], ['Steps', 'N', 'L'], ['Strap wake-alarm', 'L', 'I'], ['ECG', 'N', 'N']].map(function (l) { return { f: l[0], a: C[l[1]][0], b: C[l[2]][0], aS: cell(l[1]), bS: cell(l[2]) }; });
+return {
+tabs: [['how', 'How it works'], ['new', 'What\'s new'], ['lim', 'Limits']].map(function (x) { return { label: x[1], on: s.tab === x[0], style: pill(s.tab === x[0]) + ' font-size: 12px;', pick: function () { self.setState({ tab: x[0] }); } }; }),
+isHow: s.tab === 'how', isNew: s.tab === 'new', isLimits: s.tab === 'lim', how: how, notes: notes, limits: limits,
+supportLine: s.sup ? 'Email copied' : 'Email', support: function () { self.setState({ sup: true }); }
+};
+}
+}
+</script>
+</body>
+</html>

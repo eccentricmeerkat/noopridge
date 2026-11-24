@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The default launcher icon: the liquid orb (docs/assets/noop_icon_vx.jpg). The classic loop mark
+     remains available as the Navy alternative (ic_launcher_navy). -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@drawable/ic_launcher_orb_background" />
+    <foreground android:drawable="@drawable/ic_launcher_orb_foreground" />
+    <monochrome android:drawable="@drawable/ic_launcher_orb_monochrome" />
+</adaptive-icon>

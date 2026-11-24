@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cycle tracker — Noop Ridge</title>
+<script src="./support.js"></script>
+<script>document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[aria-label^="Back"]');if(a&&history.length>1){e.preventDefault();e.stopPropagation();history.back();}},true);</script>
+<link rel="stylesheet" href="noop-tokens.css">
+<link rel="stylesheet" href="ds/noopridge/components/bundle.css">
+<script src="ds/noopridge/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap">
+<style>
+body{margin:0;background:#131f26;font-family:Inter,system-ui,sans-serif;color:#f5efe4}
+a{color:#59ecaa}a:hover{color:#8ff3c6}
+.np-scroll{scrollbar-width:none}.np-scroll::-webkit-scrollbar{display:none}
+.np-plain{text-decoration:none;color:inherit}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg-100); color: var(--ink); font-family: var(--font-sans)">
+<div class="np-scroll" style="position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden">
+<div style="position: relative; min-height: 100%; background: radial-gradient(120% 40% at 50% 0%, rgba(255, 129, 152, 0.14), rgba(19, 31, 38, 0) 70%)">
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px; padding: 20px 16px 48px">
+
+<header style="display: flex; align-items: center; gap: 8px">
+<a href="BodyMore.dc.html" aria-label="Back to More" class="np-plain" style="width: 44px; height: 44px; margin-left: -6px; border-radius: 50%; display: grid; place-items: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font: 700 30px/34px var(--font-display)">Cycle tracker</h1><span style="font: 500 13px/18px var(--font-sans); color: var(--ink-muted)">Private, on-device tracking</span></div>
+</header>
+
+<sc-if value="{{ off }}" hint-placeholder-val="{{ true }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<x-import component-from-global-scope="NoopRidge.LiquidOrb" liquid="brand" value="40" display=" " size="110" aria-label="" style="display: block"></x-import>
+<h2 style="margin: 0; font: 700 24px/28px var(--font-display)">Cycle awareness</h2>
+<p style="margin: 0; font: 400 14px/21px var(--font-sans); color: var(--ink-muted)">NOOP reads your nightly skin-temperature pattern to estimate your phase. Logging a period start sharpens it. Everything stays on this phone.</p>
+<button type="button" onClick="{{ turnOn }}" class="nr-btn nr-btn-primary" style="width: 100%">Turn on cycle awareness</button>
+</section>
+</sc-if>
+
+<sc-if value="{{ on }}" hint-placeholder-val="{{ false }}">
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; border-color: rgba(255, 129, 152, 0.35)">
+<span class="nr-eyebrow">Current estimate</span>
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font: 700 28px/32px var(--font-display)">{{ phase }}</span><span style="font: 700 18px/22px var(--font-display); color: var(--data-heart)">{{ day }}</span></div>
+<span style="font: 400 14px/20px var(--font-sans); color: var(--ink-muted)">{{ window }}</span>
+</section>
+
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font: 700 22px/26px var(--font-display)">Log a period start</h2>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><button type="button" onClick="{{ d.pick }}" aria-pressed="{{ d.on }}" style="{{ d.style }}"><span style="font: 500 10px/12px var(--font-sans)">{{ d.dow }}</span><span style="font: 700 16px/20px var(--font-display)">{{ d.num }}</span></button></sc-for></div>
+<button type="button" onClick="{{ logIt }}" disabled="{{ already }}" class="nr-btn nr-btn-primary" style="{{ logStyle }}">{{ logLabel }}</button>
+<span style="font: 400 12px/17px var(--font-sans); color: var(--ink-subtle)">This optional date anchors cycle day 1 and is checked against your nightly temperature pattern.</span>
+</section>
+
+<section class="nr-glass" style="border-radius: var(--radius-lg); padding: 16px 18px; display: flex; flex-direction: column">
+<div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px"><span class="nr-eyebrow">Logged starts</span><button type="button" onClick="{{ askAll }}" style="border: 0; background: none; padding: 6px; cursor: pointer; font: 600 12px/16px var(--font-sans); color: var(--state-depleted)">Delete all</button></div>
+<sc-if value="{{ none }}" hint-placeholder-val="{{ false }}"><span style="padding: 10px 0; font: 400 14px/20px var(--font-sans); color: var(--ink-muted)">No period starts logged yet.</span></sc-if>
+<sc-for list="{{ logged }}" as="l" hint-placeholder-count="3"><div style="display: flex; align-items: center; min-height: 48px; border-top: 1px solid var(--glass-stroke)"><span style="flex-grow: 1; font: 500 15px/20px var(--font-sans)">{{ l.d }}</span><button type="button" onClick="{{ l.del }}" aria-label="{{ l.aria }}" style="border: 0; background: none; padding: 8px; cursor: pointer; color: var(--ink-subtle)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div></sc-for>
+</section>
+
+<sc-if value="{{ confirm }}" hint-placeholder-val="{{ false }}">
+<div role="alertdialog" aria-label="Delete all logged period starts?" style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: var(--radius-lg); border: 1px solid rgba(247, 119, 125, 0.4); background: rgba(247, 119, 125, 0.08)"><span style="font: 600 15px/20px var(--font-sans)">Delete all logged period starts?</span><div style="display: flex; gap: 8px"><button type="button" onClick="{{ cancelAll }}" class="nr-btn nr-btn-secondary" style="flex: 1">Cancel</button><button type="button" onClick="{{ doAll }}" class="nr-btn" style="flex: 1; background: var(--state-depleted); color: var(--ink-on-liquid)">Delete</button></div></div>
+</sc-if>
+
+<p style="margin: 0; padding: 0 4px; font: 400 12px/18px var(--font-sans); color: var(--ink-subtle)">This never leaves your device. It is an estimate, not contraception or a medical prediction.</p>
+<div style="display: flex; gap: 8px"><button type="button" onClick="{{ turnOff }}" class="nr-btn nr-btn-ghost" style="flex: 1">Turn off</button><a href="BodyMore.dc.html" class="nr-btn nr-btn-secondary np-plain" style="flex: 1; display: inline-flex; justify-content: center; align-items: center">Done</a></div>
+</sc-if>
+
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = { on: false, logged: ['8 Sep', '11 Aug'], pick: 6, confirm: false }; }
+renderVals() {
+var self = this, s = this.state;
+var D = [['Mon', 14], ['Tue', 15], ['Wed', 16], ['Thu', 17], ['Fri', 18], ['Sat', 19], ['Sun', 20]];
+var days = D.map(function (d, i) { var on = s.pick === i; return { dow: d[0], num: String(d[1]), on: on, pick: function () { self.setState({ pick: i }); }, style: 'display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; border-radius: 14px; cursor: pointer; color: #f5efe4; border: 1px solid ' + (on ? '#ff8198' : 'rgba(190,220,235,0.14)') + '; background: ' + (on ? 'rgba(255,129,152,0.16)' : 'transparent') + ';' }; });
+var label = D[s.pick][1] + ' Sep', already = s.logged.indexOf(label) >= 0;
+var n = s.logged.length;
+return {
+off: !s.on, on: s.on, turnOn: function () { self.setState({ on: true }); }, turnOff: function () { self.setState({ on: false }); },
+phase: n === 0 ? 'Learning your pattern' : already && label === '20 Sep' ? 'Menstrual' : 'Luteal',
+day: n === 0 ? '' : already && label === '20 Sep' ? '~day 1' : '~day 12–14',
+window: n === 0 ? 'Log a period start or wear the strap a few more nights.' : 'Likely period window: 3 Oct–6 Oct. This is a range, not a fixed date.',
+days: days, already: already, logLabel: already ? 'Already logged' : 'Log ' + label, logStyle: 'width: 100%;' + (already ? ' opacity: 0.45; cursor: not-allowed;' : ''),
+logIt: function () { if (!already) self.setState({ logged: [label].concat(s.logged) }); },
+none: n === 0, logged: s.logged.map(function (d) { return { d: d, aria: 'Delete ' + d, del: function () { self.setState({ logged: s.logged.filter(function (x) { return x !== d; }) }); } }; }),
+confirm: s.confirm, askAll: function () { self.setState({ confirm: true }); }, cancelAll: function () { self.setState({ confirm: false }); }, doAll: function () { self.setState({ logged: [], confirm: false }); }
+};
+}
+}
+</script>
+</body>
+</html>

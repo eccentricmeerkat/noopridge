@@ -1,0 +1,4 @@
+case,paIndex,fitnessAge,deltaYears,lowerConfidence
+reference_peer_maps_to_own_age,5.000000,40.000000,0.000000,false
+low_rhr_active,13.333333,25.782658,14.217342,false
+high_rhr_inactive,0.583333,50.179617,-10.179617,false

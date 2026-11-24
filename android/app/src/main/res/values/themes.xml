@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      App theme. Compose owns all in-app styling via com.noop.ui.NoopTheme; this base
+      theme only sets the window/system-bar chrome so there is no white flash before
+      the first Compose frame. Dark, instrument-grade, matching surfaceBase #060A08.
+
+      The parent is the framework dark Material theme (no extra library needed — Compose
+      Material3 comes from the androidx.compose.material3 artifact, not a platform theme),
+      letting Compose drive everything inside setContent { }.
+
+      The status/nav bars are TRANSPARENT so the per-theme Compose Scaffold background paints
+      edge-to-edge under the notch + gesture pill (fixes the black band on themed surfaces —
+      #578). The light/dark system-bar ICON tint stays runtime-driven by NoopTheme via
+      isAppearanceLightStatusBars in Theme.kt — do not re-add windowLight*Bar here.
+    -->
+    <style name="Theme.NOOP" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ridge_bg100</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:datePickerDialogTheme">@style/Theme.NOOP.RidgePickerDialog</item>
+        <item name="android:timePickerDialogTheme">@style/Theme.NOOP.RidgePickerDialog</item>
+    </style>
+
+    <!--
+      Noop Ridge (R7c, from R3c-2's finding): the platform date and time pickers are View dialogs, so Compose cannot
+      style them; this theme puts them in the Ridge colours (bg-100 sheet, bg-300 header, brand selection and
+      buttons, ink text). This app always builds with the Ridge shell (BuildConfig.RIDGE_SHELL).
+    -->
+    <style name="Theme.NOOP.RidgePickerDialog" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:colorBackground">@color/ridge_bg100</item>
+        <item name="android:colorAccent">@color/ridge_brand</item>
+        <item name="android:colorControlActivated">@color/ridge_brand</item>
+        <item name="android:textColorPrimary">@color/ridge_ink</item>
+        <item name="android:textColorSecondary">@color/ridge_ink_muted</item>
+        <item name="android:textColorPrimaryInverse">@color/ridge_ink_on_liquid</item>
+        <item name="android:datePickerStyle">@style/Widget.NOOP.RidgeDatePicker</item>
+        <item name="android:timePickerStyle">@style/Widget.NOOP.RidgeTimePicker</item>
+    </style>
+    <style name="Widget.NOOP.RidgeDatePicker" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:headerBackground">@color/ridge_bg300</item>
+    </style>
+    <style name="Widget.NOOP.RidgeTimePicker" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:headerBackground">@color/ridge_bg300</item>
+        <item name="android:numbersBackgroundColor">@color/ridge_bg300</item>
+        <item name="android:numbersSelectorColor">@color/ridge_brand</item>
+    </style>
+</resources>
