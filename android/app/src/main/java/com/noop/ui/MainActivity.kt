@@ -1602,6 +1602,8 @@ fun NoopRoot() {
             .apply()
         acceptedTerms = Terms.CURRENT_VERSION
     }
+    // The backup import progress, over whichever screen started the import (and over the setup wizard).
+    BackupImportHost()
     // R8a (H-02): under the Ridge shell a first run takes the terms inside the wizard, after its content steps and
     // before any Bluetooth or notification step; a returning user re-prompted for new terms gets the Ridge Terms step.
     if (acceptedTerms != Terms.CURRENT_VERSION && !(ridgeShell && !onboarded)) {

@@ -55,6 +55,20 @@ key), a once-a-day check for a newer release (sends nothing about you and never 
 **Hub › About** and it makes no request at all), and a default-off Experimental one-way **push** to an endpoint you
 own. Noop operates no server, account or telemetry service.
 
+### Moving your data in
+
+**Hub › Settings › Backup & restore › Import backup** takes a `.noopbak` file:
+
+| Backup from | What happens |
+|---|---|
+| **Noop Ridge** | Restored in full. |
+| **Original Noop** (Android, v11.8 and v12.0) | Restored, then upgraded to the current database on open. The daily energy figure there ("Active Energy") is the figure Ridge shows as **Calories**. |
+| **Noop Forge** | **Merged** into what you have: its readings, sleep, workouts and daily figures are added; anything already in this app is kept. Importing the same file twice adds nothing the second time. |
+| A backup from a **newer** version than this app | Refused with a message; nothing changes. Update the app first. |
+| Anything else | Refused. Use the WHOOP-format CSV export from that app instead. |
+
+Files over 2 GB ask you to confirm before they are read. Back up your current data first if you want a way back.
+
 ---
 
 Noop Ridge is a standalone, fully **offline** companion app for WHOOP straps (4.0 and 5.0). It pairs directly with the

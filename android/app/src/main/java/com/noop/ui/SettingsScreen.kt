@@ -868,17 +868,10 @@ fun SettingsScreen(
         ActivityResultContracts.OpenDocument(),
     ) { uri ->
         if (uri == null) { backupBusy = false; return@rememberLauncherForActivityResult }
-        scope.launch {
-            val result = withContext(Dispatchers.IO) {
-                DataBackup.importFrom(context, uri)
-            }
+        BackupImportRunner.start(context, uri) { result ->
             backupBusy = false
             when (result) {
-                is DataBackup.ImportResult.NeedsRestart -> Toast.makeText(
-                    context,
-                    "Backup imported. Fully close and reopen NOOP for it to take effect.",
-                    Toast.LENGTH_LONG,
-                ).show()
+                is DataBackup.ImportResult.NeedsRestart -> Unit // the runner restarts the app itself
                 is DataBackup.ImportResult.Failed -> backupFailure = result.message
                 // #1807: refused ONLY for size, which is recoverable — offer to go ahead rather than
                 // ending on a Toast the user can do nothing about. The cap is a decompression guard
@@ -1986,17 +1979,10 @@ fun SettingsScreen(
                     TextButton(onClick = {
                         oversizeRestore = null
                         backupBusy = true
-                        scope.launch {
-                            val again = withContext(Dispatchers.IO) {
-                                DataBackup.importFrom(context, pendingUri, allowOversize = true)
-                            }
+                        BackupImportRunner.start(context, pendingUri, allowOversize = true) { again ->
                             backupBusy = false
                             when (again) {
-                                is DataBackup.ImportResult.NeedsRestart -> Toast.makeText(
-                                    context,
-                                    "Backup imported. Fully close and reopen NOOP for it to take effect.",
-                                    Toast.LENGTH_LONG,
-                                ).show()
+                                is DataBackup.ImportResult.NeedsRestart -> Unit // the runner restarts the app itself
                                 // Same reason as the first attempt: these carry a next step, and a Toast
                                 // is where a next step goes to be truncated.
                                 is DataBackup.ImportResult.Failed -> backupFailure = again.message

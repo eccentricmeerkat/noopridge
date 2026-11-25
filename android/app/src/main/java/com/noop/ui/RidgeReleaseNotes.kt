@@ -39,7 +39,7 @@ internal object RidgeReleaseNotes {
     /** The same title on one line, for the changelog entry and the Updates inbox. */
     const val TITLE_ONE_LINE = "Welcome to Noop Ridge"
     /** The version string the changelog, the auto-shown sheet and the Updates inbox stamp. */
-    const val VERSION = "12.1.1"
+    const val VERSION = "12.1.2"
     const val DATE = "November 2026"
     const val ENTRY_TITLE = "Noop v12.1"
     const val ENTRY_SUBTITLE = "Ridge v1.0"
@@ -50,6 +50,7 @@ internal object RidgeReleaseNotes {
     const val DISPLAY_VERSION = "12.1"
 
     val items: List<String> = listOf(
+        "**New in 12.1.2.** Backups import more widely. A backup from the original Noop 12 now restores here, and one from Noop Forge is merged into your data without replacing anything you already have. A backup made by a newer version of the app is now refused with a clear message instead of leaving the app unable to open its data. Restoring from Settings now restarts the app by itself, so Today shows your restored history straight away, and the setup wizard has an Import backup option on the Your history page.",
         "**New in 12.1.** Settings is simpler: Appearance keeps language, clock and units, and Backup & restore is redrawn with an icon on Export, Import and CSV. The recommended bedtime now repays part of your sleep debt, and says how much it added. Vital signs starts your live heart rate when you open it. A workout recorded in the app no longer counts extra heart-rate samples, which could overstate its calories.",
         "**A new shell with five tabs.** Today, Trends, Baseline, Sleep and Hub. The Hub holds Settings, Sage and Devices, then Insights, Body, Data and App. One dark appearance, mountain photography and glass cards throughout. Every earlier screen is still reachable.",
         "**Today.** Charge, Effort and Rest orbs, the day's call and Synthesis, and a plan that names the Effort to keep under and tonight's sleep. Key Metrics, a smoothed heart-rate line with sleep and workouts marked, and activities including nights detected on the phone. Tiles for Calories, Skin temperature and Steps now open Insights, and the page no longer flashes a new user's state while your numbers load.",

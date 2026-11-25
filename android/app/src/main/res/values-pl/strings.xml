@@ -3091,4 +3091,25 @@
     <string name="settings_backup_note">Import nadpisuje wszystko, co jest teraz na tym telefonie. Dotychczasowe dane są na wszelki wypadek zachowane w osobnym pliku. NOOP wymaga ponownego uruchomienia, aby import zaczął działać. Eksport CSV można ponownie zaimportować do NOOP na Androidzie lub Macu. Wiersze obliczone na urządzeniu są oznaczone jako PRZYBLIŻONE w kolumnie Źródło; kopia .noopbak pozostaje bezstratnym sposobem przywracania.</string>
     <string name="settings_backup_csv">Eksportuj CSV</string>
     <string name="sleep_ridge_tonight_payback">Zawiera %1$d min na spłatę zaległego snu</string>
+    <string name="onboarding_import_noopbak">Importuj kopię Noop (.noopbak)</string>
+    <string name="onboarding_restoring_backup">Importowanie kopii…</string>
+    <string name="backup_restored_restarting">Kopia przywrócona. Ponowne uruchamianie Noop…</string>
+    <string name="import_progress_title">Importowanie kopii zapasowej</string>
+    <string name="import_progress_step">Krok %1$d z %2$d · %3$s</string>
+    <string name="import_stage_reading">Odczytywanie kopii</string>
+    <string name="import_stage_unpacking">Rozpakowywanie kopii</string>
+    <string name="import_stage_checking">Sprawdzanie pliku</string>
+    <string name="import_stage_safety">Zapisywanie kopii zapasowej Twoich danych</string>
+    <string name="import_stage_replacing">Zastępowanie Twoich danych</string>
+    <string name="import_stage_merging">Scalanie z Twoimi danymi</string>
+    <string name="import_stage_verifying">Weryfikowanie przywróconych danych</string>
+    <string name="import_stage_finishing">Kończenie</string>
+    <string name="import_progress_bytes">%1$s z %2$s MB · %3$d%%</string>
+    <string name="import_progress_tables">Tabela %1$d z %2$d</string>
+    <string name="import_progress_quiet">Ten krok może potrwać minutę przy dużej kopii.</string>
+    <string name="import_progress_eta_short">Zostało mniej niż minuta (szacunek według rozmiaru)</string>
+    <string name="import_progress_eta_min">Zostało około %1$d min (szacunek według rozmiaru)</string>
+    <string name="import_progress_note">Noop uruchomi się ponownie po zakończeniu. Zostaw go otwartego do tego czasu.</string>
+    <string name="import_progress_nocancel">Nie można anulować podczas zastępowania Twoich danych.</string>
+    <string name="import_progress_cancelling">Anulowanie…</string>
 </resources>

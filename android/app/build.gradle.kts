@@ -29,8 +29,8 @@ android {
         applicationId = "com.noop.app.ridge"
         minSdk = 26
         targetSdk = 34
-        versionCode = 527
-        versionName = "12.1.1"
+        versionCode = 528
+        versionName = "12.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Noop Ridge shell (A-01 / B-01): the Ridge tokens app-wide (dark only, D-10) and, from A-01, the

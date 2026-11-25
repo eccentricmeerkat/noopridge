@@ -3069,4 +3069,25 @@
     <string name="settings_backup_note">Importar substitui tudo o que está atualmente neste telemóvel. Os teus dados antigos ficam guardados num ficheiro à parte, por precaução. O NOOP tem de ser reiniciado para a importação ter efeito. A exportação CSV pode ser reimportada no NOOP em Android ou Mac. As linhas calculadas no dispositivo estão marcadas como APROXIMADAS na coluna Origem; a cópia .noopbak continua a ser a via de restauro sem perdas.</string>
     <string name="settings_backup_csv">Exportar CSV</string>
     <string name="sleep_ridge_tonight_payback">Inclui %1$d min para compensar a dívida de sono</string>
+    <string name="onboarding_import_noopbak">Importar cópia do Noop (.noopbak)</string>
+    <string name="onboarding_restoring_backup">A importar a cópia…</string>
+    <string name="backup_restored_restarting">Cópia restaurada. A reiniciar o Noop…</string>
+    <string name="import_progress_title">A importar a sua cópia</string>
+    <string name="import_progress_step">Passo %1$d de %2$d · %3$s</string>
+    <string name="import_stage_reading">A ler a cópia</string>
+    <string name="import_stage_unpacking">A descompactar a cópia</string>
+    <string name="import_stage_checking">A verificar o ficheiro</string>
+    <string name="import_stage_safety">A guardar uma cópia de segurança dos seus dados</string>
+    <string name="import_stage_replacing">A substituir os seus dados</string>
+    <string name="import_stage_merging">A combinar com os seus dados</string>
+    <string name="import_stage_verifying">A verificar os dados restaurados</string>
+    <string name="import_stage_finishing">A concluir</string>
+    <string name="import_progress_bytes">%1$s de %2$s MB · %3$d %%</string>
+    <string name="import_progress_tables">Tabela %1$d de %2$d</string>
+    <string name="import_progress_quiet">Este passo pode demorar um minuto numa cópia grande.</string>
+    <string name="import_progress_eta_short">Falta menos de um minuto (estimado pelo tamanho)</string>
+    <string name="import_progress_eta_min">Faltam cerca de %1$d min (estimado pelo tamanho)</string>
+    <string name="import_progress_note">O Noop reinicia quando terminar. Mantenha-o aberto até lá.</string>
+    <string name="import_progress_nocancel">Não pode ser cancelado enquanto os seus dados são substituídos.</string>
+    <string name="import_progress_cancelling">A cancelar…</string>
 </resources>

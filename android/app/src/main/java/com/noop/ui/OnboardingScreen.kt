@@ -6,6 +6,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import com.noop.data.DataBackup
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -47,6 +48,7 @@ import androidx.compose.material.icons.filled.MonitorHeart
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Sensors
+import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -972,6 +974,36 @@ private fun ImportStep(viewModel: AppViewModel) {
         ActivityResultContracts.OpenDocument(),
     ) { uri -> if (uri != null) runImport { AppleHealthImporter.importExport(context, uri, viewModel.repo) } }
 
+    // A `.noopbak` restores everything, so it also finishes the wizard: the restored app has nothing left to ask. The
+    // process restarts after the restore (every screen holds the database it opened), landing on Today.
+    val restoringText = uiString(R.string.onboarding_restoring_backup)
+    val noopbakLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument(),
+    ) { uri ->
+        if (uri != null) {
+            busy = true
+            status = restoringText
+            BackupImportRunner.start(
+                context, uri,
+                beforeRestart = {
+                    NoopPrefs.of(context).edit()
+                        .putBoolean(NoopPrefs.KEY_ONBOARDED, true)
+                        .putString(NoopPrefs.KEY_LAST_SEEN_CHANGELOG, AppChangelog.CURRENT_VERSION)
+                        .remove(KEY_RIDGE_ONBOARDING_PAGE)
+                        .commit()
+                },
+            ) { r ->
+                busy = false
+                when (r) {
+                    is DataBackup.ImportResult.NeedsRestart -> Unit // the runner restarts the app itself
+                    is DataBackup.ImportResult.Failed -> status = r.message
+                    // Too large to restore here: the override lives in Settings → Backup & restore.
+                    is DataBackup.ImportResult.TooLarge -> status = r.message
+                }
+            }
+        }
+    }
+
     val hcPermissionLauncher = rememberLauncherForActivityResult(
         PermissionController.createRequestPermissionResultContract(),
     ) { granted ->
@@ -1037,6 +1069,11 @@ private fun ImportStep(viewModel: AppViewModel) {
                         icon = Icons.Filled.FileUpload,
                         enabled = !busy,
                     ) { whoopImportLauncher.launch(arrayOf("*/*")) }
+                    OnboardingActionButton(
+                        label = uiString(R.string.onboarding_import_noopbak),
+                        icon = Icons.Filled.Restore,
+                        enabled = !busy,
+                    ) { noopbakLauncher.launch(arrayOf("*/*")) }
                     OnboardingActionButton(
                         label = uiString(R.string.l10n_onboarding_screen_import_from_health_connect_35d55e21),
                         icon = Icons.Filled.MonitorHeart,

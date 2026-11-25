@@ -370,9 +370,20 @@ object DataBackup {
      * On any error the current database is left exactly as it was. On success the caller
      * MUST instruct the user to fully restart the app.
      */
-    fun importFrom(context: Context, uri: Uri, allowOversize: Boolean = false): ImportResult {
+    fun importFrom(
+        context: Context,
+        uri: Uri,
+        allowOversize: Boolean = false,
+        progress: ImportProgressSink? = null,
+    ): ImportResult {
         val appContext = context.applicationContext
         val resolver = appContext.contentResolver
+        var steps = 6 // replace: read, unpack, check, safety copy, replace, verify; a merge has five
+        fun report(stage: ImportStage, step: Int, done: Long = 0, total: Long = 0, cancellable: Boolean = true) {
+            progress?.report(ImportProgress(stage, step, steps, done, total, cancellable))
+        }
+        fun cancelled(): Boolean = progress?.isCancelled() == true
+        report(ImportStage.READING, 1)
 
         // 1. Peek at the first 16 bytes to distinguish ZIP from plain SQLite.
         val header = ByteArray(16)
@@ -393,9 +404,15 @@ object DataBackup {
         val tempSqlite = File(appContext.cacheDir, "import-extract.sqlite")
         val tempSettings = File(appContext.cacheDir, "import-settings.json")
         tempSettings.delete()
+        val fileSize = runCatching { resolver.openAssetFileDescriptor(uri, "r")?.use { it.length } }.getOrNull() ?: -1L
+        report(ImportStage.UNPACKING, 2, 0, fileSize.coerceAtLeast(0))
         try {
-            when (stageBackupSqlite(resolver.openInputStream(uri), header, tempSqlite, tempSettings,
-                                    allowOversize = allowOversize)) {
+            val countingIn = progressStream(
+                resolver.openInputStream(uri),
+                onBytes = { done -> report(ImportStage.UNPACKING, 2, done, fileSize.coerceAtLeast(done)) },
+                isCancelled = ::cancelled,
+            )
+            when (stageBackupSqlite(countingIn, header, tempSqlite, tempSettings, allowOversize = allowOversize)) {
                 StageResult.OK -> Unit
                 StageResult.CANNOT_OPEN -> return ImportResult.Failed("Could not open the chosen file.")
                 StageResult.NO_DB_IN_ZIP -> {
@@ -418,10 +435,21 @@ object DataBackup {
                     "That file is not a NOOP backup - it doesn't look like a .noopbak archive or a SQLite database."
                 )
             }
+        } catch (e: ImportCancelled) {
+            tempSqlite.delete()
+            tempSettings.delete()
+            return ImportResult.Failed(IMPORT_CANCELLED_MESSAGE)
         } catch (e: IOException) {
             tempSqlite.delete()
             tempSettings.delete()
             return ImportResult.Failed("Could not read the chosen file: ${e.message}")
+        }
+
+        report(ImportStage.CHECKING, 3, cancellable = true)
+        if (cancelled()) {
+            tempSqlite.delete()
+            tempSettings.delete()
+            return ImportResult.Failed(IMPORT_CANCELLED_MESSAGE)
         }
 
         // 3. Validate the extracted file is a real SQLite database (magic-byte check).
@@ -438,15 +466,18 @@ object DataBackup {
         //     backup but still holds real data. Empty/pre-migration files fall through to Room's
         //     open-time migrator, exactly as before.
         val backupTables = sqliteTableNames(tempSqlite)
+        // A GRDB-layout file (Mac / iOS NOOP, or a fork that stores the same layout) cannot replace the Room store, but its
+        // data can be MERGED into it ([GrdbBackupMerge]) when it holds NOOP tables.
+        var mergeForeign = false
         when (backupOriginOf(backupTables)) {
             BackupOrigin.MAC ->
-                return rejectForeign(
+                if (GrdbBackupMerge.isMergeable(backupTables)) mergeForeign = true
+                else return rejectForeign(
                     tempSqlite,
                     tempSettings,
-                    "This isn't a NOOP backup from this app. It looks like a backup from the Mac or " +
-                        "iOS NOOP app (it carries that platform's migration bookkeeping). Restoring it here " +
-                        "would strand your store. To move your history across platforms, export the " +
-                        "WHOOP-format CSV on the other device (Settings → Export data) and import that here.",
+                    "This backup uses another NOOP app's database layout and holds no data NOOP can read, so nothing " +
+                        "was restored and your data is untouched. To bring your history across, export the " +
+                        "WHOOP-format CSV from that app (Settings → Export data) and import that here.",
                 )
             BackupOrigin.UNKNOWN ->
                 if (holdsData(backupTables)) {
@@ -458,7 +489,20 @@ object DataBackup {
                             "strand your store.",
                     )
                 }
-            BackupOrigin.ANDROID -> Unit // our own backup, proceed.
+            BackupOrigin.ANDROID -> {
+                // A backup written by a NEWER schema than this app understands cannot be opened here: Room has no way
+                // back down, so swapping it in would leave the app unable to open its own data. Refuse it BEFORE the swap.
+                val version = sqliteUserVersion(tempSqlite)
+                if (version > WhoopDatabase.SCHEMA_VERSION) {
+                    return rejectForeign(
+                        tempSqlite,
+                        tempSettings,
+                        "This backup was made by a newer version of NOOP (database version $version; this app reads up to " +
+                            "${WhoopDatabase.SCHEMA_VERSION}), so it was not restored and your data is untouched. " +
+                            "Update this app, or export the WHOOP-format CSV from the newer app and import that here.",
+                    )
+                }
+            }
         }
 
         // 3c. #1014 defence-in-depth: gates 3 and 3b read only the FIRST pages of the file — the
@@ -479,6 +523,21 @@ object DataBackup {
             )
         }
 
+        if (cancelled()) {
+            tempSqlite.delete()
+            tempSettings.delete()
+            return ImportResult.Failed(IMPORT_CANCELLED_MESSAGE)
+        }
+        if (mergeForeign) {
+            steps = 5 // read, unpack, check, merge, finish
+            return mergeGrdbBackup(
+                appContext, tempSqlite, tempSettings,
+                onStart = { report(ImportStage.MERGING, 4, cancellable = false) },
+                onTable = { i, n -> report(ImportStage.MERGING, 4, i.toLong(), n.toLong(), cancellable = false) },
+                onFinishing = { report(ImportStage.FINISHING, 5, cancellable = false) },
+            )
+        }
+
         val dbFile = appContext.getDatabasePath(WhoopDatabase.DB_NAME)
         val walFile = File(dbFile.path + "-wal")
         val shmFile = File(dbFile.path + "-shm")
@@ -490,7 +549,11 @@ object DataBackup {
         // 5. Snapshot the current db so a failed copy can be rolled back.
         try {
             rollbackFile.delete()
-            if (dbFile.exists()) dbFile.copyTo(rollbackFile, overwrite = true)
+            val liveBytes = if (dbFile.exists()) dbFile.length() else 0L
+            report(ImportStage.SAFETY_COPY, 4, 0, liveBytes, cancellable = false)
+            if (dbFile.exists()) {
+                copyWithProgress(dbFile, rollbackFile) { done -> report(ImportStage.SAFETY_COPY, 4, done, liveBytes, cancellable = false) }
+            }
         } catch (e: IOException) {
             tempSqlite.delete()
             tempSettings.delete()
@@ -500,7 +563,9 @@ object DataBackup {
         // 6. Overwrite the db file with the extracted backup, then drop the stale sidecars.
         try {
             dbFile.parentFile?.mkdirs()
-            tempSqlite.copyTo(dbFile, overwrite = true)
+            val stagedBytes = tempSqlite.length()
+            report(ImportStage.REPLACING, 5, 0, stagedBytes, cancellable = false)
+            copyWithProgress(tempSqlite, dbFile) { done -> report(ImportStage.REPLACING, 5, done, stagedBytes, cancellable = false) }
             walFile.delete()
             shmFile.delete()
         } catch (e: IOException) {
@@ -517,6 +582,7 @@ object DataBackup {
         //     the wrong instant — and the next launch would meet a corrupt store (which, before the
         //     CorruptionPreservingOpenHelperFactory below, the platform would then silently DELETE).
         //     On failure, roll back to the `.import-bak` snapshot automatically and say so.
+        report(ImportStage.VERIFYING, 6, cancellable = false)
         sqliteQuickCheckFailure(dbFile)?.let { complaint ->
             tempSqlite.delete()
             tempSettings.delete()
@@ -764,6 +830,97 @@ object DataBackup {
     fun holdsData(tableNames: Set<String>): Boolean {
         val housekeeping = setOf("android_metadata", "sqlite_sequence", "room_master_table", "grdb_migrations")
         return tableNames.any { it !in housekeeping && !it.startsWith("sqlite_") }
+    }
+
+    /** [src] wrapped so every megabyte read is reported and a cancel stops the read at the next call. */
+    private fun progressStream(src: InputStream?, onBytes: (Long) -> Unit, isCancelled: () -> Boolean): InputStream? {
+        src ?: return null
+        return object : java.io.FilterInputStream(src) {
+            private var total = 0L
+            private var lastReported = 0L
+            private fun bump(n: Long) {
+                if (isCancelled()) throw ImportCancelled()
+                total += n
+                if (total - lastReported >= 1_048_576L) { lastReported = total; onBytes(total) }
+            }
+            override fun read(): Int = super.read().also { if (it >= 0) bump(1) }
+            override fun read(b: ByteArray, off: Int, len: Int): Int = super.read(b, off, len).also { if (it > 0) bump(it.toLong()) }
+        }
+    }
+
+    /** Copy [src] to [dst] (replacing it), reporting the bytes written every few megabytes. */
+    private fun copyWithProgress(src: File, dst: File, onBytes: (Long) -> Unit) {
+        src.inputStream().use { input ->
+            dst.outputStream().use { out ->
+                val buffer = ByteArray(DEFAULT_BUFFER_SIZE * 8)
+                var total = 0L
+                var lastReported = 0L
+                while (true) {
+                    val n = input.read(buffer)
+                    if (n < 0) break
+                    out.write(buffer, 0, n)
+                    total += n
+                    if (total - lastReported >= 4_194_304L) { lastReported = total; onBytes(total) }
+                }
+                onBytes(total)
+            }
+        }
+    }
+
+    /** The `PRAGMA user_version` of [file], read-only; 0 when it cannot be read. Room records its schema version there. */
+    private fun sqliteUserVersion(file: File): Int {
+        val db = runCatching {
+            SQLiteDatabase.openDatabase(file.path, null, SQLiteDatabase.OPEN_READONLY, PRESERVE_ON_CORRUPTION)
+        }.getOrNull() ?: return 0
+        return try {
+            db.rawQuery("PRAGMA user_version", null).use { c -> if (c.moveToFirst()) c.getInt(0) else 0 }
+        } catch (e: Exception) {
+            0
+        } finally {
+            runCatching { db.close() }
+        }
+    }
+
+    /**
+     * Merge a GRDB-layout backup into the live Room database ([GrdbBackupMerge]). The live database is brought to the
+     * current schema first, then Room is closed so the file can be opened directly; the merge is one transaction, so on
+     * any failure the data is exactly as it was.
+     */
+    private fun mergeGrdbBackup(
+        appContext: Context,
+        tempSqlite: File,
+        tempSettings: File,
+        onStart: () -> Unit = {},
+        onTable: (Int, Int) -> Unit = { _, _ -> },
+        onFinishing: () -> Unit = {},
+    ): ImportResult {
+        val dbFile = appContext.getDatabasePath(WhoopDatabase.DB_NAME)
+        return try {
+            onStart()
+            WhoopDatabase.get(appContext).openHelper.writableDatabase // create and migrate to the current schema
+            WhoopDatabase.close()
+            val report = GrdbBackupMerge.merge(dbFile, tempSqlite, onTable)
+            onFinishing()
+            android.util.Log.i(
+                "DataBackup",
+                "merged a GRDB-layout backup: ${report.rowsAdded} of ${report.rowsOffered} rows added; " +
+                    "tables " + report.tables.joinToString { "${it.table}=${it.added}/${it.offered}" } +
+                    (if (report.skipped.isEmpty()) "" else "; skipped " + report.skipped.joinToString()),
+            )
+            if (tempSettings.exists()) {
+                runCatching { BackupSettingsBridge.apply(appContext, tempSettings.readText(Charsets.UTF_8)) }
+            }
+            runCatching {
+                com.noop.ui.NoopPrefs.of(appContext).edit()
+                    .putLong("backup.lastRestoreAt", System.currentTimeMillis() / 1000L).apply()
+            }
+            ImportResult.NeedsRestart
+        } catch (e: Exception) {
+            ImportResult.Failed("The backup could not be merged, so nothing was changed. (${e.message})")
+        } finally {
+            tempSqlite.delete()
+            tempSettings.delete()
+        }
     }
 
     /** Every table name in [file], opened READ-ONLY so the probed file is never mutated. Empty on

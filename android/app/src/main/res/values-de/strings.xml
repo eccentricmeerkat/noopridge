@@ -3087,4 +3087,25 @@
     <string name="settings_backup_note">Ein Import überschreibt alles, was gerade auf diesem Telefon liegt. Deine alten Daten bleiben vorsichtshalber in einer Nebendatei erhalten. NOOP muss neu gestartet werden, damit ein Import wirksam wird. Der CSV-Export lässt sich in NOOP auf Android oder Mac wieder importieren. Auf dem Gerät berechnete Zeilen sind in der Spalte „Quelle“ als UNGEFÄHR markiert; das .noopbak-Backup bleibt der verlustfreie Weg zur Wiederherstellung.</string>
     <string name="settings_backup_csv">CSV exportieren</string>
     <string name="sleep_ridge_tonight_payback">Enthält %1$d Min., um Schlafschulden abzubauen</string>
+    <string name="onboarding_import_noopbak">Noop-Sicherung importieren (.noopbak)</string>
+    <string name="onboarding_restoring_backup">Sicherung wird importiert …</string>
+    <string name="backup_restored_restarting">Sicherung wiederhergestellt. Noop wird neu gestartet …</string>
+    <string name="import_progress_title">Sicherung wird importiert</string>
+    <string name="import_progress_step">Schritt %1$d von %2$d · %3$s</string>
+    <string name="import_stage_reading">Sicherung wird gelesen</string>
+    <string name="import_stage_unpacking">Sicherung wird entpackt</string>
+    <string name="import_stage_checking">Datei wird geprüft</string>
+    <string name="import_stage_safety">Sicherheitskopie deiner Daten wird gespeichert</string>
+    <string name="import_stage_replacing">Deine Daten werden ersetzt</string>
+    <string name="import_stage_merging">Wird mit deinen Daten zusammengeführt</string>
+    <string name="import_stage_verifying">Wiederhergestellte Daten werden überprüft</string>
+    <string name="import_stage_finishing">Wird abgeschlossen</string>
+    <string name="import_progress_bytes">%1$s von %2$s MB · %3$d %%</string>
+    <string name="import_progress_tables">Tabelle %1$d von %2$d</string>
+    <string name="import_progress_quiet">Dieser Schritt kann bei einer großen Sicherung eine Minute dauern.</string>
+    <string name="import_progress_eta_short">Weniger als eine Minute übrig (nach Größe geschätzt)</string>
+    <string name="import_progress_eta_min">Etwa %1$d Min. übrig (nach Größe geschätzt)</string>
+    <string name="import_progress_note">Noop startet nach Abschluss neu. Lass es bis dahin geöffnet.</string>
+    <string name="import_progress_nocancel">Während deine Daten ersetzt werden, lässt sich der Vorgang nicht abbrechen.</string>
+    <string name="import_progress_cancelling">Wird abgebrochen …</string>
 </resources>

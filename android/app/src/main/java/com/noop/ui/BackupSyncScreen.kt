@@ -86,52 +86,21 @@ fun BackupSyncScreen() {
     var showSnapshotPicker by remember { mutableStateOf(false) }
     var pendingRestore by remember { mutableStateOf<Pair<String, Uri>?>(null) }
 
-    // Runs the actual destructive restore for a chosen backup Uri, off the main thread.
+    // Runs the actual destructive restore for a chosen backup Uri. [BackupImportRunner] does the work off the main thread
+    // on the app's own scope, shows the progress dialog, and restarts the app itself when the database was swapped (#57: a
+    // long-lived repository and strap link would otherwise keep a DAO on the old, closed database).
     fun runRestore(uri: Uri) {
-        busy = true
-        scope.launch {
-            // Clear in a `finally` so it clears on ANY exit — the twin of the Apple `defer` in
-            // `BackupSyncView.runRestore`. All five controls in the screen body are gated on `!busy`
-            // — folder picker, auto toggle, keep-count, Back up now, Restore — so a flag left set is a
-            // dead end rather than one stuck button. (The restore sheet and confirm dialog are not
-            // gated, but they are transient overlays, not the way back to a working screen.)
-            //
-            // The NeedsRestart branch never reaches the `finally`: it exits the process first. That is
-            // the wanted behaviour — the screen stays disabled through the restart rather than briefly
-            // accepting taps against a database that has already been swapped underneath it.
-            try {
-                val r = withContext(Dispatchers.IO) { DataBackup.importFrom(context, uri) }
-                when (r) {
-                    is DataBackup.ImportResult.NeedsRestart -> {
-                        // #57: the restore CLOSED and swapped the database file. The long-lived WhoopRepository +
-                        // BLE client still hold a DAO on the OLD (now-closed) connection, so any strap sync would
-                        // fail with "connection pool has been closed" — and, worse, empty/metadata history ENDs
-                        // would still ack and trim the strap PAST records we can't store, discarding real history.
-                        // Relaunching the process re-opens Room against the restored file. Do it automatically
-                        // rather than trust the user to read a toast (which is exactly how #57 happened).
-                        Toast.makeText(context, "Backup restored — restarting NOOP…", Toast.LENGTH_LONG).show()
-                        // NonCancellable: this coroutine runs in the screen's scope, which is cancelled the
-                        // instant the user navigates away. The restart is a data-safety guarantee (the DB is
-                        // already swapped), so it must complete even if the composition leaves — otherwise the
-                        // user could keep syncing into the closed DB, the very bug we're fixing.
-                        withContext(NonCancellable) {
-                            delay(800)   // let the toast render before the process dies
-                            val ctx = context.applicationContext
-                            ctx.packageManager.getLaunchIntentForPackage(ctx.packageName)
-                                ?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                ?.let { ctx.startActivity(it) }
-                            Runtime.getRuntime().exit(0)
-                        }
-                    }
-                    is DataBackup.ImportResult.Failed -> backupFailure = r.message
-                    // #1807: recoverable, but not from here — this screen restores a folder snapshot
-                    // directly and has no confirm step to hang the override on. Settings → Backup & restore
-                    // → Import does, and shows the same sentence with a way through. Which is the reason
-                    // it has to be READABLE here: the dialog is where the reader learns where to go.
-                    is DataBackup.ImportResult.TooLarge -> backupFailure = r.message
-                }
-            } finally {
-                busy = false
+        busy = true // stays set through the restart rather than accepting taps against a database swapped underneath it
+        BackupImportRunner.start(context, uri) { r ->
+            busy = false
+            when (r) {
+                is DataBackup.ImportResult.NeedsRestart -> Unit // the runner restarts the app itself
+                is DataBackup.ImportResult.Failed -> backupFailure = r.message
+                // #1807: recoverable, but not from here — this screen restores a folder snapshot
+                // directly and has no confirm step to hang the override on. Settings → Backup & restore
+                // → Import does, and shows the same sentence with a way through. Which is the reason
+                // it has to be READABLE here: the dialog is where the reader learns where to go.
+                is DataBackup.ImportResult.TooLarge -> backupFailure = r.message
             }
         }
     }
