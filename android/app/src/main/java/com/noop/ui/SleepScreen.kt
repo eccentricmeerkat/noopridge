@@ -616,6 +616,10 @@ fun SleepScreen(
             // The score is a full-history latest (series.last), so it reads from `tilesModel` when
             // the selected day's model failed to build (#940): real data over a zeroed gauge.
             if (ridgeShell) {
+                // RS-3c: the Sleep score of the night shown, the page's top card.
+                if (com.noop.metrics.MetricsV2.on(com.noop.metrics.V2Change.SLEEP_SCORE)) {
+                    item { RidgeSleepScoreCardHost(vm, night?.dayKey ?: days.lastOrNull()?.day, days, onOpenScoringGuide) }
+                }
                 // F-02: the per-night debt chart, from the same per-day debt the tab's debt figures use.
                 tilesModel?.let { m ->
                     val lastDay = days.lastOrNull()?.day?.let { runCatching { java.time.LocalDate.parse(it) }.getOrNull() }
@@ -625,13 +629,18 @@ fun SleepScreen(
                     }
                 }
                 val heroScore = if (night != null) heroPerformanceScore(night, days, imported) else tilesModel?.performance?.latest
-                if (tilesModel != null) {
-                    // B2-4a-3 (owner D10): the Rest orb now lives in the board's Hours vs Needed card.
+                // The debt the Sleep debt card headlines (the latest tracked night's rolling shortfall): the one input the
+                // Sleep needed debt part and the Recommended bedtime's payback share, so the two cannot disagree.
+                val debtNow = ridgeDebtNow(days, tilesModel)
+                // RS-1-2 item 5: tonight's Sleep needed in its three parts (Base, Recent Effort, Sleep debt).
+                val needSplit = ridgeSleepNeedSplit(days, tilesModel)
+                if (tilesModel != null && needSplit != null) {
+                    // B2-4a-3 (owner D10) / RS-1-2: the Rest score is the card's chip now; the orb is gone.
                     item {
                         RidgeHoursVsNeededCard(
-                            h = hoursVsNeeded(tilesModel.trendHours, tilesModel.trendNeedHours, model?.stages?.asleep ?: 0.0),
+                            sleptMin = hoursVsNeeded(tilesModel.trendHours, tilesModel.trendNeedHours, model?.stages?.asleep ?: 0.0).sleptH * 60.0,
+                            split = needSplit,
                             score = heroScore,
-                            word = heroScore?.let { stringResource(sleepScoreWordRes(it)) },
                             source = restHeroSource(imported, night?.dayKey ?: days.lastOrNull()?.day, activeIsOura),
                             onHowRestWorks = onOpenScoringGuide,
                         )
@@ -665,11 +674,6 @@ fun SleepScreen(
                     val nowSec = System.currentTimeMillis() / 1000L
                     val wakes = remember(sleeps) { RecommendedBedtime.wakeMinutes(sleeps.filter { !it.isNapShaped }.map { it.endTs }, nowSec) }
                     val wake = tonightWake(alarmOn, nextStart, alarmWindow)
-                    // The debt the Sleep debt card headlines: the latest tracked night's rolling shortfall.
-                    val debtNow = tilesModel?.let { m ->
-                        val last = days.lastOrNull()?.day?.let { runCatching { java.time.LocalDate.parse(it) }.getOrNull() }
-                        last?.let { buildDebtChart(m.debtByDay, days.filter { (it.totalSleepMin ?: 0.0) > 0.0 }.map { it.day }.toSet(), it).lastNight }
-                    }
                     val bedtime = RecommendedBedtime.compute(
                         alarmWakeMin = wake?.endMin,
                         typicalWakeMin = RecommendedBedtime.typicalWakeMin(wakes),
@@ -693,8 +697,8 @@ fun SleepScreen(
                 )
             }
             // #sleep-layout: a compact "Arrange" affordance (the same Tune entry Today uses) opens the
-            // reorder / show-hide sheet. Pinned just above the arrangeable cards.
-            item {
+            // reorder / show-hide sheet. Pinned just above the arrangeable cards. RS-1-2 (owner, 25 Nov): not under Ridge.
+            if (!ridgeShell) item {
                 Row(Modifier.fillMaxWidth().padding(top = Metrics.selectorTopUp)) {
                     Spacer(Modifier.weight(1f))
                     TextButton(
@@ -716,7 +720,9 @@ fun SleepScreen(
             // #sleep-layout: persist the live hold-to-drag reorder when the gesture drops (the in-memory
             // `sleepSectionOrder` already moved live in the frame loop; this writes it through).
             val persistSleepOrder = { SleepLayoutPrefs.setOrder(context, sleepSectionOrder) }
-            sleepSectionOrder.filterNot { it in hiddenSections || it in SleepSection.removedFromPage }.forEach { section ->
+            // RS-1-2: Ridge has no Customize entry any more, so a section hidden earlier could never be shown again; under
+            // Ridge every section on the page draws (the saved order still applies).
+            sleepSectionOrder.filterNot { (!ridgeShell && it in hiddenSections) || it in SleepSection.removedFromPage }.forEach { section ->
               val k = SLEEP_SECTION_KEY_PREFIX + section.raw
               when (section) {
                 // B2-4b-4 (owner, 19 Nov): Sleep marks and Night detail are off the page. They stay in the enum so saved
@@ -913,7 +919,17 @@ fun SleepScreen(
                         SleepReorderableSection(k, sleepListState, sleepSectionDrag, persistSleepOrder) {
                             Column {
                                 Spacer(Modifier.height(Metrics.selectorTopUp))
-                                DurationTrend(m)
+                                // RS-1-2 (owner, 25 Nov): under Ridge this slot is the board's Hours asleep card, the last 14
+                                // calendar nights against tonight's Sleep needed; the old "Trend · Sleep" chart and its heading go.
+                                val last = days.lastOrNull()?.day?.let { runCatching { java.time.LocalDate.parse(it) }.getOrNull() }
+                                if (ridgeShell && last != null) {
+                                    RidgeHoursAsleepCard(
+                                        HoursAsleepChart.build(days.associate { it.day to it.totalSleepMin }, last),
+                                        ridgeSleepNeedSplit(days, m)?.totalMin,
+                                    )
+                                } else {
+                                    DurationTrend(m)
+                                }
                             }
                         }
                     }

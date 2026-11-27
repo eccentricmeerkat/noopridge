@@ -221,7 +221,7 @@ private object CompareCatalog {
         "spo2" -> { d -> d.spo2Pct }
         "skin_temp" -> { d -> d.skinTempDevC }
         "sleep_total_min" -> { d -> d.totalSleepMin }
-        "sleep_efficiency" -> { d -> d.efficiency }
+        "sleep_efficiency" -> { d -> efficiencyPercent(d.efficiency) }
         "sleep_deep_min" -> { d -> d.deepMin }
         "sleep_rem_min" -> { d -> d.remMin }
         "sleep_light_min" -> { d -> d.lightMin }

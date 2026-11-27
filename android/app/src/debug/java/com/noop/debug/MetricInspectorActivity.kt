@@ -186,13 +186,6 @@ private fun v2Comparison(change: V2Change, old: V10MetricRegistry, new: V10Metri
             pair(MetricId.HOURS_VS_NEEDED), pair(MetricId.SLEEP_DEBT),
         ).joinToString("\n")
         V2Change.PLAN_SLEEP_HALF -> "plan: Effort only → aim for " + f(new, MetricId.SLEEP_NEED)
-        V2Change.SLEPT_ON_TARGET -> {
-            val rest = old.value(MetricId.REST, day).value
-            val asleep = new.value(MetricId.SLEEP_DURATION, day).value
-            val need = new.value(MetricId.SLEEP_NEED, day).value
-            "on target: " + (rest?.let { (it >= 85.0).toString() + " (Rest " + it.toInt() + ")" } ?: "untracked") +
-                " → " + (if (asleep != null && asleep > 0 && need != null) (asleep >= need * 60).toString() else "untracked")
-        }
         V2Change.NORMAL_BAND_60 -> listOf(MetricId.RESTING_HR, MetricId.HRV, MetricId.RESP_RATE, MetricId.SKIN_TEMP_DEV)
             .joinToString("\n") { it.name.lowercase() + " " + band(old, it) + " → " + band(new, it) }
         V2Change.PAST_DAY_LOAD -> pair(MetricId.ACWR) + "\n" + pair(MetricId.READINESS)
@@ -208,6 +201,17 @@ private fun v2Comparison(change: V2Change, old: V10MetricRegistry, new: V10Metri
             "bedtime: wake − need (" + f(new, MetricId.SLEEP_NEED) + ") → wake − (need + " +
                 com.noop.ui.RecommendedBedtime.paybackMin(debt) + " min of the " + (debt?.toInt() ?: 0) + " min debt)"
         }
+        V2Change.SLEEP_NEED_DEBT_PART -> {
+            val debt = new.value(MetricId.SLEEP_DEBT, day).value
+            "Sleep › Sleep needed: " + f(new, MetricId.SLEEP_NEED) + " → + " + com.noop.ui.RecommendedBedtime.paybackMin(debt) +
+                " min (a quarter of the " + (debt?.toInt() ?: 0) + " min debt, at most 60; the bedtime's payback)"
+        }
+        V2Change.SLEEP_NEED_EFFORT_PART -> "Sleep › Sleep needed: + 20 min per SD of today's Effort above the last 30 days, 0–60 min " +
+            "(Sleep page only; a NOOP heuristic, not a registry metric)"
+        V2Change.SLEEP_SCORE -> "Sleep score on Sleep, Insights and Key Metrics: " + f(new, MetricId.SLEEP_SCORE) + " (new; feeds nothing else)"
+        V2Change.READINESS_SCORE -> "Today card, Trends calendar: Synthesis (Charge) → Readiness (Charge^0.8 × Rest^0.2, less up to half for Effort); not a registry metric"
+        V2Change.BODY_AGE_PACE -> "Baseline › Pace of aging card and Trend View sheet: pace = (body age from 30-day inputs at age + 0.5 − " +
+            "from 182-day inputs) ÷ 0.5, clamped −1…3× (not a registry metric; body age itself unchanged)"
         V2Change.NAP_PLAN_TARGET -> "plan: aim for " + f(new, MetricId.SLEEP_NEED) +
             " → that, less today's nap asleep minutes (Today's plan card; naps are not a registry metric)"
         V2Change.LOGICAL_DAY -> {

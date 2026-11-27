@@ -5,12 +5,15 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** B2-4b-4: Sleep marks and Night detail are off the page, and saved layouts that name them still decode. */
+/** B2-4b-4 and RS-1-2: the removed sections are off the page, and saved layouts that name them still decode. */
 class SleepSectionRemovalTest {
 
     @Test
     fun theTwoRemovedSectionsStayInTheEnumAndTheDefaultOrder() {
-        assertEquals(setOf(SleepSection.SLEEP_MARKS, SleepSection.NIGHT_DETAIL), SleepSection.removedFromPage)
+        assertEquals(
+            setOf(SleepSection.SLEEP_MARKS, SleepSection.NIGHT_DETAIL, SleepSection.SLEEP_DEBT, SleepSection.STAGES_VS_TYPICAL),
+            SleepSection.removedFromPage,
+        )
         // Kept so a saved layout (or a restore) naming them decodes, and the order registry still covers every case.
         assertTrue(SleepSection.entries.all { it in SleepSection.defaultOrder })
     }
@@ -20,6 +23,10 @@ class SleepSectionRemovalTest {
         for (ridge in listOf(true, false)) {
             assertFalse(SleepSection.SLEEP_MARKS.isOffered(ridge))
             assertFalse(SleepSection.NIGHT_DETAIL.isOffered(ridge))
+            // RS-1-2 (owner, 25 Nov): the Sleep-debt ledger and Stages vs typical duplicated other cards.
+            assertFalse(SleepSection.SLEEP_DEBT.isOffered(ridge))
+            assertFalse(SleepSection.STAGES_VS_TYPICAL.isOffered(ridge))
+            assertTrue(SleepSection.ASLEEP_DURATION.isOffered(ridge))
             assertTrue(SleepSection.STAGES.isOffered(ridge))
             assertTrue(SleepSection.CONSISTENCY.isOffered(ridge))
         }

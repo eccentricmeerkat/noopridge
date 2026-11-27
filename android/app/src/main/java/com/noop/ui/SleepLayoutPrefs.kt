@@ -51,8 +51,12 @@ enum class SleepSection(val raw: String, val title: String) {
     companion object {
         fun fromRaw(raw: String?): SleepSection? = entries.firstOrNull { it.raw == raw }
 
-        /** Sections the owner took off the Sleep page (19 Nov, B2-4b-4). Kept as enum cases so saved layouts still decode. */
-        val removedFromPage: Set<SleepSection> = setOf(SLEEP_MARKS, NIGHT_DETAIL)
+        /**
+         * Sections the owner took off the Sleep page: Sleep marks and Night detail (19 Nov, B2-4b-4), the Sleep-debt ledger
+         * and Stages vs typical (25 Nov, RS-1-2: the debt chart and the stage cards already show both). Kept as enum cases so
+         * saved layouts still decode.
+         */
+        val removedFromPage: Set<SleepSection> = setOf(SLEEP_MARKS, NIGHT_DETAIL, SLEEP_DEBT, STAGES_VS_TYPICAL)
 
         /** The original, hard-coded card order — the default when the layout isn't customised. Matches the
          *  pre-customisation render order in SleepScreen below the pinned Sleep-performance hero. (Naps

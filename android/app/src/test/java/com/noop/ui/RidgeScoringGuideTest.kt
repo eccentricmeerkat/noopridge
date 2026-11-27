@@ -18,7 +18,7 @@ class RidgeScoringGuideTest {
     }
 
     @Test fun everyTabExists() = assertEquals(
-        listOf("Core Metrics", "Stress", "Sleep debt", "VO₂ max", "Body age", "Fitness age", "Baselines"),
+        listOf("Core Metrics", "Sleep score", "Stress", "Sleep debt", "VO₂ max", "Body age", "Fitness age", "Baselines"),
         GuideTab.entries.map { it.label },
     )
 

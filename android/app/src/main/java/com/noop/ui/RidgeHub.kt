@@ -464,14 +464,13 @@ private fun monitorStressLine(days: List<com.noop.data.DailyMetric>): String {
     else stringResource(R.string.hub_monitor_stress, StressBand.forScore(latest).title.lowercase().replaceFirstChar { it.uppercase() }, String.format(java.util.Locale.US, "%.1f", latest))
 }
 
-/** "4 of 5 in your range" across the latest day's vitals that have a reading, or a plain line with none. */
+/** "4 of 5 in your range" across the vitals that have a reading, or a plain line with none. RS-2a: reads the same five vitals as
+ *  Vital signs (Blood oxygen from the registry included); it used the latest day alone and showed "1 of 3" beside the page's 2 of 4. */
 @Composable
-private fun monitorVitalsLine(days: List<com.noop.data.DailyMetric>): String {
-    val context = LocalContext.current
-    val vitals = remember(days) { ridgeLatestVitals(context, days) }
-    val read = vitals.filter { it.banding.band != com.noop.analytics.VitalBands.Band.NO_DATA }
-    return if (read.isEmpty()) stringResource(R.string.hub_monitor_vitals_none)
-    else stringResource(R.string.hub_monitor_vitals, read.count { it.banding.band == com.noop.analytics.VitalBands.Band.IN_RANGE }, read.size)
+private fun monitorVitalsLine(vm: AppViewModel): String {
+    val summary = summariseVitals(rememberRidgeVitals(vm))
+    return if (summary.read == 0) stringResource(R.string.hub_monitor_vitals_none)
+    else stringResource(R.string.hub_monitor_vitals, summary.inRange, summary.read)
 }
 
 /**
@@ -506,7 +505,7 @@ internal fun RidgeHubSectionScreen(section: HubSection, vm: AppViewModel, onNavi
     // their range. Both read the same sources as Trends and the old Health grid.
     val days by vm.recentDays.collectAsStateWithLifecycle()
     val stressSub = if (section == HubSection.BODY_MONITOR) monitorStressLine(days) else null
-    val vitalsSub = if (section == HubSection.BODY_MONITOR) monitorVitalsLine(days) else null
+    val vitalsSub = if (section == HubSection.BODY_MONITOR) monitorVitalsLine(vm) else null
     HubScaffold(
         eyebrow = stringResource(section.eyebrowRes),
         title = hubTitleCase(stringResource(section.titleRes)),

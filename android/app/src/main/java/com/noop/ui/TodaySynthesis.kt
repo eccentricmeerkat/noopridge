@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -109,6 +110,10 @@ internal fun SynthesisHeroCard(
     onOpenCoach: (() -> Unit)? = null,
     // SQ5 (V2-11): today's nap asleep minutes, taken off tonight's sleep target.
     todayNapAsleepMin: Double = 0.0,
+    /** RS-3b: when set, the card reads Readiness instead of Synthesis. The plan below still follows Charge. */
+    readiness: ReadinessCardUi? = null,
+    /** RS-3i: the alert cards are right above, so the card follows them at the list's own gap. */
+    followsAlerts: Boolean = false,
 ) {
     // The row the synthesis reads from: today's own when it carries recovery, else the carried-over last
     // scored day (#543) so the card mirrors the carried Charge ring instead of blanking to "No Data". When
@@ -120,7 +125,7 @@ internal fun SynthesisHeroCard(
         // SQ8a (owner, 15 Nov 2026): the greeting moved into the header and the readiness pill (Push / Maintain / Rest)
         // and the Calibrating chip beside it are gone (Synthesis itself says Calibrating). Their space stays, so the
         // orb card and Synthesis keep their 114 dp gap.
-        Spacer(Modifier.height(TodayRhythm.orbsToSynthesis - TodayRhythm.sectionGap - Metrics.gap))
+        if (!followsAlerts) Spacer(Modifier.height(TodayRhythm.orbsToSynthesis - TodayRhythm.sectionGap - Metrics.gap))
         // S4: the Synthesis card collapses to a one-liner that expands on tap. The headline (the status) is
         // the SAME in both states, only the detail body and chrome fold, never the read (#506).
         val status = if (recoveryCalibration != null) uiString(R.string.score_state_title_calibrating)
@@ -160,11 +165,11 @@ internal fun SynthesisHeroCard(
         } else {
             synthesisDetail(day)
         }
+        // The slider places a SCORED day on its band; while calibrating there is no score to place.
+        val scored = recovery.takeIf { recoveryCalibration == null }
         SynthesisGlassCard(
-            status = status,
-            detail = detail,
-            // The slider places a SCORED Charge on its band; while calibrating there is no score to place.
-            recovery = if (recoveryCalibration == null) recovery else null,
+            eyebrow = uiString(if (readiness != null) R.string.readiness_title else R.string.l10n_today_screen_synthesis_876bc749),
+            card = readiness ?: ReadinessCardUi(status, detail, band = scored?.let(::synthesisBand), sliderScore = scored),
             expanded = synthesisExpanded,
             onToggle = onToggleSynthesis,
         )
@@ -332,18 +337,19 @@ private fun TodayPlanCard(
  * calibrating) leaves the card neutral and hides the scale, since there is no score to place.
  */
 @Composable
-private fun SynthesisGlassCard(
-    status: String,
-    detail: String,
-    recovery: Double?,
+internal fun SynthesisGlassCard(
+    eyebrow: String,
+    card: ReadinessCardUi,
     expanded: Boolean,
     onToggle: () -> Unit,
 ) {
-    val state = recovery?.let { SYNTHESIS_STATE_COLOURS[synthesisBand(it)] }
+    val state = card.band?.let { SYNTHESIS_STATE_COLOURS[it] }
     val interaction = remember { MutableInteractionSource() }
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            // RS-3e: the closed card sets the height Today's alert cards match.
+            .heightIn(min = TODAY_GLANCE_CARD_HEIGHT)
             .liquidPress(interaction)
             .clip(RoundedCornerShape(Ridge.radiusLg))
             .ridgeGlass(radius = Ridge.radiusLg, tint = state, tintWash = 0.16f, tintBorder = 0.45f)
@@ -355,8 +361,8 @@ private fun SynthesisGlassCard(
                 ),
                 onClick = onToggle,
             )
-            .padding(Ridge.space5),
-        verticalArrangement = Arrangement.spacedBy(Ridge.space5),
+            .padding(horizontal = Ridge.space5, vertical = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(Ridge.space5, Alignment.CenterVertically),
     ) {
         // Main.dc.html: collapsed shows the eyebrow, the state word in its colour with a soft glow, and the
         // chevron; expanded adds the guidance sentence and the five-stage scale. The word is the same in both
@@ -368,12 +374,12 @@ private fun SynthesisGlassCard(
         ) {
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(
-                    uiString(R.string.l10n_today_screen_synthesis_876bc749).uppercase(Locale.getDefault()),
+                    eyebrow.uppercase(Locale.getDefault()),
                     style = RidgeType.eyebrow,
                     color = Ridge.inkSubtle,
                 )
                 AutoSizeValue(
-                    text = status,
+                    text = card.word,
                     style = RidgeType.titleLg.copy(
                         fontSize = 22.sp, lineHeight = 26.sp,
                         shadow = state?.let { Shadow(color = it.copy(alpha = 0.55f), blurRadius = 14f) },
@@ -390,10 +396,10 @@ private fun SynthesisGlassCard(
             )
         }
         if (expanded) {
-            Text(detail, style = RidgeType.body.copy(fontSize = 14.sp, lineHeight = 21.sp), color = Ridge.inkMuted)
+            Text(card.detail, style = RidgeType.body.copy(fontSize = 14.sp, lineHeight = 21.sp), color = Ridge.inkMuted)
         }
-        if (expanded && recovery != null) {
-            SynthesisBandSlider(recovery)
+        if (expanded && card.band != null && card.sliderScore != null) {
+            SynthesisBandSlider(card.sliderScore, card.band)
         }
     }
 }
@@ -430,9 +436,8 @@ internal fun synthesisSliderPosition(score: Double): Float {
  * words beneath with the current one lit. Display-only — the Charge is computed elsewhere.
  */
 @Composable
-private fun SynthesisBandSlider(score: Double) {
+private fun SynthesisBandSlider(score: Double, activeBand: Int) {
     val pos = synthesisSliderPosition(score)
-    val activeBand = synthesisBand(score)
     val thumb = SYNTHESIS_STATE_COLOURS[activeBand]
     val words = listOf(
         uiString(R.string.today_synthesis_depleted),

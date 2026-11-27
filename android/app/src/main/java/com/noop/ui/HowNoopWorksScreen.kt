@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Insights
+import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.Sensors
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Button
@@ -108,6 +109,15 @@ private enum class PrimerSection(
             "you how fresh it is. If it says \"Not recording\", reconnect.",
         icon = Icons.Filled.Sensors,
     ),
+    // RS-1-1 item 3 (About.dc.html): what runs on the phone, and the only paths off it. Every network path the app
+    // has is named here (Sage, Health Connect, exported backups, the self-hosted push, the update check), so the
+    // page never promises more privacy than the code keeps.
+    ON_DEVICE(
+        eyebrowRes = R.string.primer_eyebrow_on_device,
+        title = uiString(R.string.primer_on_device_title),
+        body = uiString(R.string.primer_on_device_body),
+        icon = Icons.Filled.PhoneAndroid,
+    ),
     PROVENANCE(
         eyebrowRes = R.string.primer_eyebrow_sources,
         title = uiString(R.string.l10n_how_noop_works_screen_where_your_numbers_come_from_e169963a),
@@ -123,6 +133,7 @@ private enum class PrimerSection(
             SCORES -> Palette.accent             // the daily scores' gold
             SCORE_RECIPE -> Palette.chargeColor  // the Charge world the recipe explains
             RECORDING -> Palette.metricCyan      // live / sensor signal
+            ON_DEVICE -> Palette.metricCyan      // the phone itself, beside recording
             PROVENANCE -> Palette.metricCyan     // the By-Day provenance badge tint
         }
 }

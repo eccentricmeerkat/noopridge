@@ -96,6 +96,29 @@ fun BaselineScreen(vm: AppViewModel, onOpenSettings: () -> Unit) {
         hrrSessions = withContext(Dispatchers.IO) { loadHrrSessions(vm, today.minusDays((range.spanDays(inputs?.let(::earliestDay), today) - 1).toLong())) }
     }
     val drivers = inputs?.let { i -> remember(i) { buildDrivers(vitalityContributions(i.days.sortedBy { it.day }, engineAge)) } }
+    // RS-1-3 item 8: Pace of aging and Trend View (V2Change.BODY_AGE_PACE), computed off the main thread; body age is unchanged.
+    var trend by remember { mutableStateOf<BodyAgeTrend?>(null) }
+    LaunchedEffect(inputs) {
+        val i = inputs ?: return@LaunchedEffect
+        if (chronoAge == null || !com.noop.metrics.MetricsV2.on(com.noop.metrics.V2Change.BODY_AGE_PACE)) return@LaunchedEffect
+        trend = withContext(Dispatchers.Default) {
+            runCatching {
+                val reg = V10MetricRegistry(i)
+                fun vo2Avg(n: Long) = reg.series(com.noop.metrics.MetricId.VO2_MAX, com.noop.metrics.DayKey(i.today.minusDays(n - 1)), com.noop.metrics.DayKey(i.today))
+                    .mapNotNull { it.value }.takeIf { it.isNotEmpty() }?.average()
+                val dob = profile.dateOfBirthMillis
+                val ageAt = { d: LocalDate ->
+                    val born = java.time.Instant.ofEpochMilli(dob).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+                    java.time.temporal.ChronoUnit.DAYS.between(born, d) / 365.2425
+                }
+                BodyAgeTrendModel.build(
+                    i.days, i.today, engineAge.toDouble(), ageAt, vo2Avg(BodyAgeTrendModel.SIX_MONTHS_DAYS.toLong()), vo2Avg(BodyAgeTrendModel.MONTH_DAYS.toLong()),
+                    storedBodyAge = i.computedSeries["body_age"].orEmpty(),
+                )
+            }.getOrNull()
+        }
+    }
+    var showTrend by rememberSaveable { mutableStateOf(false) }
     val showDayCycleBackground = remember { NoopPrefs.showDayCycleBackground(context) }
     val skyBehindCards = remember { NoopPrefs.skyBehindCards(context) }
 
@@ -116,12 +139,14 @@ fun BaselineScreen(vm: AppViewModel, onOpenSettings: () -> Unit) {
         item { BaselinePills(range) { range = it } }
         val m = model ?: return@LazyScreenScaffold
         item { BodyAgeCard(m.bodyAge, chronoAge, onOpenSettings) }
+        trend?.let { t -> item { PaceOfAgingCard(t, onOpenTrend = { showTrend = true }) } }
         item { CapacityCard(m, chronoAge, onOpenSettings) }
         item { LongRunHeartCard(m) }
         item { HrrCard(buildHrr(hrrSessions, m.vo2.days), m.range) }
         // R9c: the drivers explain body age, so with no age entered (body age asks for one) they are not shown.
         if (chronoAge != null) item { DriversCard(drivers.orEmpty()) }
     }
+    trend?.takeIf { showTrend }?.let { t -> TrendViewSheet(t) { showTrend = false } }
 }
 
 /** The earliest day with a stored daily row: where the "All" range begins. */
@@ -287,16 +312,8 @@ private fun BaselinePills(range: BaselineRange, onSelect: (BaselineRange) -> Uni
         BaselineRange.D365 to stringResource(R.string.baseline_range_365),
         BaselineRange.ALL to stringResource(R.string.baseline_range_all),
     )
-    val off = stringResource(R.string.baseline_range_30_a11y)
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Ridge.space2)) {
-        Box(
-            Modifier
-                .heightIn(min = 48.dp)
-                .border(1.dp, Ridge.glassStroke, RoundedCornerShape(Ridge.radiusPill))
-                .padding(horizontal = Ridge.space4)
-                .semantics { contentDescription = off; disabled() },
-            contentAlignment = Alignment.Center,
-        ) { Text(stringResource(R.string.baseline_range_30), style = RidgeType.bodySm, color = Ridge.inkSubtle.copy(alpha = 0.6f)) }
+    // RS-1-3 item 7: the disabled "30d" pill is gone (board); the four live ranges fill the row.
+    Row(verticalAlignment = Alignment.CenterVertically) {
         RidgeSegmentedPills(
             items = BaselineRange.entries.toList(),
             selected = range,
@@ -507,8 +524,11 @@ private fun nearestEstimate(xs: List<Double?>, i: Int): Int? =
 
 // MARK: - Long-run heart
 
+private val LONG_RUN_PLOT_HEIGHT = 135.dp
+
+/** Resting HR and HRV over the range, both in one card. */
 @Composable
-private fun LongRunHeartCard(m: BaselineModel) {
+internal fun LongRunHeartCard(m: BaselineModel) {
     val rhrTitle = when (m.rhr.position) {
         NormalPosition.ABOVE -> stringResource(R.string.trends_ridge_rhr_above)
         NormalPosition.BELOW -> stringResource(R.string.trends_ridge_rhr_below)
@@ -559,13 +579,12 @@ private fun LongRunPlot(m: BaselineModel, s: LongRunSeries, color: Color, label:
         RidgePlot(
             n = m.slots.size,
             axis = s.axis,
-            // B2-3-3: the board's compact plot: about 60 dp, no gridlines and no y labels, since the header row above
-            // already carries the value and its normal range.
-            height = 60.dp,
-            yLabels = false,
-            gridlines = false,
+            // RS-3a (owner, 26 Nov): taller than the board's 60 dp, which read as flat lines; about the height of Trends'
+            // Calories chart, with y labels and gridlines so the values can be read off it.
+            height = LONG_RUN_PLOT_HEIGHT,
             yLabel = { it.roundToInt().toString() },
-            xLabels = if (dates) axisLabelSlots(m.slots.size).map { it to slotLabel(m.slots[it], long) } else emptyList(),
+            // RS-3a: four of the longer "Aug 2026" labels over the long ranges; five touch now the y labels take their column.
+            xLabels = if (dates) axisLabelSlots(m.slots.size, if (long) 4 else 5).map { it to slotLabel(m.slots[it], long) } else emptyList(),
             contentDescription = stringResource(R.string.baseline_heart_a11y, label, rangeWord(m.range), now),
             accent = color,
             scrubY = { s.mean30[it] ?: s.nightly[it] },

@@ -49,6 +49,8 @@ enum class MetricId {
     SLEEP_DEBT, HOURS_VS_NEEDED,
     TRAINING_LOAD_CTL, TRAINING_LOAD_ATL, TRAINING_FORM, ACWR, READINESS,
     ACTIVE_KCAL, MAX_HR, VO2_MAX, FITNESS_AGE, VITALITY, BODY_AGE,
+    /** RS-3c: how well a night went (`SleepScore`), beside Rest. Behind [V2Change.SLEEP_SCORE]. */
+    SLEEP_SCORE,
 }
 
 /** Storage unit of a [MetricValue]. Named `MetricUnit` rather than the plan's `Unit` so it can't shadow `kotlin.Unit`. */

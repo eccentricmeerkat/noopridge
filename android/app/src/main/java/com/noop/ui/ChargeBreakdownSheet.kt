@@ -365,17 +365,24 @@ private fun RidgeChargeHero(day: DailyMetric?) {
             fraction = score / 100.0, display = score.roundToInt().toString(), liquid = RidgeLiquid.CHARGE,
             diameter = 166.dp, glass = true, modifier = Modifier.clearAndSetSemantics {},
         )
+        // RS-3b: Charge is a number with no category; the five words belong to Readiness.
+        val numberOnly = com.noop.metrics.MetricsV2.on(com.noop.metrics.V2Change.READINESS_SCORE)
+        if (!numberOnly) {
+            Text(
+                synthesisWord(score).uppercase(Locale.getDefault()),
+                style = RidgeType.eyebrow.copy(fontSize = 13.sp, letterSpacing = 0.2.em),
+                color = band,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .border(1.dp, band.copy(alpha = 0.7f), RoundedCornerShape(50))
+                    .padding(horizontal = 20.dp, vertical = 8.dp),
+            )
+        }
+        val sleepLine = day.totalSleepMin?.let {
+            uiString(if (it >= 7 * 60) R.string.readiness_charge_sleep_ok else R.string.readiness_charge_sleep_short)
+        }
         Text(
-            synthesisWord(score).uppercase(Locale.getDefault()),
-            style = RidgeType.eyebrow.copy(fontSize = 13.sp, letterSpacing = 0.2.em),
-            color = band,
-            modifier = Modifier
-                .clip(RoundedCornerShape(50))
-                .border(1.dp, band.copy(alpha = 0.7f), RoundedCornerShape(50))
-                .padding(horizontal = 20.dp, vertical = 8.dp),
-        )
-        Text(
-            synthesisDetail(day),
+            if (numberOnly) sleepLine.orEmpty() else synthesisDetail(day),
             style = RidgeType.body.copy(fontSize = 15.sp, lineHeight = 22.sp),
             color = Ridge.inkMuted,
             textAlign = TextAlign.Center,

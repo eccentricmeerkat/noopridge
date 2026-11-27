@@ -236,7 +236,7 @@ internal fun buildSleepModel(
             ?: com.noop.analytics.RestScorer.restFromDaily(d)
     }
     val efficiency = metric(days, todayKey) { d ->
-        d.efficiency?.let { if (it <= 1.0) it * 100.0 else it }
+        efficiencyPercent(d.efficiency)
     }
     val consistency = run {
         // Prefer the imported sleep_consistency series, but only when it covers the latest

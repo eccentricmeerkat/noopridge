@@ -69,6 +69,60 @@ import com.noop.ui.ridge.RidgeToggle
  */
 @Composable
 fun SmartAlarmScreen(vm: AppViewModel) {
+    LazyScreenScaffold(
+        // #766: "Alarms" because this screen now holds the phone Wake Window, the strap's firmware
+        // wake-alarm (moved here from Automations), and the wind-down reminder, so the broader title fits.
+        title = uiString(R.string.l10n_smart_alarm_screen_alarms_131dd3d6),
+        subtitle = "Wake window, strap alarm and wind-down, in one place.",
+    ) {
+        // The board's one-line subtitle under the title (ScaffoldTitleBlock drops it on a Ridge tool page).
+        if (ridgeShell) {
+            item {
+                Text(
+                    "Wake window, strap alarm and wind-down, in one place.",
+                    style = RidgeType.bodySm, color = Ridge.inkMuted,
+                )
+            }
+        }
+        alarmItems(vm)
+    }
+}
+
+/**
+ * RS-2b: the Alarms page's cards as list items, so Automations & Alarms can show them inline under its Alarms group and
+ * the Alarms route (kept for deep links such as the alarm notification) shows the same cards.
+ */
+internal fun androidx.compose.foundation.lazy.LazyListScope.alarmItems(vm: AppViewModel) {
+    item { WakeWindowSection(vm) }
+
+    // #766: the strap's own firmware wake-alarm (Morning) — its own time + weekdays + per-day overrides.
+    item { StrapAlarmCard(vm) }
+
+    // The cross-platform wind-down nudge (Evening) lives here too.
+    item { WindDownCard(vm) }
+
+    // #821: the "how the smart wake works" explainer belongs at the BOTTOM after every control.
+    item { ExplanationCard() }
+}
+
+/** RS-2b: the same four alarm cards as [alarmItems], in one column, for the Alarms group box on Automations & Alarms. */
+@Composable
+internal fun AlarmCards(vm: AppViewModel) {
+    Column {
+        com.noop.ui.ridge.RidgeRowDivider()
+        WakeWindowSection(vm)
+        com.noop.ui.ridge.RidgeRowDivider()
+        StrapAlarmCard(vm)
+        com.noop.ui.ridge.RidgeRowDivider()
+        WindDownCard(vm)
+        com.noop.ui.ridge.RidgeRowDivider()
+        ExplanationCard()
+    }
+}
+
+/** The phone Wake window card with the state it reads; the strap-buzz row names the connected strap. */
+@Composable
+private fun WakeWindowSection(vm: AppViewModel) {
     val context = LocalContext.current
     val enabled by vm.phoneAlarmEnabled.collectAsStateWithLifecycle()
     val targetMinutes by vm.phoneAlarmTargetMinutes.collectAsStateWithLifecycle()
@@ -88,80 +142,53 @@ fun SmartAlarmScreen(vm: AppViewModel) {
     // it in Settings and come back — there's no result callback for this special-access permission.
     var canSchedule by remember { mutableStateOf(vm.canScheduleExactAlarms()) }
 
-    LazyScreenScaffold(
-        // #766: "Alarms" because this screen now holds the phone Wake Window, the strap's firmware
-        // wake-alarm (moved here from Automations), and the wind-down reminder, so the broader title fits.
-        title = uiString(R.string.l10n_smart_alarm_screen_alarms_131dd3d6),
-        subtitle = "Wake window, strap alarm and wind-down, in one place.",
+    // #1858: the card names a specific time ("a backup alarm is set for 04:45"), so with per-day
+    // wake times it has to show the NEXT one rather than the default — on a day whose time was
+    // moved, the default is simply the wrong number, and this card is the one thing on the screen
+    // that makes a promise. Falls back to the default when no day is reachable.
+    val nextTargetMinutes = remember(
+        targetMinutes, windowMinutes, phoneAlarmWeekdays, phoneAlarmDayOverrides,
     ) {
-        item {
-            Column(verticalArrangement = Arrangement.spacedBy(Ridge.space2)) {
-                // The board's one-line subtitle under the title (ScaffoldTitleBlock drops it on a Ridge tool page).
-                if (ridgeShell) {
-                    Text(
-                        "Wake window, strap alarm and wind-down, in one place.",
-                        style = RidgeType.bodySm, color = Ridge.inkMuted,
-                    )
-                }
-                // #1858: the card names a specific time ("a backup alarm is set for 04:45"), so with per-day
-                // wake times it has to show the NEXT one rather than the default — on a day whose time was
-                // moved, the default is simply the wrong number, and this card is the one thing on the screen
-                // that makes a promise. Falls back to the default when no day is reachable.
-                val nextTargetMinutes = remember(
-                    targetMinutes, windowMinutes, phoneAlarmWeekdays, phoneAlarmDayOverrides,
-                ) {
-                    com.noop.alarm.SmartAlarmScheduler.nextWindowStartMinutes(
-                        now = java.util.Calendar.getInstance(),
-                        weekdays = phoneAlarmWeekdays,
-                        windowMinutes = windowMinutes,
-                        defaultTarget = targetMinutes,
-                    ) { phoneAlarmDayOverrides[it] ?: targetMinutes }
-                }
-                WakeWindowCard(
-                    enabled = enabled,
-                    targetMinutes = targetMinutes,
-                    nextTargetMinutes = nextTargetMinutes,
-                    windowMinutes = windowMinutes,
-                    weekdays = phoneAlarmWeekdays,
-                    overrides = phoneAlarmDayOverrides,
-                    buzzWhoop4 = buzzWhoop4,
-                    bonded = bonded,
-                    strapName = strapName,
-                    canSchedule = canSchedule,
-                    onToggle = { want ->
-                        if (want && !vm.canScheduleExactAlarms()) {
-                            // No callback for this special-access grant — send the user to the system page,
-                            // and re-read the state when they return (canSchedule recomputes on recompose).
-                            requestExactAlarmAccess(context)
-                            canSchedule = vm.canScheduleExactAlarms()
-                        } else {
-                            val ok = vm.setPhoneAlarmEnabled(want)
-                            canSchedule = vm.canScheduleExactAlarms()
-                            if (!ok) requestExactAlarmAccess(context)
-                        }
-                    },
-                    onRequestExactAlarm = {
-                        requestExactAlarmAccess(context)
-                        canSchedule = vm.canScheduleExactAlarms()
-                    },
-                    onTarget = { vm.setPhoneAlarmTargetMinutes(it) },
-                    onWindow = { vm.setPhoneAlarmWindowMinutes(it) },
-                    onToggleWeekday = { dow -> vm.setPhoneAlarmWeekdays(toggledSmartAlarmWeekday(dow, phoneAlarmWeekdays)) },
-                    onOverride = { dow, minutes -> vm.setPhoneAlarmDayOverride(dow, minutes) },
-                    onBuzz = { vm.setBuzzWhoop4Enabled(it) },
-                )
-            }
-        }
-
-        // #766: the strap's own firmware wake-alarm (Morning) — its own time + weekdays + per-day overrides.
-        item { StrapAlarmCard(vm) }
-
-        // The cross-platform wind-down nudge (Evening) lives here too.
-        item { WindDownCard(vm) }
-
-        // #821: the "how the smart wake works" explainer belongs at the BOTTOM after every control.
-        item { ExplanationCard() }
+        com.noop.alarm.SmartAlarmScheduler.nextWindowStartMinutes(
+            now = java.util.Calendar.getInstance(),
+            weekdays = phoneAlarmWeekdays,
+            windowMinutes = windowMinutes,
+            defaultTarget = targetMinutes,
+        ) { phoneAlarmDayOverrides[it] ?: targetMinutes }
     }
+    WakeWindowCard(
+        enabled = enabled,
+        targetMinutes = targetMinutes,
+        nextTargetMinutes = nextTargetMinutes,
+        windowMinutes = windowMinutes,
+        weekdays = phoneAlarmWeekdays,
+        overrides = phoneAlarmDayOverrides,
+        buzzWhoop4 = buzzWhoop4,
+        bonded = bonded,
+        strapName = strapName,
+        canSchedule = canSchedule,
+        onToggle = { want ->
+            if (want && !vm.canScheduleExactAlarms()) {
+                // No callback for this special-access grant — send the user to the system page,
+                // and re-read the state when they return (canSchedule recomputes on recompose).
+                requestExactAlarmAccess(context)
+                canSchedule = vm.canScheduleExactAlarms()
+            } else {
+                val ok = vm.setPhoneAlarmEnabled(want)
+                canSchedule = vm.canScheduleExactAlarms()
+                if (!ok) requestExactAlarmAccess(context)
+            }
+        },
+        onRequestExactAlarm = {
+            requestExactAlarmAccess(context)
+            canSchedule = vm.canScheduleExactAlarms()
+        },
+        onTarget = { vm.setPhoneAlarmTargetMinutes(it) },
+        onWindow = { vm.setPhoneAlarmWindowMinutes(it) },
+        onToggleWeekday = { dow -> vm.setPhoneAlarmWeekdays(toggledSmartAlarmWeekday(dow, phoneAlarmWeekdays)) },
+        onOverride = { dow, minutes -> vm.setPhoneAlarmDayOverride(dow, minutes) },
+        onBuzz = { vm.setBuzzWhoop4Enabled(it) },
+    )
 }
 
 /**

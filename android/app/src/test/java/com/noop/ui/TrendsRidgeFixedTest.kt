@@ -80,8 +80,7 @@ class TrendsRidgeFixedTest {
         val rows = (0 until 40).map { DailyMetric("d", day(it), strain = if (it % 2 == 0) 70.0 else 20.0) }
         // Rest tracked on all but two nights; above 85 on every third.
         val rest = (0 until 40).filter { it != 1 && it != 2 }.associate { day(it) to if (it % 3 == 0) 90.0 else 70.0 }
-        // v10's rule (Rest ≥ 85). The approved V2-3 rule (asleep ≥ need) is tested in MetricsV2ScreensTest.
-        val c = buildConsistency(registry(rows, rest), today, v2 = emptySet())
+        val c = buildConsistency(registry(rows, rest), today)
         assertEquals(CONSISTENCY_WEEKS * 7, c.cells.size)
         assertEquals(LocalDate.of(2026, 8, 24), c.cells.first().date)
         assertEquals(java.time.DayOfWeek.MONDAY, c.cells.first().date.dayOfWeek)
@@ -92,6 +91,19 @@ class TrendsRidgeFixedTest {
         assertEquals(20, c.trained)
         assertEquals(38, c.trackedNights)
         assertEquals((0 until 40).count { it != 1 && it != 2 && it % 3 == 0 }, c.onTarget)
+    }
+
+    /** RS-2d: the moon marks an Optimal Rest (85+) as shown, whether or not the night reached its full sleep need. */
+    @Test
+    fun theMoonMarksARestThatReads85OrMore() {
+        val rests = listOf(84.0, 84.4, 84.5, 85.0, 99.0, 100.0)
+        // Six hours asleep every night, well under any need: the old asleep-≥-need rule marked none of these.
+        val rows = rests.indices.map { DailyMetric("d", day(it), totalSleepMin = 360.0) }
+        val c = buildConsistency(registry(rows, rests.indices.associate { day(it) to rests[it] }), today)
+        val byDay = c.cells.associate { it.date.toString() to it.onTarget }
+        assertEquals(listOf(false, false, true, true, true, true), rests.indices.map { byDay[day(it)] })
+        assertEquals(4, c.onTarget)
+        assertEquals(6, c.trackedNights)
     }
 
     @Test
@@ -138,7 +150,7 @@ class TrendsRidgeFixedTest {
                 else -> 75.0
             })
         }
-        val s = buildSynthesis(registry(rows), today)
+        val s = buildSynthesis(registry(rows), today, readiness = false)
         assertEquals(SYNTHESIS_WEEKS * 7, s.cells.size)
         assertEquals(60, s.tracked)
         // Stage colours: 20 → Depleted (band 0), 45 → Low (band 1), 75 → Strong (band 3).
@@ -155,7 +167,7 @@ class TrendsRidgeFixedTest {
     @Test
     fun synthesisMonthLabelsCollapseConsecutiveDuplicates() {
         val rows = (0 until 20).map { DailyMetric("d", day(it), recovery = 60.0) }
-        val s = buildSynthesis(registry(rows), today)
+        val s = buildSynthesis(registry(rows), today, readiness = false)
         assertEquals(SYNTHESIS_WEEKS, s.monthLabels.size)
         // The first label is always present; repeats are blank.
         assertTrue(s.monthLabels.first().isNotEmpty())

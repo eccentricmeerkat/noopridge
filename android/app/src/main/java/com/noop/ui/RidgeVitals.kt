@@ -1,6 +1,12 @@
 package com.noop.ui
 
 import android.content.Context
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,16 +27,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.withFrameNanos
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -45,16 +48,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.noop.R
 import com.noop.analytics.VitalBands
 import com.noop.ui.ridge.GlassCard
 import com.noop.ui.ridge.RidgeEyebrow
 import com.noop.ui.ridge.RidgeIcons
-import kotlinx.coroutines.delay
 
 // B2 Hub3a (VitalSigns.dc.html): the Vital signs page, new under Ridge (v10's Health Monitor and Vital Signs were retired
 // into Explore). The figures, the ranges and the skin-temperature setting are the ones the old vitals grid used.
@@ -66,7 +65,48 @@ internal fun ridgeLatestVitals(context: Context, days: List<com.noop.data.DailyM
         latest, days, UnitPrefs.temperature(context), emptyMap(), NoopPrefs.spo2CandidateDisplay(context), emptyMap(),
         UnitPrefs.skinTempPreferred(context),
     )
-    return listOf("resp", "spo2", "rhr", "hrv", "skin").mapNotNull { k -> all.firstOrNull { it.key == k } }
+    val five = listOf("resp", "spo2", "rhr", "hrv", "skin").mapNotNull { k -> all.firstOrNull { it.key == k } }
+    return withCarriedHrv(five, latest, days, context.getString(R.string.vital_ridge_hrv_from)) { row ->
+        vitalsFor(
+            row, days.filter { it.day <= row.day }, UnitPrefs.temperature(context), emptyMap(),
+            NoopPrefs.spo2CandidateDisplay(context), emptyMap(), UnitPrefs.skinTempPreferred(context),
+        ).firstOrNull { it.key == "hrv" }
+    }
+}
+
+/** How far back Vital signs looks for an HRV reading when the latest night has none. */
+internal const val HRV_CARRY_MAX_DAYS = 30L
+
+/**
+ * RS-3e: the latest night can be without HRV (not recorded, or withheld) while earlier nights have it, which left the tile
+ * blank beside an HRV on Today. The newest earlier reading within [HRV_CARRY_MAX_DAYS] is shown instead, dated. Up to
+ * [CARRY_FRESHNESS_DAYS] old it is banded as on its own night; older, it is shown but judged neither in nor out of range,
+ * so Today's alert and Body Monitor never count an old night as today's.
+ */
+internal fun withCarriedHrv(
+    vitals: List<Vital>,
+    latest: com.noop.data.DailyMetric,
+    days: List<com.noop.data.DailyMetric>,
+    /** "From %1$s", dating the carried reading. */
+    fromFormat: String,
+    hrvOn: (com.noop.data.DailyMetric) -> Vital?,
+): List<Vital> {
+    if (latest.avgHrv != null) return vitals
+    val row = lastHrvRow(days, latest.day) ?: return vitals
+    val age = runCatching {
+        java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.parse(row.day), java.time.LocalDate.parse(latest.day))
+    }.getOrNull() ?: return vitals
+    if (age > HRV_CARRY_MAX_DAYS) return vitals
+    val carried = hrvOn(row) ?: return vitals
+    val date = java.time.LocalDate.parse(row.day)
+        .format(java.time.format.DateTimeFormatter.ofPattern("d MMM", java.util.Locale.getDefault()))
+    return vitals.map {
+        if (it.key != "hrv") it else carried.copy(
+            secondary = String.format(java.util.Locale.getDefault(), fromFormat, date),
+            deltaText = null,
+            banding = if (age <= CARRY_FRESHNESS_DAYS) carried.banding else carried.banding.copy(band = VitalBands.Band.NO_DATA),
+        )
+    }
 }
 
 private fun vitalIcon(key: String): ImageVector = when (key) {
@@ -85,9 +125,26 @@ private fun vitalHue(key: String): Color = when (key) {
     else -> Ridge.dataEnergy
 }
 
-/** Vital signs: the live heart rate, then one tile per reading with its in-range chip; each tile opens that metric. */
+/**
+ * RS-2a: Blood oxygen from the registry (the newest reading, the strap estimate included, however old) in place of the latest
+ * day's calibrated column, which a strap never fills. The Vital signs page did this alone, so Body Monitor counted one vital
+ * fewer than the page showed ("1 of 3" beside 2 of 4).
+ */
+internal fun withRegistrySpo2(vitals: List<Vital>, spo2: LatestSpo2?, estimateWord: String): List<Vital> = vitals.map { v ->
+    if (v.key == "spo2" && v.value == null && spo2 != null) {
+        val day = spo2.day.format(java.time.format.DateTimeFormatter.ofPattern("d MMM", java.util.Locale.getDefault()))
+        v.copy(
+            value = spo2.value,
+            banding = VitalBands.band(spo2.value, emptyList(), 95.0..100.0, null),
+            secondary = (if (spo2.estimate) "$estimateWord · " else "") + day,
+            isEstimate = spo2.estimate,
+        )
+    } else v
+}
+
+/** The five vitals as Vital signs shows them, for every surface that summarises them (the page, Body Monitor, Today's alert). */
 @Composable
-internal fun RidgeVitalSignsScreen(vm: AppViewModel, onVitalClick: (String) -> Unit) {
+internal fun rememberRidgeVitals(vm: AppViewModel): List<Vital> {
     val context = LocalContext.current
     val days by vm.recentDays.collectAsStateWithLifecycle()
     // Fix 5: Blood oxygen reads the registry like Trends and Insights (the strap estimate included, however old the latest night is),
@@ -102,20 +159,13 @@ internal fun RidgeVitalSignsScreen(vm: AppViewModel, onVitalClick: (String) -> U
         }
     }
     val estimateWord = stringResource(R.string.trends_ridge_sig_strap_estimate)
-    val vitals = remember(days, spo2) {
-        ridgeLatestVitals(context, days).map { v ->
-            val l = spo2
-            if (v.key == "spo2" && v.value == null && l != null) {
-                val day = l.day.format(java.time.format.DateTimeFormatter.ofPattern("d MMM", java.util.Locale.getDefault()))
-                v.copy(
-                    value = l.value,
-                    banding = VitalBands.band(l.value, emptyList(), 95.0..100.0, null),
-                    secondary = (if (l.estimate) "$estimateWord · " else "") + day,
-                    isEstimate = l.estimate,
-                )
-            } else v
-        }
-    }
+    return remember(days, spo2, estimateWord) { withRegistrySpo2(ridgeLatestVitals(context, days), spo2, estimateWord) }
+}
+
+/** Vital signs: the live heart rate, then one tile per reading with its in-range chip; each tile opens that metric. */
+@Composable
+internal fun RidgeVitalSignsScreen(vm: AppViewModel, onVitalClick: (String) -> Unit) {
+    val vitals = rememberRidgeVitals(vm)
     ScreenScaffold(
         title = stringResource(R.string.vital_ridge_title),
         subtitle = stringResource(R.string.vital_ridge_sub),
@@ -145,7 +195,8 @@ private fun RidgeVitalTile(v: Vital, modifier: Modifier, onClick: () -> Unit) {
         when (band) {
             VitalBands.Band.IN_RANGE -> R.string.vital_ridge_in_range
             VitalBands.Band.OUT_OF_RANGE -> R.string.vital_ridge_out_of_range
-            VitalBands.Band.NO_DATA -> R.string.vital_ridge_no_reading
+            // RS-3e: an older carried HRV has a value but no verdict.
+            VitalBands.Band.NO_DATA -> if (v.value != null) R.string.vital_ridge_older else R.string.vital_ridge_no_reading
         },
     )
     val shape = RoundedCornerShape(Ridge.radiusLg)
@@ -179,13 +230,15 @@ private fun RidgeVitalTile(v: Vital, modifier: Modifier, onClick: () -> Unit) {
     }
 }
 
-/** The live heart rate: Live or Waiting, the bpm in the serif, the last minute as a line, and where it comes from. */
+/** The live heart rate: Live, Waiting or Not connected, the bpm in the serif, a heartbeat trace, and where it comes from. */
 @Composable
 private fun RidgeLiveHeartCard(vm: AppViewModel) {
     val live by vm.live.collectAsStateWithLifecycle()
     val bpm by vm.bpm.collectAsStateWithLifecycle()
-    val hr = displayHr(bpm, live)
-    val isLive = hr != null
+    // RS-1-1 item 4: three states (Live, Waiting, Not connected). A stale bpm after the link drops is not shown.
+    val state = heartCardState(live.connected, displayHr(bpm, live))
+    val isLive = state == HeartCardState.LIVE
+    val hr = if (isLive) displayHr(bpm, live) else null
     // Final review: opening Vital signs asks the strap to stream, as Live and Body monitor do. The Ridge rebuild (Hub3a)
     // dropped this request, so the card only moved when another screen happened to be streaming. Ref-counted in the
     // ViewModel, so handing off between Live and here never drops the stream.
@@ -193,30 +246,39 @@ private fun RidgeLiveHeartCard(vm: AppViewModel) {
         vm.requestRealtimeHr()
         onDispose { vm.releaseRealtimeHr() }
     }
-    val history = remember { mutableStateListOf<LiveHrSample>() }
-    val latest by rememberUpdatedState(hr)
-    val owner = LocalLifecycleOwner.current
-    LaunchedEffect(owner) {
-        owner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            while (true) {
-                appendLiveHrSample(history, latest, System.currentTimeMillis(), cap = 60)
-                delay(1000)
-            }
-        }
-    }
     var strap by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(vm.activeStrapId) {
         strap = runCatching { vm.pairedDevices() }.getOrDefault(emptyList()).firstOrNull { it.id == vm.activeStrapId }?.let { displayName(it) }
     }
+    RidgeHeartCardContent(state, hr, strap, animate = !rememberPoseStill())
+}
+
+/**
+ * The heart card's face for one [state] (stateless, so each state has a snapshot). [animate] false draws the Live trace
+ * once and still (Reduce motion, battery saver, Quiet motion, and snapshots).
+ */
+@Composable
+internal fun RidgeHeartCardContent(state: HeartCardState, hr: Int?, strap: String?, animate: Boolean) {
+    val isLive = state == HeartCardState.LIVE
     val heart = if (isLive) Ridge.dataHeart else Ridge.inkSubtle
     GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(18.dp)) {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 RidgeEyebrow(stringResource(R.string.vital_ridge_heart))
                 Box(Modifier.weight(1f))
-                val pill = if (isLive) Ridge.brand else Ridge.inkSubtle
+                val pill = when (state) {
+                    HeartCardState.LIVE -> Ridge.brand
+                    HeartCardState.WAITING -> Ridge.effort
+                    HeartCardState.NOT_CONNECTED -> Ridge.inkSubtle
+                }
                 Text(
-                    stringResource(if (isLive) R.string.vital_ridge_live else R.string.vital_ridge_waiting),
+                    stringResource(
+                        when (state) {
+                            HeartCardState.LIVE -> R.string.vital_ridge_live
+                            HeartCardState.WAITING -> R.string.vital_ridge_waiting
+                            HeartCardState.NOT_CONNECTED -> R.string.vital_ridge_not_connected
+                        },
+                    ),
                     style = TRN_LEGEND.copy(fontSize = 11.sp, fontWeight = FontWeight.SemiBold), color = pill,
                     modifier = Modifier
                         .clip(RoundedCornerShape(Ridge.radiusPill))
@@ -231,38 +293,45 @@ private fun RidgeLiveHeartCard(vm: AppViewModel) {
                     Text(stringResource(R.string.vital_ridge_bpm), style = TRN_LEGEND.copy(fontWeight = FontWeight.SemiBold), color = Ridge.inkMuted, modifier = Modifier.padding(bottom = 8.dp))
                 }
             }
-            // The last minute streams right to left: the newest reading sits at the right edge and slides left as time passes
-            // (a frame-clock tick while live; once a second under Reduce motion, battery saver or Quiet motion).
-            val streamNow = remember { mutableLongStateOf(System.currentTimeMillis()) }
-            val calm = rememberPoseStill()
-            LaunchedEffect(isLive, calm) {
-                while (isLive) {
-                    if (calm) delay(1000) else withFrameNanos { }
-                    streamNow.longValue = System.currentTimeMillis()
+            // RS-1-1 item 4: a drawn heartbeat on a faint grid, sliding right to left one beat every 2 s (not the readings;
+            // the numeral above is the reading). Waiting or Not connected: a flat grey line that does not move. Reduce
+            // motion, battery saver or Quiet motion: the Live trace is drawn once and stays still.
+            val phase = if (isLive && animate) {
+                rememberInfiniteTransition().animateFloat(
+                    initialValue = 0f, targetValue = 1f,
+                    animationSpec = infiniteRepeatable(tween(HEART_TRACE_PERIOD_MS, easing = LinearEasing), RepeatMode.Restart),
+                )
+            } else null
+            val path = remember { Path() }
+            val grid = Ridge.glassStroke.copy(alpha = 0.10f)
+            Canvas(Modifier.fillMaxWidth().height(64.dp).clipToBounds()) {
+                // The faint square grid behind the line (reference).
+                val cell = 16.dp.toPx()
+                var gx = 0f
+                while (gx <= size.width) { drawLine(grid, Offset(gx, 0f), Offset(gx, size.height), 1f); gx += cell }
+                var gy = size.height / 2 % cell
+                while (gy <= size.height) { drawLine(grid, Offset(0f, gy), Offset(size.width, gy), 1f); gy += cell }
+                val mid = size.height / 2
+                if (!isLive) {
+                    drawLine(Ridge.inkSubtle.copy(alpha = 0.6f), Offset(0f, mid), Offset(size.width, mid), 2.dp.toPx(), cap = StrokeCap.Round)
+                    return@Canvas
                 }
-            }
-            Canvas(Modifier.fillMaxWidth().height(56.dp)) {
-                val now = streamNow.longValue
-                val pts = liveHrStream(history.toList(), now)
-                val color = Ridge.dataHeart.copy(alpha = if (pts.size > 1) 1f else 0.15f)
-                val path = Path()
-                if (pts.size > 1) {
-                    pts.forEachIndexed { i, p ->
-                        val x = size.width * p.x
-                        val y = size.height * p.y
-                        if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
-                    }
-                    // Carry the line to the right edge at the newest value, so it reads as a continuous stream between beats.
-                    path.lineTo(size.width, size.height * pts.last().y)
-                } else {
-                    path.moveTo(0f, size.height / 2); path.lineTo(size.width, size.height / 2)
+                path.reset()
+                heartTrace(phase?.value ?: 0f).forEachIndexed { i, p ->
+                    val x = size.width * p.x
+                    val y = size.height * p.y
+                    if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
                 }
-                drawPath(path, color, style = Stroke(2.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
-                if (pts.size > 1) drawCircle(color, 3.5.dp.toPx(), Offset(size.width, size.height * pts.last().y))
+                // A soft glow under the line, then the line itself.
+                drawPath(path, Ridge.dataHeart.copy(alpha = 0.22f), style = Stroke(7.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+                drawPath(path, Ridge.dataHeart, style = Stroke(2.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
             }
             Text(
-                if (isLive) stringResource(R.string.vital_ridge_from, strap ?: stringResource(R.string.vital_ridge_your_strap))
-                else stringResource(R.string.vital_ridge_waiting_note),
+                when (state) {
+                    HeartCardState.LIVE -> stringResource(R.string.vital_ridge_from, strap ?: stringResource(R.string.vital_ridge_your_strap))
+                    HeartCardState.WAITING -> stringResource(R.string.vital_ridge_waiting_note)
+                    HeartCardState.NOT_CONNECTED -> stringResource(R.string.vital_ridge_not_connected_note)
+                },
                 style = TRN_LEGEND, color = Ridge.inkMuted,
             )
         }

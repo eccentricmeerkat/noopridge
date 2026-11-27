@@ -262,8 +262,8 @@ internal fun appLaunchIntent(context: Context): Intent =
 //                                             AND set lastSeen = CURRENT_VERSION, so a brand-new
 //                                             user who just read the expectations doesn't ALSO
 //                                             get the changelog popped at them.
-//   onboarded && lastSeen != CURRENT_VERSION → existing user who updated: show WhatsNewSheet once,
-//                                             over the live AppRoot, until they dismiss it.
+//   onboarded && lastSeen != CURRENT_VERSION → existing user who updated: RS-2c, no pop-up; the Updates
+//                                             inbox item announces it, and lastSeen is recorded silently.
 //
 // SharedPreferences isn't reactive, so each value is read once into a remembered
 // mutableState and writes go through .edit().apply() + a state update to recompose.
@@ -1630,30 +1630,15 @@ fun NoopRoot() {
         return
     }
 
-    // Existing, onboarded user: render the app, and if they've updated since last launch
-    // (stored version behind current), show "What's New" once over the top.
+    // Existing, onboarded user: render the app. RS-2c: no What's New pop-up after an update (owner, 26 Nov). The update is
+    // announced only by its Updates inbox item (UpdateStore.seedWhatsNewIfNeeded, above), which opens What's new on a tap.
+    // The last-seen version is still recorded, so nothing keyed on it re-fires.
     AppRoot(viewModel = appViewModel)
 
-    if (lastSeenChangelog != AppChangelog.CURRENT_VERSION) {
-        Dialog(
-            onDismissRequest = {
-                prefs.edit()
-                    .putString(NoopPrefs.KEY_LAST_SEEN_CHANGELOG, AppChangelog.CURRENT_VERSION)
-                    .apply()
-                lastSeenChangelog = AppChangelog.CURRENT_VERSION
-            },
-            properties = DialogProperties(usePlatformDefaultWidth = false),
-        ) {
-            Surface(modifier = Modifier.fillMaxSize(), color = Palette.surfaceBase) {
-                WhatsNewSheet(
-                    onClose = {
-                        prefs.edit()
-                            .putString(NoopPrefs.KEY_LAST_SEEN_CHANGELOG, AppChangelog.CURRENT_VERSION)
-                            .apply()
-                        lastSeenChangelog = AppChangelog.CURRENT_VERSION
-                    },
-                )
-            }
+    LaunchedEffect(lastSeenChangelog) {
+        if (lastSeenChangelog != AppChangelog.CURRENT_VERSION) {
+            prefs.edit().putString(NoopPrefs.KEY_LAST_SEEN_CHANGELOG, AppChangelog.CURRENT_VERSION).apply()
+            lastSeenChangelog = AppChangelog.CURRENT_VERSION
         }
     }
 }

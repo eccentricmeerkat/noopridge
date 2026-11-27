@@ -104,6 +104,13 @@ internal fun debtSigned(minutes: Double): String {
     return "$sign${durationText(abs(minutes))}"
 }
 
+/**
+ * Sleep efficiency as a percent (0 to 100) from the stored value, which is a fraction (0 to 1) when NOOP or the WHOOP CSV
+ * import wrote it and can be a percent when a wearable export did. Every screen that SHOWS efficiency goes through this,
+ * so a 0.92 never prints as "1%" (Insights > Explore did, before this fix).
+ */
+internal fun efficiencyPercent(raw: Double?): Double? = raw?.let { if (it <= 1.0) it * 100.0 else it }
+
 internal fun durationText(minutes: Double): String {
     val m = max(0, minutes.roundToInt())
     return if (m < 60) "${m}m" else "${m / 60}h ${m % 60}m"

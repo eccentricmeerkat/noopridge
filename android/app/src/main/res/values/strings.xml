@@ -258,6 +258,7 @@
     <string name="explore_ridge_about_hrv" translatable="false">The variation between heartbeats while you sleep. Higher than your normal usually means you have recovered; a run of lower nights is a sign to ease off.</string>
     <string name="explore_ridge_about_rhr" translatable="false">Your lowest steady heart rate overnight. A rise of a few beats above your normal often comes with stress, illness, alcohol or heavy training.</string>
     <string name="explore_ridge_about_sleep" translatable="false">Time actually asleep each night. Rest compares this with what you needed; Sleep shows the stages.</string>
+    <string name="explore_ridge_about_sleep_score" translatable="false">How well each night went, from 0 to 100: hours against what you needed, steady bed and wake times, and time in bed spent asleep. Rest is a separate score.</string>
     <string name="explore_ridge_about_efficiency" translatable="false">The share of time in bed you spent asleep. Above 85% is typical for good sleepers.</string>
     <string name="explore_ridge_about_spo2" translatable="false">Estimated oxygen saturation from the strap\'s optical sensor during sleep. It is not a medical device reading.</string>
     <string name="explore_ridge_about_resp" translatable="false">Breaths per minute while asleep. It is very stable for most people, so a jump of a breath or more is worth noticing.</string>
@@ -366,6 +367,8 @@
     <string name="vital_ridge_in_range" translatable="false">In your range</string>
     <string name="vital_ridge_out_of_range" translatable="false">Outside your range</string>
     <string name="vital_ridge_no_reading" translatable="false">No reading</string>
+    <string name="vital_ridge_hrv_from" translatable="false">From %1$s</string>
+    <string name="vital_ridge_older" translatable="false">Older reading</string>
     <string name="vital_ridge_heart" translatable="false">Heart rate</string>
     <string name="vital_ridge_live" translatable="false">Live</string>
     <string name="vital_ridge_waiting" translatable="false">Waiting</string>
@@ -538,6 +541,10 @@
     <string name="auto_ridge_on" translatable="false">ON</string>
     <string name="auto_ridge_off" translatable="false">Off</string>
     <string name="auto_ridge_alarms_sub" translatable="false">Smart wake, strap buzz and wind-down</string>
+    <string name="auto_ridge_group_on" translatable="false">%1$d of %2$d on</string>
+    <string name="about_ridge_release_title" translatable="false">Noop v%1$s</string>
+    <string name="about_ridge_older_releases" translatable="false">Older releases are on GitHub →</string>
+    <string name="about_ridge_all_releases" translatable="false">Every release is on GitHub →</string>
     <string name="about_ridge_tab_how" translatable="false">How it works</string>
     <string name="about_ridge_tab_new" translatable="false">What\'s new</string>
     <string name="about_ridge_tab_limits" translatable="false">Limits</string>
@@ -2392,7 +2399,7 @@
     <!-- Home/Today localization boundary: semantic helpers resolve these at the Compose edge. -->
     <string name="today_section_hero">Charge / Effort / Rest</string>
     <string name="today_section_live_session">Start session</string>
-    <string name="today_section_synthesis">Synthesis</string>
+    <string name="today_section_synthesis">Readiness</string>
     <string name="today_section_key_metrics">Key Metrics</string>
     <string name="today_section_workouts">Workouts</string>
     <string name="today_section_heart_rate">Heart Rate</string>
@@ -2493,7 +2500,7 @@
     <string name="today_metric_steps">Steps</string>
     <string name="today_metric_weight">Weight</string>
     <string name="today_metric_calories">Calories</string>
-    <string name="today_readiness_title">Readiness</string>
+    <string name="today_readiness_title">Training signals</string>
     <string name="today_readiness_wear_for_nights">Wear the strap for a few nights and your readiness read will appear here.</string>
     <string name="today_readiness_signal_hrv">HRV</string>
     <string name="today_readiness_hrv_good">above your baseline - well recovered</string>
@@ -2680,6 +2687,7 @@
     <string name="today_driver_warmer_limiting">warmer than baseline, limiting recovery</string>
     <string name="today_driver_cooler_limiting">cooler than baseline, limiting recovery</string>
     <string name="today_driver_a11y">%1$s, %2$s, %3$s, %4$s points, %5$s</string>
+    <string name="guide_ridge_means" translatable="false">What it means</string>
     <string name="scoring_guide_daily_scores">Your daily scores</string>
     <string name="scoring_guide_three_scores">The three scores</string>
     <string name="scoring_guide_intro_body">NOOP gives you three daily scores: Charge, Effort and Rest, each from 0 to 100. They are calculated on your device from strap signals and published sport science. They are independent approximations, not WHOOP’s private scores, so the direction may be similar while the numbers differ.</string>
@@ -3310,7 +3318,7 @@
     <string name="onb_ridge_aim_normal_t">Know your normal</string>
     <string name="onb_ridge_aim_normal_d">Every score is compared with your own recent nights, not a population average.</string>
     <string name="onb_ridge_aim_plan_t">Turn numbers into a plan</string>
-    <string name="onb_ridge_aim_plan_d">One read of the day, Synthesis, and one plan, Today\'s plan.</string>
+    <string name="onb_ridge_aim_plan_d">One read of the day, Readiness, and one plan, Today\'s plan.</string>
     <string name="onb_ridge_aim_data_t">Own your data</string>
     <string name="onb_ridge_aim_data_d">Everything stays on this phone. Back it up or export it whenever you like.</string>
     <string name="onb_ridge_aims_foot">Open source. Not a medical device. Not affiliated with WHOOP.</string>
@@ -3321,12 +3329,12 @@
     <string name="onb_ridge_scale_0_100">0–100</string>
     <string name="onb_ridge_label_plan">Your plan</string>
     <string name="onb_ridge_plan_title">From numbers to a plan</string>
-    <string name="onb_ridge_plan_sub">Synthesis reads your Charge as one of five stages. Today\'s plan turns that stage into an Effort target.</string>
-    <string name="onb_ridge_plan_synth_eyebrow">Synthesis · Charge\'s stage</string>
+    <string name="onb_ridge_plan_sub">Readiness blends your Charge and Rest into one of five stages. Today\'s plan turns your Charge into an Effort target.</string>
+    <string name="onb_ridge_plan_synth_eyebrow">Readiness · five stages</string>
     <string name="onb_ridge_band_range">%1$d–%2$d</string>
     <string name="onb_ridge_plan_example">Today\'s plan, for example</string>
     <string name="onb_ridge_plan_how_t">How the Effort target works</string>
-    <string name="onb_ridge_plan_how_d">The lower your Charge, the lower the day\'s Effort target, so a depleted day asks less of you.</string>
+    <string name="onb_ridge_plan_how_d">The lower your Charge, the lower the day\'s Effort target, so a low-Charge day asks less of you.</string>
     <string name="onb_ridge_label_strap">Your strap</string>
     <string name="onb_ridge_strap_title">Connect your strap</string>
     <string name="onb_ridge_strap_sub">Put your strap on, keep it near your phone, and let Noop Ridge find it.</string>
@@ -3492,4 +3500,143 @@
     <string name="import_progress_note">Noop restarts when it finishes. Keep it open until then.</string>
     <string name="import_progress_nocancel">It can\'t be cancelled while your data is being replaced.</string>
     <string name="import_progress_cancelling">Cancelling…</string>
+    <!-- RS-1-1: Hub > About updates, How tab, Vitals pill -->
+    <string name="about_upd_check_again">Check again</string>
+    <string name="about_upd_latest">You\'re on the latest version.</string>
+    <string name="about_upd_last_checked">Last checked %1$s</string>
+    <string name="about_upd_never">Not checked yet</string>
+    <string name="about_ridge_scores" translatable="false">How scores work</string>
+    <string name="about_ridge_scores_sub" translatable="false">Charge, Effort and Rest explained</string>
+    <string name="about_ridge_protocol_credits" translatable="false">Protocol credits</string>
+    <string name="primer_eyebrow_on_device">On your phone</string>
+    <string name="primer_on_device_title">What runs on your phone</string>
+    <string name="primer_on_device_body">Scoring, sleep detection, baselines and your history all run and stay on this phone. Only things you switch on leave it: Sage (using your own key), Health Connect sync, backups you export and a push to your own server. The one request on by default is the daily update check, which asks GitHub for the latest version number and sends nothing about you.</string>
+    <string name="vital_ridge_not_connected" translatable="false">Not connected</string>
+    <string name="vital_ridge_not_connected_note" translatable="false">Connect your strap to see live heart rate</string>
+    <string name="updates_open_about_msg">You\'re on %1$s. Open Hub, then About NOOP, and use Check for updates to see what\'s new and download %2$s.</string>
+    <!-- RS-1-2: Sleep, Hours vs Needed and Hours asleep -->
+    <string name="sleep_ridge_rest_chip">Rest %1$d</string>
+    <string name="sleep_ridge_hos_title">Hours of sleep</string>
+    <string name="sleep_ridge_hos_a11y">Slept %1$s, %2$d%% of the %3$s needed</string>
+    <string name="sleep_ridge_need_title">Sleep needed</string>
+    <string name="sleep_ridge_need_a11y">Sleep needed %1$s: base sleep %2$s, recent effort %3$s (an estimate), sleep debt %4$s</string>
+    <string name="sleep_ridge_need_base">Base sleep</string>
+    <string name="sleep_ridge_need_effort">Recent Effort</string>
+    <string name="sleep_ridge_need_debt">Sleep debt</string>
+    <string name="sleep_ridge_ha_title">Hours asleep</string>
+    <string name="sleep_ridge_ha_nights">%1$d nights</string>
+    <string name="sleep_ridge_ha_last">last night</string>
+    <string name="sleep_ridge_ha_need">Need %1$s</string>
+    <string name="sleep_ridge_ha_avg">Average</string>
+    <string name="sleep_ridge_ha_short">Shortest</string>
+    <string name="sleep_ridge_ha_long">Longest</string>
+    <string name="sleep_ridge_ha_empty">Needs %1$d nights of sleep</string>
+    <string name="sleep_ridge_ha_bar_a11y">%1$s: %2$s asleep</string>
+    <string name="sleep_ridge_ha_bar_none">%1$s: no sleep recorded</string>
+    <string name="sleep_ridge_need_note">Base sleep is what your own nights say you need. Recent Effort adds up to an hour after a harder day than usual (an estimate). Sleep debt adds a quarter of what you owe, up to an hour.</string>
+    <!-- RS-1-3: Baseline, Pace of aging and Trend View -->
+    <string name="pace_title">Pace of aging</string>
+    <string name="pace_slower">Slower vs last month</string>
+    <string name="pace_steady">Steady vs last month</string>
+    <string name="pace_faster">Faster vs last month</string>
+    <string name="pace_needs_month">Needs 30 days of data</string>
+    <string name="pace_unit">years of body age per year</string>
+    <string name="pace_a11y">Pace of aging %1$s</string>
+    <string name="pace_a11y_avg">Six-month average pace of aging %1$s</string>
+    <string name="pace_real_time">1.0× = real time</string>
+    <string name="pace_sentence_slower">At this pace you\'re adding about %1$d months of body age a year, not twelve. Read it as a direction, not a promise.</string>
+    <string name="pace_sentence_same">At this pace your body age is keeping step with the calendar, about twelve months a year. Read it as a direction, not a promise.</string>
+    <string name="pace_sentence_faster">At this pace you\'re adding about %1$d months of body age a year, more than twelve. Read it as a direction, not a promise.</string>
+    <string name="pace_sentence_falling">At this pace your body age is falling by about %1$d months a year. Read it as a direction, not a promise.</string>
+    <string name="pace_trend_a11y">Trend View: the 6 month trends affecting your body age</string>
+    <string name="pace_slow">Slow</string>
+    <string name="pace_fast">Fast</string>
+    <string name="pace_six_month_avg">6 month average</string>
+    <string name="trend_view_title">Trend View</string>
+    <string name="trend_view_six_months">6 month trends</string>
+    <string name="trend_view_heading">What\'s moving your age</string>
+    <string name="trend_view_sub">Your last 6 months, drawn against where each measure sits today.</string>
+    <string name="trend_view_fitness">Fitness</string>
+    <string name="trend_view_six_month">6 month</string>
+    <string name="trend_view_thirty_day">30 day</string>
+    <string name="trend_view_done">Done</string>
+    <string name="trend_f_vo2">VO₂ max</string>
+    <string name="trend_f_rhr">Resting heart rate</string>
+    <string name="trend_f_hrv">Heart-rate variability</string>
+    <string name="trend_f_steps">Daily steps</string>
+    <string name="trend_f_regularity">Sleep regularity</string>
+    <string name="trend_f_sleep">Sleep duration</string>
+    <string name="trend_u_vo2">ml/kg/min</string>
+    <string name="trend_u_bpm">bpm</string>
+    <string name="trend_u_ms">ms</string>
+    <string name="trend_u_steps">steps a day</string>
+    <string name="trend_u_regularity">% consistent</string>
+    <string name="trend_u_sleep">hours a night</string>
+    <string name="trend_years">%1$s years</string>
+    <string name="trend_not_in_age">not in body age yet</string>
+    <string name="trend_avg6">6 month avg %1$s</string>
+    <string name="trend_row_a11y">%1$s: 6 month average %2$s, 30 day average %3$s</string>
+    <string name="age_chart_title">Body age vs calendar age</string>
+    <string name="age_chart_needs">Needs 2 months of data</string>
+    <string name="age_chart_body">Body age</string>
+    <string name="age_chart_calendar">Calendar age</string>
+    <string name="age_chart_sentence_down">Your body age has dropped %1$s years over these months while your calendar age moved %2$s. It updates once a week, so the line steps.</string>
+    <string name="age_chart_sentence_up">Your body age has risen %1$s years over these months while your calendar age moved %2$s. It updates once a week, so the line steps.</string>
+    <string name="age_chart_a11y">Body age went from %1$s to %2$s over six months; calendar age is %3$s</string>
+    <!-- RS-1-3 item 9: Profile, Date of Birth -->
+    <string name="profile_dob_label">Date of Birth</string>
+    <string name="profile_dob_age">Age %1$d</string>
+    <string name="dob_dialog_title">Birthday</string>
+    <string name="dob_month">Month</string>
+    <string name="dob_day">Day</string>
+    <string name="dob_year">Year</string>
+    <string name="dob_cancel">Cancel</string>
+    <string name="dob_done">Done</string>
+    <!-- RS-2a: Today's Vitals and Illness heads-up alert cards. -->
+    <string name="today_alert_vitals_all">All five vitals</string>
+    <string name="today_alert_vitals_eyebrow">Vitals</string>
+    <string name="today_alert_vitals_count">%1$d/%2$d outside your range</string>
+    <string name="today_alert_vitals_body">Off your usual: %1$s.</string>
+    <string name="today_alert_illness_eyebrow">Illness heads-up</string>
+    <string name="today_alert_illness_eyebrow_estimate">Illness heads-up · estimate</string>
+    <string name="today_alert_illness_title">Your vitals indicate possible illness</string>
+    <string name="today_alert_illness_title_short">Possible illness</string>
+    <string name="today_alert_illness_advice">Consider taking it easy. An on-device estimate, not a diagnosis.</string>
+    <string name="today_alert_view_vitals">View vitals →</string>
+    <!-- RS-3b: Readiness replaces Synthesis. -->
+    <string name="readiness_title">Readiness</string>
+    <string name="readiness_say">%1$s, %2$s.</string>
+    <string name="readiness_say_today_depleted">Today is a day to rest</string>
+    <string name="readiness_say_today_low">Today is a recovery day</string>
+    <string name="readiness_say_today_steady">Today is a steady day</string>
+    <string name="readiness_say_today_strong">Today is a good day to train</string>
+    <string name="readiness_say_today_peak">Today is a great day to push</string>
+    <string name="readiness_say_past_depleted">That was a day to rest</string>
+    <string name="readiness_say_past_low">That was a recovery day</string>
+    <string name="readiness_say_past_steady">That was a steady day</string>
+    <string name="readiness_say_past_strong">That was a good day to train</string>
+    <string name="readiness_say_past_peak">That was a great day to push</string>
+    <string name="readiness_why_low_charge">driven by low Charge</string>
+    <string name="readiness_why_low_rest">driven by low Rest</string>
+    <string name="readiness_why_low_both">driven by low Charge and Rest</string>
+    <string name="readiness_why_moderate_charge">with Charge in the middle</string>
+    <string name="readiness_why_lower_rest">held back by Rest</string>
+    <string name="readiness_why_high_charge">driven by high Charge</string>
+    <string name="readiness_why_high_both">driven by high Charge and Rest</string>
+    <string name="readiness_why_good_rest">helped by a very good night’s Rest</string>
+    <string name="readiness_why_solid_both">with solid Charge and Rest</string>
+    <string name="readiness_why_effort">after today’s Effort</string>
+    <string name="readiness_detail_calibrating">Readiness needs Charge, which is still learning your baseline: %1$d of %2$d nights.</string>
+    <string name="readiness_detail_no_charge">Readiness needs Charge, which hasn\'t been scored for this day.</string>
+    <string name="readiness_detail_no_rest">Readiness needs Rest. No sleep was tracked.</string>
+    <string name="readiness_cal_eyebrow">Readiness · calendar</string>
+    <string name="readiness_cal_title">Daily Readiness</string>
+    <string name="readiness_cal_sub">Last %1$d weeks · morning readiness</string>
+    <string name="readiness_charge_sleep_ok">Sleep was 7 hours or more.</string>
+    <string name="readiness_charge_sleep_short">Sleep ran under 7 hours.</string>
+    <!-- RS-3c: the Sleep score. -->
+    <string name="sleep_score_title">Sleep score</string>
+    <string name="sleep_score_needs">No score for this night. It needs that night’s sleep and at least 2 of the 3 nights before.</string>
+    <string name="sleep_score_info_a11y">How the sleep score works</string>
+    <string name="sleep_score_a11y">Sleep score %1$s</string>
 </resources>

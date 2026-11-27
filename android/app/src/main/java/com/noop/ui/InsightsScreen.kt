@@ -116,7 +116,7 @@ private enum class Outcome(
     ),
     Sleep(
         label = uiString(R.string.l10n_insights_screen_rest_b79e5f48), outcomeName = "Rest", higherIsBetter = true, domain = DomainTheme.Rest,
-        pick = { it.efficiency }, format = { "${it.roundToInt()}%" },
+        pick = { efficiencyPercent(it.efficiency) }, format = { "${it.roundToInt()}%" },
     ),
     Rhr(
         label = uiString(R.string.l10n_insights_screen_rhr_04edf9b3), outcomeName = "Resting HR", higherIsBetter = false, domain = DomainTheme.Stress,

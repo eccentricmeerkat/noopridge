@@ -23,10 +23,10 @@ import androidx.compose.ui.unit.dp
 import com.noop.ui.Ridge
 import com.noop.ui.RidgeType
 
-/** An uppercase Inter eyebrow ("TODAY · SUN, 20 SEP"), tracked, in [Ridge.inkMuted]. */
+/** An uppercase Inter eyebrow ("TODAY · SUN, 20 SEP"), tracked, in [Ridge.inkMuted] unless [color] says otherwise. */
 @Composable
-fun RidgeEyebrow(text: String, modifier: Modifier = Modifier) {
-    Text(text.uppercase(), style = RidgeType.eyebrow, color = Ridge.inkMuted, modifier = modifier, maxLines = 1)
+fun RidgeEyebrow(text: String, modifier: Modifier = Modifier, color: androidx.compose.ui.graphics.Color = Ridge.inkMuted) {
+    Text(text.uppercase(), style = RidgeType.eyebrow, color = color, modifier = modifier, maxLines = 1)
 }
 
 /**

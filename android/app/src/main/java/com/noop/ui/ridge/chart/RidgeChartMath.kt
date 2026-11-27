@@ -82,6 +82,26 @@ fun sleepHoursAxis(hours: List<Double>): Axis {
 val scoreAxis: Axis = Axis(0.0, 100.0, listOf(0.0, 25.0, 50.0, 75.0, 100.0))
 
 /**
+ * RS-3e: Effort's axis, fitted to the data as Calories' is, so ordinary days fill the plot instead of its bottom third.
+ * Values stay on 0–100; with [whoop] the ticks fall on whole numbers of the 0–21 scale. It starts at 0, and never tops out
+ * below half the scale (10 of 21), so a quiet week does not look like a hard one.
+ */
+fun effortAxis(values: List<Double>, whoop: Boolean): Axis {
+    val max = values.maxOrNull() ?: 0.0
+    if (!whoop) {
+        val top = (kotlin.math.ceil(max / 25.0) * 25.0).coerceIn(50.0, 100.0)
+        return Axis(0.0, top, (0..(top / 25.0).toInt()).map { it * 25.0 })
+    }
+    val needed = max * 21.0 / 100.0
+    val ticks = when {
+        needed <= 10.0 -> listOf(0.0, 5.0, 10.0)
+        needed <= 15.0 -> listOf(0.0, 5.0, 10.0, 15.0)
+        else -> listOf(0.0, 7.0, 14.0, 21.0)
+    }.map { it * 100.0 / 21.0 }
+    return Axis(0.0, ticks.last(), ticks)
+}
+
+/**
  * The trailing [window]-day mean at each index of [values], or null where fewer than [minN] of those days are
  * tracked (§6.3: 4 of 7). Indices before the first full window still average what exists, so pass [lead] extra
  * leading days and the result is the slice after them, aligned with the visible window.

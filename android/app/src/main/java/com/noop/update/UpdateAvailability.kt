@@ -30,7 +30,7 @@ object UpdateAvailability {
      * What keeps it honest is what the request IS: one read of a public version number, once a day,
      * after onboarding. Nothing about the user is sent, nothing is uploaded, and no data leaves the
      * device — the offline promise is about the user's HEALTH DATA, and that is untouched. Anyone who
-     * disagrees turns it off in Settings, and it then makes no request at all.
+     * disagrees turns it off in Hub > About, and it then makes no request at all.
      */
     const val DEFAULT_ENABLED = true
 
@@ -131,6 +131,22 @@ object UpdateWatch {
         prefs(context).edit().putBoolean(KEY_ENABLED, on).apply()
     }
 
+    /**
+     * RS-1-1: when the About page's button last ran a check. A key of its own, NOT [KEY_LAST_CHECKED_AT]: that one
+     * is the automatic check's daily slot, and a tap must not move the automatic schedule.
+     */
+    const val KEY_LAST_MANUAL_CHECK_AT = "updates.lastManualCheckAt"
+
+    fun recordManualCheck(context: android.content.Context, nowMs: Long) {
+        prefs(context).edit().putLong(KEY_LAST_MANUAL_CHECK_AT, nowMs).apply()
+    }
+
+    /** The newest check on record, manual or automatic, in epoch ms; 0 when there has never been one. */
+    fun lastCheckedAt(context: android.content.Context): Long {
+        val p = prefs(context)
+        return maxOf(p.getLong(KEY_LAST_CHECKED_AT, 0L), p.getLong(KEY_LAST_MANUAL_CHECK_AT, 0L))
+    }
+
     private fun prefs(context: android.content.Context) =
         context.getSharedPreferences(com.noop.ui.NoopPrefs.NAME, android.content.Context.MODE_PRIVATE)
 
@@ -189,7 +205,7 @@ object UpdateWatch {
                     com.noop.R.string.l10n_updates_noop_1s_is_available_05d8ef55, available.version),
                 message = UpdateAvailability.composeMessage(
                     body = context.getString(
-                        com.noop.R.string.l10n_updates_youre_on_1s_open_settings_and_35b9e135,
+                        com.noop.R.string.updates_open_about_msg,
                         currentVersion, available.version),
                     sideload = null,
                     notes = available.notes,

@@ -45,6 +45,7 @@ enum class KeyMetric(val raw: String, @StringRes val titleRes: Int, val catalogK
     MAX_HR_DAY("maxHrDay", R.string.explore_metric_max_heart_rate, "max_hr"),
     STRESS("stress", R.string.cat_ridge_stress, "stress"),
     SLEEP_HOURS("sleepHours", R.string.l10n_trends_explore_screen_sleep_3cac34e6, "sleep"),
+    SLEEP_SCORE("sleepScore", R.string.sleep_score_title, "sleep_score"),
     SLEEP_EFFICIENCY("sleepEfficiency", R.string.l10n_trends_explore_screen_sleep_efficiency_b4b5c293, "efficiency"),
     DEEP_SLEEP("deepSleep", R.string.cat_ridge_deep, "deep_min"),
     REM_SLEEP("remSleep", R.string.cat_ridge_rem, "rem_min"),

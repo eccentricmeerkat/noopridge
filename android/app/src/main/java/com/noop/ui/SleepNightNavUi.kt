@@ -43,6 +43,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.noop.analytics.SleepEditGuard
 import com.noop.analytics.SleepGroupEdit
 import com.noop.data.SleepSession
@@ -72,6 +73,10 @@ internal fun SleepWindowRow(onsetTs: Long, wakeTs: Long) {
     val is24h = ClockPrefs.uses24Hour(LocalContext.current)
     val asleep = clockTimeLabel(onsetTs, is24h)
     val woke = clockTimeLabel(wakeTs, is24h)
+    if (ridgeShell) {
+        RidgeSleepWindowRow(asleep, woke)
+        return
+    }
     // A frosted Rest-tinted card (was a flat surfaceRaised block) so the window row sits in the
     // same colour world as the rest of the screen. Bevel treatment — content unchanged.
     NoopCard(
@@ -605,4 +610,36 @@ internal fun NightNavHeader(
 
 // MARK: - 2. Metric grid (row-equalized min-height tiles, each with a bottom sparkline)
 
+/**
+ * RS-1-2 (owner, 25 Nov): the Asleep / Woke row in Ridge style. Glass card, Ridge eyebrows and mint glyphs, and the two
+ * times in Playfair at the same 22 sp the row used before. One TalkBack element, as before.
+ */
+@Composable
+private fun RidgeSleepWindowRow(asleep: String, woke: String) {
+    val a11y = uiString(R.string.l10n_sleep_screen_fell_asleep_at_asleep_woke_at_80465b2d, asleep, woke)
+    com.noop.ui.ridge.GlassCard(
+        Modifier.fillMaxWidth().semantics(mergeDescendants = true) { contentDescription = a11y },
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 18.dp, vertical = 14.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            RidgeSleepTime(Icons.Filled.Bedtime, uiString(R.string.l10n_sleep_screen_asleep_b9692bbe), asleep)
+            Spacer(Modifier.width(Ridge.space4))
+            Box(Modifier.height(34.dp).width(1.dp).background(Ridge.glassStroke))
+            Spacer(Modifier.width(Ridge.space4))
+            RidgeSleepTime(Icons.Filled.WbSunny, uiString(R.string.l10n_sleep_screen_woke_cfbb59a8), woke)
+            Spacer(Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+private fun RidgeSleepTime(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, value: String) {
+    Row(horizontalArrangement = Arrangement.spacedBy(Ridge.space3), verticalAlignment = Alignment.CenterVertically) {
+        Icon(icon, contentDescription = null, tint = Ridge.brand, modifier = Modifier.size(20.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            com.noop.ui.ridge.RidgeEyebrow(label)
+            Text(value, style = RidgeType.numeralMd.copy(fontSize = 22.sp, lineHeight = 26.sp), color = Ridge.ink, maxLines = 1)
+        }
+    }
+}
 

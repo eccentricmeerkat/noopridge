@@ -1,5 +1,7 @@
 package com.noop.ui
 
+import com.noop.metrics.V2Change
+import com.noop.metrics.MetricsV2
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.foundation.border
@@ -229,9 +231,14 @@ fun TodayScreen(
     // The #627 journal-reminder card links straight to the journal (Insights). Defaulted to a no-op so
     // the call site stays compiling; AppRoot binds it to nav.navigateTopLevel(Insights), same as Sleep.
     onOpenJournal: () -> Unit = {},
+    // RS-2a: the Vitals and Illness heads-up alert cards open Hub > Vital signs. AppRoot binds it.
+    onOpenVitals: () -> Unit = {},
 ) {
     val today by viewModel.today.collectAsStateWithLifecycle()
     val alert by viewModel.healthAlert.collectAsStateWithLifecycle()
+    // RS-2a: the alert slot under the orbs reads the same five vitals as Vital signs and the Illness heads-up message.
+    val todayVitals = rememberRidgeVitals(viewModel)
+    val todayAlerts = remember(todayVitals, alert) { todayAlertsState(todayVitals, alert) }
     val days by viewModel.recentDays.collectAsStateWithLifecycle()
     val daysLoaded by viewModel.recentDaysLoaded.collectAsStateWithLifecycle()
     val activeDayCycle by viewModel.activeDayCycle.collectAsStateWithLifecycle()
@@ -1487,7 +1494,6 @@ fun TodayScreen(
             }
         }
 
-        if (alert != null) item { IllnessBanner(alert!!) }
 
         // #486: the "Arrange" affordance moved UP into the header/wordmark cluster (see above) so it no
         // longer sits alone in its own full-width band here. It stays pinned; only its position changed.
@@ -1637,7 +1643,15 @@ fun TodayScreen(
                                 if (kotlin.math.abs(rest - synthTopAtRest) > 1f) synthTopAtRest = rest
                             },
                         ) {
+                            // RS-3b: Readiness from the same Charge, Rest and Effort the orbs show.
+                            val readinessModel = if (!MetricsV2.on(V2Change.READINESS_SCORE)) null else readinessCardModel(
+                                charge = ui.charge.value, chargeCarriedFrom = ui.charge.carriedFrom?.toString(), rest = ui.restScore,
+                                effort = ui.effortForDay, calibratingNights = recoveryCalibration, isToday = selectedDayOffset == 0,
+                            )
+                            val readinessShown = rememberReadinessShown(readinessModel, ui.selectedDayKey)
+                            val readinessUi = readinessModel?.let { readinessCardUi(it, readinessShown) }
                             SynthesisHeroCard(
+                                readiness = readinessUi,
                                 day = displayMetric,
                                 recoveryCalibration = recoveryCalibration,
                                 carriedDay = lastScoredRecoveryDay,
@@ -1648,6 +1662,7 @@ fun TodayScreen(
                                 effortScale = effortScale,
                                 onOpenCoach = if (BottomBarStyleStore.coachEnabled) { { onOpenCoach(null) } } else null,
                                 todayNapAsleepMin = todayNapAsleepMin,
+                                followsAlerts = alertsSitAboveSynthesis(sectionOrder, selectedDayOffset == 0 && !todayAlerts.isEmpty),
                             )
                         }
                         // METRICS: header + Edit affordance (#251) + the tile grid. Previously two
@@ -1812,6 +1827,13 @@ fun TodayScreen(
                     }
                 }
             }
+            // RS-2a: the Vitals and Illness heads-up alerts sit right under the orbs, wherever the orbs are arranged. Not a
+            // section: an alert is not something to move out of sight, so it is not in the Arrange list. Today only.
+            if (section == TodaySection.HERO && selectedDayOffset == 0 && !todayAlerts.isEmpty) {
+                item(key = "today_alerts") {
+                    Box(Modifier.fillMaxWidth().staggeredAppear(1)) { TodayAlertCards(todayAlerts, onOpenVitals) }
+                }
+            }
         }
         // Auto-detect workouts (MVP, opt-in, default OFF), a NON-DESTRUCTIVE "looks like a workout?"
         // card that suggests logging a detected sustained-elevated-HR bout. Renders nothing when the
@@ -1935,6 +1957,7 @@ fun TodayScreen(
     // and re-reads it into local state so the grid updates immediately and survives relaunch.
     if (showMetricsEditor) {
         KeyMetricsEditorDialog(
+            noData = rememberKeyMetricsWithoutData(viewModel),
             initial = enabledKeyMetrics,
             initialDetailed = keyMetricsDetailed,
             initialWindowDays = keyMetricsWindowDays,

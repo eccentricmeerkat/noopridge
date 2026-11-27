@@ -827,10 +827,12 @@ internal fun KeyMetricsEditorDialog(
     initialWindowDays: Int = 14,
     onDismiss: () -> Unit,
     onSave: (List<KeyMetric>, Boolean, Int) -> Unit,
+    /** RS-2e: tiles the Ridge editor tags "No data". */
+    noData: Set<KeyMetric> = emptySet(),
 ) {
     // B2-X: under Ridge the editor is the board-style sheet (RidgeKeyMetricsEditor); v10 keeps this dialog.
     if (ridgeShell) {
-        RidgeKeyMetricsEditor(initial, initialDetailed, initialWindowDays, onDismiss, onSave)
+        RidgeKeyMetricsEditor(initial, initialDetailed, initialWindowDays, onDismiss, onSave, noData)
         return
     }
     val context = LocalContext.current

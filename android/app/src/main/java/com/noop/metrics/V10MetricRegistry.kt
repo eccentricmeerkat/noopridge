@@ -72,6 +72,8 @@ data class V10MetricInputs(
     val spo2DeviceUnsupported: Boolean = false,
     /** J-06 (R9b): the SpO₂ strap estimate is switched on (`NoopPrefs.spo2CandidateDisplay`, default off). */
     val spo2EstimateOn: Boolean = true,
+    /** RS-3c: each night's local bed and wake times by wake day, from the Sleep tab's main-night selector. */
+    val bedWakeByDay: Map<String, com.noop.ui.SleepScore.BedWake> = emptyMap(),
     /** The R9a corrections in force ([MetricsV2]); empty reproduces v10 exactly. */
     val v2: Set<V2Change> = MetricsV2.active,
 )
@@ -117,6 +119,32 @@ class V10MetricRegistry(private val inputs: V10MetricInputs) : MetricRegistry {
             needHours = oneNeedMin(latest) / 60.0,
             importedDebtMin = inputs.importedDebtMin,
         ).toMap()
+    }
+
+    /**
+     * RS-3c: the Sleep score's parts for the night that ended on [day], or null when an input is missing. The need is the one
+     * that stood going into the night (the day before's): the Sleep page's Sleep needed, that is the base need, plus the
+     * recent-Effort part, plus the payback of the debt carried in. The night itself never raises its own need.
+     */
+    internal fun sleepScoreParts(day: LocalDate): com.noop.ui.SleepScore.Parts? {
+        val key = day.toString()
+        val row = byDay[key] ?: return null
+        val tonight = inputs.bedWakeByDay[key] ?: return null
+        val prior = (1..com.noop.ui.SleepScore.PRIOR_NIGHTS).mapNotNull { inputs.bedWakeByDay[day.minusDays(it.toLong()).toString()] }
+        val before = day.minusDays(1)
+        val effort = if (v2(V2Change.SLEEP_NEED_EFFORT_PART)) {
+            val (that, history) = com.noop.ui.SleepNeedParts.effortInputs(ordered, before)
+            com.noop.ui.SleepNeedParts.effortPartMin(that, history) ?: 0
+        } else 0
+        val debtIn = if (v2(V2Change.ONE_SLEEP_NEED)) oneNeedDebtByDay else debtByDay
+        val debt = ordered.lastOrNull { it.day < key && debtIn[it.day] != null }?.let { debtIn[it.day] }
+        val payback = if (v2(V2Change.SLEEP_NEED_DEBT_PART)) com.noop.ui.RecommendedBedtime.paybackMin(debt) else 0
+        return com.noop.ui.SleepScore.parts(
+            asleepMin = row.totalSleepMin,
+            needMin = oneNeedMin(before.toString()) + effort + payback,
+            efficiencyPct = row.efficiency?.let { com.noop.ui.efficiencyPercent(it) },
+            consistency = com.noop.ui.SleepScore.consistency(tonight, prior),
+        )
     }
 
     override fun value(id: MetricId, day: DayKey): MetricValue = compute(id, day, allowCarry = true)
@@ -247,6 +275,10 @@ class V10MetricRegistry(private val inputs: V10MetricInputs) : MetricRegistry {
                 plain(id, day, hoursVsNeededPct(row?.totalSleepMin, need), unit)
             }
             MetricId.SLEEP_DEBT -> plain(id, day, (if (v2(V2Change.ONE_SLEEP_NEED)) oneNeedDebtByDay else debtByDay)[key], unit)
+            MetricId.SLEEP_SCORE -> plain(
+                id, day, if (v2(V2Change.SLEEP_SCORE)) sleepScoreParts(LocalDate.parse(key))?.score else null, unit,
+                missing = MissingReason.INSUFFICIENT_HISTORY,
+            )
             MetricId.TRAINING_LOAD_CTL, MetricId.TRAINING_LOAD_ATL, MetricId.TRAINING_FORM -> {
                 // TrainingLoadCard models the full history through its latest day; through = the asked day.
                 val result = if (byDay.containsKey(key)) TrainingLoadEngine.evaluate(loads, through = key) else null
@@ -443,6 +475,7 @@ class V10MetricRegistry(private val inputs: V10MetricInputs) : MetricRegistry {
             MetricDefinition(MetricId.SLEEP_NEED_DEBT, MetricUnit.MINUTES, 0, 0.0, 570.0, "M-NEED.md"),
             MetricDefinition(MetricId.SLEEP_NEED, MetricUnit.HOURS, 1, 0.0, 9.5, "M-NEED.md"),
             MetricDefinition(MetricId.SLEEP_DEBT, MetricUnit.MINUTES, 0, null, 0.0, "M-DEBT.md"),
+            MetricDefinition(MetricId.SLEEP_SCORE, MetricUnit.SCORE, 0, 0.0, 100.0, "M-SSCORE.md"),
             MetricDefinition(MetricId.HOURS_VS_NEEDED, MetricUnit.PERCENT, 0, 0.0, null, "M-HVN.md"),
             MetricDefinition(MetricId.TRAINING_LOAD_CTL, MetricUnit.LOAD, 1, 0.0, null, "M-LOAD-CTL-ATL.md"),
             MetricDefinition(MetricId.TRAINING_LOAD_ATL, MetricUnit.LOAD, 1, 0.0, null, "M-LOAD-CTL-ATL.md"),
@@ -477,6 +510,7 @@ class V10MetricRegistry(private val inputs: V10MetricInputs) : MetricRegistry {
             MetricId.SLEEP_NEED_DEBT to "sleepDebtNeedMin(dailyMetric)",
             MetricId.SLEEP_NEED to "oneSleepNeedHours(dailyMetric.totalSleepMin, 21 d, age) (R9a V2-1)",
             MetricId.SLEEP_DEBT to "SleepDebt.debtSeries (dailyMetric + naps; metricSeries sleep_debt_min wins)",
+            MetricId.SLEEP_SCORE to "SleepScore (dailyMetric asleep and efficiency; sleepSession bed and wake; Sleep needed) (RS-3c)",
             MetricId.HOURS_VS_NEEDED to "hoursVsNeededPct(dailyMetric.totalSleepMin, Sleep tab need)",
             MetricId.TRAINING_LOAD_CTL to "TrainingLoadEngine over dailyMetric.strain",
             MetricId.TRAINING_LOAD_ATL to "TrainingLoadEngine over dailyMetric.strain",

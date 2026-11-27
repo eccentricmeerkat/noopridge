@@ -270,6 +270,7 @@ internal fun exploreAboutRes(key: String): Int? = when (key) {
     "hrv" -> R.string.explore_ridge_about_hrv
     "rhr" -> R.string.explore_ridge_about_rhr
     "sleep" -> R.string.explore_ridge_about_sleep
+    "sleep_score" -> R.string.explore_ridge_about_sleep_score
     "efficiency" -> R.string.explore_ridge_about_efficiency
     "spo2" -> R.string.explore_ridge_about_spo2
     "resp" -> R.string.explore_ridge_about_resp

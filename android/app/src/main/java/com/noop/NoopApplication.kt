@@ -58,6 +58,9 @@ class NoopApplication : Application() {
         // this is a no-op once a schedule exists, and the worker retires itself when no widget is
         // placed — which is what stops this costing anything for an install that has never had one.
         com.noop.widget.StressWidgetRefresh.ensureScheduled(this)
+        // RS-3d: put right any efficiency an earlier import (or a restored backup of one) stored on the wrong scale.
+        // Off the main thread; a failure leaves the rows as they were and is retried on the next start.
+        Thread { runCatching { com.noop.data.EfficiencyStorage.repairStored(WhoopDatabase.get(this)) } }.start()
     }
 
     /** Process-wide Room-backed store. One instance shared by the UI and the background service. */

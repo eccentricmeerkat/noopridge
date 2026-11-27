@@ -13,7 +13,6 @@ import com.noop.BuildConfig
 enum class V2Change(val decision: String, val summary: String) {
     ONE_SLEEP_NEED("S0-3", "One sleep need: personalizedNeedHours over 21 nights, with age"),
     PLAN_SLEEP_HALF("S0-3 · D-08", "Today's plan names tonight's sleep need"),
-    SLEPT_ON_TARGET("D-14", "Slept on target: asleep ≥ that night's need"),
     NORMAL_BAND_60("D-05 · J-04", "Normal band: mean ± 1 SD of the last 60 tracked nights"),
     PAST_DAY_LOAD("#25 · J-03", "A past day's load ratio uses only rows up to that day"),
     REST_CARRY_BOUND("#20", "Today's Rest never carries a future-dated night"),
@@ -25,12 +24,17 @@ enum class V2Change(val decision: String, val summary: String) {
     SPO2_ONE_SOURCE("BS-x2-2 · item 9", "Blood oxygen: the calibrated or imported value, else the strap estimate tagged Estimate, on every surface"),
     HR_DAILY_STATS("BS-x2-3 · item 18", "Insights: Average and Max heart rate are each day's mean and peak of the heart-rate samples (they had no data)"),
     BEDTIME_DEBT_PAYBACK("Owner, 24 Nov 2026", "Recommended bedtime adds part of your sleep debt: a quarter of it, up to an hour"),
+    SLEEP_NEED_DEBT_PART("RS-1-2 · D1", "Sleep page: Sleep needed adds a quarter of the sleep debt, up to an hour (the bedtime's payback)"),
+    SLEEP_NEED_EFFORT_PART("RS-1-2 · D1 · D5", "Sleep page: Sleep needed adds up to an hour for Effort above your usual (20 min per SD, a NOOP heuristic)"),
+    BODY_AGE_PACE("RS-1-3 · D2", "Baseline: Pace of aging and Trend View (the Healthspan white paper's 30-day vs 6-month projection on NOOP's body-age engine)"),
+    READINESS_SCORE("RS-3b · owner, 26 Nov 2026", "Readiness (Charge^0.8 × Rest^0.2, less up to half for Effort) replaces Synthesis; Charge is a number with no category"),
+    SLEEP_SCORE("RS-3c · owner, 26 Nov 2026", "Sleep score: 50% hours vs the night's need, 25% bed and wake consistency, 25% efficiency; feeds nothing else"),
     ;
 
     /** A change that only makes sense with another on: both read the one need. */
     val requires: V2Change?
         get() = when (this) {
-            PLAN_SLEEP_HALF, SLEPT_ON_TARGET -> ONE_SLEEP_NEED
+            PLAN_SLEEP_HALF -> ONE_SLEEP_NEED
             NAP_PLAN_TARGET -> PLAN_SLEEP_HALF
             else -> null
         }
@@ -41,9 +45,10 @@ enum class V2Change(val decision: String, val summary: String) {
  * loaded once at process start ([load]), so a switch applies after the inspector restarts the app.
  */
 object MetricsV2 {
-    /** The changes the product owner approved, line by line (DECISIONS_LOG): R9a's eight, R9c's V2-9, R9d's V2-10. */
+    /** The changes the product owner approved, line by line (DECISIONS_LOG): R9a's eight, R9c's V2-9, R9d's V2-10. R9a's V2-3
+     *  (slept on target = asleep ≥ need) was withdrawn in RS-2d: Consistency's moons follow Rest ≥ 85. */
     val APPROVED: Set<V2Change> = setOf(
-        V2Change.ONE_SLEEP_NEED, V2Change.PLAN_SLEEP_HALF, V2Change.SLEPT_ON_TARGET, V2Change.NORMAL_BAND_60,
+        V2Change.ONE_SLEEP_NEED, V2Change.PLAN_SLEEP_HALF, V2Change.NORMAL_BAND_60,
         V2Change.PAST_DAY_LOAD, V2Change.REST_CARRY_BOUND, V2Change.NO_ASSUMED_AGE, V2Change.LOGICAL_DAY,
         V2Change.CONSISTENCY_PER_NIGHT, V2Change.EXPLORE_CALENDAR_WINDOW,
         // BS-x2-2 item 9: the owner chose option C (21 Nov 2026). Remove this line to turn the change off.
@@ -52,6 +57,15 @@ object MetricsV2 {
         V2Change.HR_DAILY_STATS,
         // Recommended bedtime repays part of the sleep debt: the owner asked for it (24 Nov 2026). Remove to turn it off.
         V2Change.BEDTIME_DEBT_PAYBACK,
+        // RS-1-2 item 5: the owner chose to follow the board's Sleep needed split (25 Nov 2026). Remove a line to turn it off.
+        V2Change.SLEEP_NEED_DEBT_PART,
+        V2Change.SLEEP_NEED_EFFORT_PART,
+        // RS-1-3 item 8: the owner chose to follow the board's Pace of aging and Trend View (25 Nov 2026). Remove to turn off.
+        V2Change.BODY_AGE_PACE,
+        // RS-3b: Readiness replaces Synthesis (26 Nov 2026). Remove to bring Synthesis and Charge's categories back.
+        V2Change.READINESS_SCORE,
+        // RS-3c: the sleep score, option A (26 Nov 2026). Remove to hide it.
+        V2Change.SLEEP_SCORE,
     )
 
     @Volatile

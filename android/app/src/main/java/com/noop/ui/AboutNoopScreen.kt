@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -23,11 +24,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.noop.BuildConfig
 import com.noop.R
 import com.noop.ui.ridge.GlassCard
+import com.noop.ui.ridge.RidgeRowDivider
 import com.noop.ui.ridge.RidgeSegmentedPills
 
 private enum class AboutTab { HOW, NEW, LIMITS }
@@ -38,7 +41,7 @@ private enum class AboutTab { HOW, NEW, LIMITS }
  * "never makes up a number" line, a door to Test Centre ("Lab tools") and the open-source footer.
  */
 @Composable
-fun AboutNoopScreen(onOpenTestCentre: () -> Unit) {
+fun AboutNoopScreen(onOpenTestCentre: () -> Unit, onOpenScoringGuide: () -> Unit) {
     var tab by rememberSaveable { mutableStateOf(AboutTab.HOW) }
     val labels = mapOf(
         AboutTab.HOW to stringResource(R.string.about_ridge_tab_how),
@@ -64,16 +67,25 @@ fun AboutNoopScreen(onOpenTestCentre: () -> Unit) {
         ScreenScaffold(title = stringResource(R.string.hub_about_title), subtitle = null) {
             when (tab) {
                 AboutTab.HOW -> HowNoopWorksBody()
-                AboutTab.NEW -> WhatsNewBody()
+                AboutTab.NEW -> {
+                    // RS-1-1 item 1: the Updates card heads the What's new tab, above the release notes (board).
+                    AboutUpdatesCard()
+                    WhatsNewBody()
+                }
                 AboutTab.LIMITS -> NoopLimitationsBody()
             }
-            GlassCard(Modifier.fillMaxWidth().clickable(onClick = onOpenTestCentre), contentPadding = PaddingValues(horizontal = 18.dp, vertical = 14.dp)) {
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(stringResource(R.string.about_ridge_lab), style = RidgeType.titleSm, color = Ridge.ink)
-                        Text(stringResource(R.string.about_ridge_lab_sub), style = RidgeType.bodySm, color = Ridge.inkMuted)
+            GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(horizontal = 18.dp, vertical = 4.dp)) {
+                Column {
+                    // RS-1-1 item 3: the board's "How scores work" row, on the How tab only, opens the scoring guide.
+                    if (tab == AboutTab.HOW) {
+                        AboutLinkRow(
+                            stringResource(R.string.about_ridge_scores),
+                            stringResource(R.string.about_ridge_scores_sub),
+                            onOpenScoringGuide,
+                        )
+                        RidgeRowDivider()
                     }
-                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Ridge.inkMuted)
+                    AboutLinkRow(stringResource(R.string.about_ridge_lab), stringResource(R.string.about_ridge_lab_sub), onOpenTestCentre)
                 }
             }
             Text(stringResource(R.string.about_ridge_footer), style = TextStyle(fontSize = 12.sp, lineHeight = 18.sp), color = Ridge.inkSubtle)
@@ -85,6 +97,26 @@ fun AboutNoopScreen(onOpenTestCentre: () -> Unit) {
                     style = TextStyle(fontSize = 14.sp, lineHeight = 20.sp, textDecoration = TextDecoration.Underline), color = Ridge.brand,
                 )
             }
+            // RS-1-1 (D3, item 2): the project-home link, the protocol credits and the full disclaimer, moved here from
+            // Settings > About.
+            AboutProjectLink()
+            AboutCredits()
         }
+    }
+}
+
+/** One row of the About page's link card: a title, a muted line and a chevron, 60 dp tall (board). */
+@Composable
+private fun AboutLinkRow(title: String, sub: String, onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = 60.dp).clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(title, style = TextStyle(fontFamily = RidgeType.sans, fontWeight = FontWeight.Medium, fontSize = 15.sp, lineHeight = 20.sp), color = Ridge.ink)
+            Text(sub, style = TextStyle(fontFamily = RidgeType.sans, fontSize = 12.sp, lineHeight = 16.sp), color = Ridge.inkMuted)
+        }
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Ridge.inkSubtle)
     }
 }

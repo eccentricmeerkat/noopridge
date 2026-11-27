@@ -16,7 +16,9 @@ class RidgeInsightsTest {
     @Test
     fun tilesRouteToTheirMetric() {
         for (k in listOf("recovery", "strain", "hrv", "rhr", "spo2", "resp")) assertEquals(exploreRoute(k), ridgeMetricRoute(k))
-        for (k in listOf("fitness_age", "vo2max_est", "vitality")) assertEquals(Destination.Baseline.route, ridgeMetricRoute(k))
+        for (k in listOf("fitness_age", "vo2max_est")) assertEquals(Destination.Baseline.route, ridgeMetricRoute(k))
+        // RS-3e: the Vitality tile opens Insights on Vitality, not Baseline.
+        assertEquals(exploreRoute("vitality"), ridgeMetricRoute("vitality"))
         assertEquals(Destination.Sleep.route, ridgeMetricRoute("rest"))
         // Fix 5: Calories, Skin temperature and Steps open Insights on their metric (the vital_detail pages were empty or flat).
         assertEquals("explore/active_kcal", ridgeMetricRoute("active_kcal"))

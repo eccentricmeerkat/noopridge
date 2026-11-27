@@ -48,6 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -65,12 +66,20 @@ import com.noop.analytics.ClockFormat
  * and the illness watch are real + persisted (ViewModel-backed).
  */
 @Composable
-fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
+fun AutomationsScreen(viewModel: AppViewModel) {
     val openGroup = androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
     // The board opens Haptics first.
     val hapticsTitle = uiString(R.string.haptics_section_title)
     androidx.compose.runtime.LaunchedEffect(Unit) { if (openGroup.value == null) openGroup.value = hapticsTitle }
     androidx.compose.runtime.CompositionLocalProvider(LocalAutomationsOpen provides openGroup) {
+    // RS-2b: the page holds two groups, Automations and Alarms, both collapsed on every visit (plain remember, not saveable, so
+    // coming back from another page starts collapsed), so Alarms is one tap from the top instead of a long scroll.
+    var automationsExpanded by remember { mutableStateOf(false) }
+    var alarmsExpanded by remember { mutableStateOf(false) }
+    val napDetection by viewModel.napDetectionEnabled.collectAsStateWithLifecycle()
+    val strapAlarm by viewModel.smartAlarmEnabled.collectAsStateWithLifecycle()
+    val wakeWindow by viewModel.phoneAlarmEnabled.collectAsStateWithLifecycle()
+    val windDown by viewModel.windDownEnabled.collectAsStateWithLifecycle()
     val live by viewModel.live.collectAsStateWithLifecycle()
 
     // Double-tap action (parity since 4.2.8) — real + persisted via the ViewModel (NoopPrefs). The
@@ -124,13 +133,11 @@ fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
     // becomes one `item { }` in the same order. No standalone Spacers (the eager `spacedBy(20.dp)` is
     // reproduced by the LazyColumn), so spacing is byte-identical; only on-screen sections compose + get
     // accessibility-walked on scroll.
-    LazyScreenScaffold(
-        title = uiString(R.string.l10n_automations_screen_automations_82542d6d),
-        subtitle = "Make the strap do things: tap to act, walk away to lock, train by feel.",
-    ) {
+    // RS-2b: every automation section, drawn inside the Automations group box (rows, not cards of their own) on Ridge.
+    val automationSections: @Composable () -> Unit = {
         // #haptics (#1115): per-event in-session haptic toggles, default ON (opt-out) — turn off any cue you
         // find noisy; the feature keeps working, just without that wrist buzz.
-        item {
+        run {
         SettingsSection(
             icon = Icons.Filled.Vibration,
             title = uiString(R.string.haptics_section_title),
@@ -169,7 +176,7 @@ fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
         // Double-tap (parity since 4.2.8): a real, persisted action picker bound to the ViewModel, with a
         // Test action button. Mirrors AutomationsView.swift's Picker (Apple-applicable subset only; no
         // lockScreen / runShortcut on Android).
-        item {
+        run {
         SettingsSection(
             icon = Icons.Filled.TouchApp,
             title = uiString(R.string.l10n_automations_screen_double_tap_8d2f1646),
@@ -205,7 +212,7 @@ fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
         }
 
         // Haptic coaching.
-        item {
+        run {
         SettingsSection(
             icon = Icons.Filled.Bolt,
             title = uiString(R.string.l10n_automations_screen_haptic_coaching_e2fab286),
@@ -235,7 +242,7 @@ fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
         // every wake/alarm control lives in one place. Automations is just inputs-to-actions now.
 
         // Inactivity reminder (#419) — real + persisted via InactivityPrefs; opt-in, default OFF.
-        item {
+        run {
         SettingsSection(
             icon = Icons.Filled.Timer,
             title = uiString(R.string.l10n_automations_screen_inactivity_reminder_ca49b1ba),
@@ -335,7 +342,7 @@ fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
         // dismiss. NEVER auto-written.
 
         // Illness early-warning (real + persisted; opt-OUT — the watch has always run on Android).
-        item {
+        run {
         SettingsSection(
             icon = Icons.Filled.MonitorHeart,
             title = uiString(R.string.l10n_automations_screen_illness_early_warning_453ab477),
@@ -344,7 +351,7 @@ fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
         ) {
             ToggleRow(
                 label = uiString(R.string.l10n_automations_screen_watch_for_early_illness_signs_4c22e127),
-                help = "Needs at least 14 days of history. When two or more signals drift together you get a banner on Today and a notification, at most once a day.",
+                help = "Needs at least 14 days of history. When two or more signals drift together you get an Illness heads-up card on Today and a notification, at most once a day.",
                 checked = illnessWatch,
                 onChange = { viewModel.setIllnessWatchEnabled(it) },
             )
@@ -352,7 +359,7 @@ fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
         }
 
         // Battery alerts (real + persisted; opt-OUT, default ON — #368, thanks @ujix).
-        item {
+        run {
         SettingsSection(
             icon = Icons.Filled.BatteryStd,
             title = uiString(R.string.l10n_automations_screen_battery_alerts_f3679d60),
@@ -376,24 +383,90 @@ fun AutomationsScreen(viewModel: AppViewModel, onOpenAlarms: () -> Unit = {}) {
         }
         }
         // Nap detection last, as the board orders it.
-        item { NapDetectionSection(viewModel) }
-        // B2 Hub5b (Automations.dc.html): the Alarms page as a link row at the foot.
+        NapDetectionSection(viewModel)
+    }
+    LazyScreenScaffold(
+        // RS-2b: the page holds both groups, so on Ridge it carries the Hub row's name, "Automations & Alarms".
+        title = if (ridgeShell) hubTitleCase(stringResource(R.string.hub_automations_title)) else uiString(R.string.l10n_automations_screen_automations_82542d6d),
+        subtitle = "Make the strap do things: tap to act, walk away to lock, train by feel.",
+    ) {
         if (ridgeShell) {
-            item {
-                com.noop.ui.ridge.GlassCard(Modifier.fillMaxWidth().clickable(onClick = onOpenAlarms), contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 18.dp, vertical = 14.dp)) {
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text(stringResource(R.string.nav_alarms), style = RidgeType.titleSm, color = Ridge.ink)
-                            Text(stringResource(R.string.auto_ridge_alarms_sub), style = RidgeType.bodySm, color = Ridge.inkMuted)
-                        }
-                        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Ridge.inkMuted)
-                    }
-                }
+            item(key = "group_automations") {
+                val on = listOf(
+                    breathingHaptic || intervalsHaptic || liveSessionHaptic || workoutHaptic,
+                    doubleTapAction != DoubleTapAction.NONE, zoneCoaching, inactivityEnabled, illnessWatch, batteryAlerts, napDetection,
+                )
+                AutomationsGroupBox(
+                    title = uiString(R.string.l10n_automations_screen_automations_82542d6d),
+                    summary = stringResource(R.string.auto_ridge_group_on, on.count { it }, on.size),
+                    expanded = automationsExpanded,
+                    onToggle = { automationsExpanded = !automationsExpanded },
+                ) { automationSections() }
+            }
+        } else {
+            item { Column(verticalArrangement = Arrangement.spacedBy(20.dp)) { automationSections() } }
+        }
+        // RS-2b: the Alarms page's cards inline under their own collapsed group (they were a link row at the foot of a long page).
+        if (ridgeShell) {
+            item(key = "group_alarms") {
+                val on = listOf(wakeWindow, strapAlarm, windDown)
+                AutomationsGroupBox(
+                    title = stringResource(R.string.nav_alarms),
+                    summary = stringResource(R.string.auto_ridge_alarms_sub) + " · " +
+                        stringResource(R.string.auto_ridge_group_on, on.count { it }, on.size),
+                    expanded = alarmsExpanded,
+                    onToggle = { alarmsExpanded = !alarmsExpanded },
+                ) { AlarmCards(viewModel) }
             }
         }
     }
     }
 }
+
+/**
+ * RS-2b: a group on Automations & Alarms. One glass box: the title, what is on and a chevron, and, when open, the group's
+ * sections inside the same box as rows below a divider, so a section reads as part of the group and not as its equal.
+ */
+@Composable
+internal fun AutomationsGroupBox(
+    title: String,
+    summary: String,
+    expanded: Boolean,
+    onToggle: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    val rotation by androidx.compose.animation.core.animateFloatAsState(if (expanded) 180f else 0f)
+    com.noop.ui.ridge.GlassCard(Modifier.fillMaxWidth(), contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)) {
+        Column(Modifier.fillMaxWidth()) {
+            Row(
+                Modifier.fillMaxWidth().clip(androidx.compose.foundation.shape.RoundedCornerShape(Ridge.radiusLg)).clickable(onClick = onToggle)
+                    .padding(horizontal = 18.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(title, style = RidgeType.titleSm, color = Ridge.ink)
+                    Text(summary, style = RidgeType.bodySm, color = Ridge.inkMuted)
+                }
+                Icon(
+                    com.noop.ui.ridge.RidgeIcons.chevronDown, contentDescription = null, tint = Ridge.inkMuted,
+                    modifier = Modifier.size(20.dp).rotate(rotation),
+                )
+            }
+            if (expanded) {
+                // Inside the box: one glass layer only (LocalNestedGlass), and each section is a flat row (LocalAutomationsNested).
+                androidx.compose.runtime.CompositionLocalProvider(
+                    com.noop.ui.ridge.LocalNestedGlass provides true,
+                    LocalAutomationsNested provides true,
+                ) {
+                    Column(Modifier.fillMaxWidth().padding(bottom = 8.dp)) { content() }
+                }
+            }
+        }
+    }
+}
+
+/** RS-2b: true inside an [AutomationsGroupBox]; a section there draws as a row with a divider above, not as its own card. */
+internal val LocalAutomationsNested = androidx.compose.runtime.staticCompositionLocalOf { false }
 
 // MARK: - On-device nap detection (PR #569 reimpl under NoopApp)
 
@@ -559,8 +632,9 @@ private fun SettingsSection(
     if (ridgeShell) {
         // B2 Hub5b (Automations.dc.html): an accordion group, one open at a time, "ON" under the title when anything inside is on.
         val open = LocalAutomationsOpen.current
+        val nested = LocalAutomationsNested.current
         com.noop.ui.ridge.RidgeAccordionCard(
-            eyebrow = stringResource(R.string.auto_ridge_eyebrow), title = title, icon = icon,
+            eyebrow = if (nested) "" else stringResource(R.string.auto_ridge_eyebrow), title = title, icon = icon, nested = nested,
             summary = if (active) stringResource(R.string.auto_ridge_on) else stringResource(R.string.auto_ridge_off),
             controlledExpanded = open.value == title,
             onToggle = { open.value = if (open.value == title) null else title },

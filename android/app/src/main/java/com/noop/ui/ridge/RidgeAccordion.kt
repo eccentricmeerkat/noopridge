@@ -55,6 +55,8 @@ fun RidgeAccordionCard(
     summary: String? = null,
     controlledExpanded: Boolean? = null,
     onToggle: (() -> Unit)? = null,
+    /** RS-2b: a section inside a group box: a divider above, no glass, a smaller icon and title, and no eyebrow when blank. */
+    nested: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     var localExpanded by rememberSaveable { mutableStateOf(initiallyExpanded) }
@@ -63,10 +65,11 @@ fun RidgeAccordionCard(
     val interaction = remember { MutableInteractionSource() }
     GlassCard(modifier = modifier.fillMaxWidth(), contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)) {
         Column(Modifier.fillMaxWidth()) {
+            if (nested) RidgeRowDivider()
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 72.dp)
+                    .heightIn(min = if (nested) 60.dp else 72.dp)
                     .ridgeFocusRing(interaction, Ridge.radiusLg)
                     .clickable(interactionSource = interaction, indication = null, role = Role.Button) { if (onToggle != null) onToggle() else localExpanded = !localExpanded }
                     .padding(horizontal = Ridge.space5, vertical = Ridge.space3),
@@ -74,19 +77,20 @@ fun RidgeAccordionCard(
                 horizontalArrangement = Arrangement.spacedBy(Ridge.space4),
             ) {
                 // B2 Hub5a (Settings.dc.html): a 40 dp rounded icon tile, then eyebrow, serif title and a one-line summary.
+                val tile = if (nested) 32.dp else 40.dp
+                val tileShape = androidx.compose.foundation.shape.RoundedCornerShape(if (nested) 10.dp else 12.dp)
                 Box(
-                    Modifier.size(40.dp).background(Ridge.glassFill, androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
-                        .border(1.dp, Ridge.glassStroke, androidx.compose.foundation.shape.RoundedCornerShape(12.dp)),
+                    Modifier.size(tile).background(Ridge.glassFill, tileShape).border(1.dp, Ridge.glassStroke, tileShape),
                     contentAlignment = Alignment.Center,
-                ) { Icon(icon, contentDescription = null, tint = Ridge.brand, modifier = Modifier.size(22.dp)) }
+                ) { Icon(icon, contentDescription = null, tint = Ridge.brand, modifier = Modifier.size(if (nested) 18.dp else 22.dp)) }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    RidgeEyebrow(eyebrow)
-                    Text(title, style = RidgeType.titleSm, color = Ridge.ink)
+                    if (eyebrow.isNotBlank()) RidgeEyebrow(eyebrow)
+                    Text(title, style = if (nested) RidgeType.body.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold) else RidgeType.titleSm, color = Ridge.ink)
                     if (summary != null) Text(summary, style = androidx.compose.ui.text.TextStyle(fontSize = 12.sp, lineHeight = 16.sp), color = Ridge.inkMuted)
                 }
                 Icon(
                     RidgeIcons.chevronDown, contentDescription = null, tint = Ridge.inkMuted,
-                    modifier = Modifier.size(24.dp).rotate(if (expanded) 180f else 0f),
+                    modifier = Modifier.size(if (nested) 20.dp else 24.dp).rotate(if (expanded) 180f else 0f),
                 )
             }
             AnimatedVisibility(

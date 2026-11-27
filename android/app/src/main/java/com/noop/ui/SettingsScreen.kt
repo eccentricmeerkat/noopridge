@@ -1,11 +1,9 @@
 package com.noop.ui
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -20,8 +18,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +26,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -48,14 +43,11 @@ import androidx.compose.material.icons.filled.BatteryStd
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Brightness6
 import androidx.compose.material.icons.filled.ViewAgenda
-import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.IosShare
-import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.SaveAlt
@@ -73,10 +65,7 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Slider
@@ -127,7 +116,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.noop.BuildConfig
 import com.noop.analytics.Baselines
 import com.noop.metrics.MetricsV2
 import com.noop.metrics.V2Change
@@ -147,7 +135,6 @@ import com.noop.ble.WhoopModel
 import com.noop.data.DataBackup
 import com.noop.ingest.RawSensorExport
 import com.noop.ingest.WhoopCsvExporter
-import com.noop.update.UpdateCheck
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -159,8 +146,8 @@ import com.noop.analytics.ClockFormatPreference
 //
 // Profile (the numbers that power HR zones / calories / recovery baselines), a
 // Backup & restore section wiring DataBackup export/import through the Storage
-// Access Framework, and an About section with version + attribution + a Support
-// link. Re-skinned to the locked NOOP component system: every surface is a
+// Access Framework. (The About section moved to Hub > About in RS-1-1: version, update check,
+// credits and disclaimer live there now.) Re-skinned to the locked NOOP component system: every surface is a
 // NoopCard, every status uses StatePill, the two-column form feel is preserved.
 //
 // macOS parity notes:
@@ -502,8 +489,8 @@ class ProfileStore(private val prefs: SharedPreferences) {
         private const val KEY_STEPS_MANUAL_COEFF = "steps_manual_coefficient"
         private const val KEY_STEPS_HAS_MOTION = "steps_has_banked_motion"
 
-        private const val AGE_MIN = 13
-        private const val AGE_MAX = 100
+        internal const val AGE_MIN = 13
+        internal const val AGE_MAX = 100
         private const val WEIGHT_MIN = 30.0
         private const val WEIGHT_MAX = 250.0
         private const val HEIGHT_MIN = 120.0
@@ -634,18 +621,6 @@ fun SettingsScreen(
     // button calls connect() directly and silently no-ops on Android 12+ when the permission was
     // denied/revoked (issue #1). Shared with Live's Connect via the one rememberRequestScan gate.
     val requestScan = rememberRequestScan { vm.connect() }
-
-    // "What's New" changelog sheet, reachable any time from About (mirrors the macOS
-    // Settings → About "What's new" button). Persistence/gating lives in NoopRoot; this
-    // is a manual re-open and writes nothing.
-    var showWhatsNew by remember { mutableStateOf(false) }
-
-    // "How your scores work" explainer sheet, reachable any time from About (macOS/iOS parity).
-    var showScoringGuide by remember { mutableStateOf(false) }
-
-    // "How NOOP works" primer sheet (COMPONENT 5 of the explainability layer), reachable any time
-    // from About — the plain-English tour of sleep sorting, scores, recording and provenance.
-    var showHowNoopWorks by remember { mutableStateOf(false) }
 
     // "WHOOP 4.0 vs 5.0/MG: what each can read and why" explainer (FI-2 / #490), reachable from the
     // Strap section by BOTH model owners. Clears up which features each strap supports — e.g. why the
@@ -1781,7 +1756,7 @@ fun SettingsScreen(
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 SettingsToggleRow(
                     title = uiString(R.string.l10n_settings_screen_illness_heads_up_97e10035),
-                    detail = "Watches your resting heart rate, HRV and skin temperature for the pattern that often shows up before you feel unwell, and surfaces a gentle heads-up. An observation about your own numbers, not a diagnosis.",
+                    detail = "Alerts you when 2 or more of resting heart rate, HRV, skin temperature and breathing rate move the way they often do before you feel unwell, compared with your last month. Needs 14 days of data. Shows a card on Today and a notification, at most once a day. An observation about your own numbers, not a diagnosis.",
                     checked = illnessWatch,
                     onCheckedChange = {
                         illnessWatch = it
@@ -2960,396 +2935,6 @@ fun SettingsScreen(
 
         } // end Advanced disclosure content Column
         } // end SettingsDisclosureGroup("Advanced")
-
-        // --- About ---
-        SettingsCard(
-            icon = Icons.Filled.Info,
-            title = uiString(R.string.l10n_settings_screen_about_6b21fb79),
-            eyebrow = SettingsGroup.APP,
-            ridgeEyebrow = stringResource(R.string.set_ridge_e_noop),
-            summary = stringResource(R.string.set_ridge_s_about, BuildConfig.VERSION_NAME),
-            blurb = "NOOP: all your data, none of the cloud.",
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    Text("NOOP", style = NoopType.title2, color = Palette.textPrimary)
-                    StatePill("v${BuildConfig.VERSION_NAME}", tone = StrandTone.Neutral, showsDot = false)
-                }
-
-                // Project home — NOOP's code, releases, issues and wiki live on GitHub.
-                val projectHomeInteraction = remember { MutableInteractionSource() }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .liquidPress(projectHomeInteraction)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Palette.accent.copy(alpha = 0.10f))
-                        .border(1.dp, Palette.accent.copy(alpha = 0.25f), RoundedCornerShape(10.dp))
-                        .clickable(
-                            interactionSource = projectHomeInteraction,
-                            indication = null,
-                        ) {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(RidgeReleaseNotes.PROJECT_URL))
-                            try {
-                                context.startActivity(intent)
-                            } catch (_: ActivityNotFoundException) {
-                                Toast.makeText(context, RidgeReleaseNotes.PROJECT_URL.removePrefix("https://"), Toast.LENGTH_LONG).show()
-                            }
-                        }
-                        .padding(horizontal = 14.dp, vertical = 12.dp)
-                        .semantics { contentDescription = uiString(R.string.l10n_settings_screen_project_home_and_source_on_github_a067ed35) },
-                ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(uiString(R.string.l10n_settings_screen_project_home_source_994627c1), style = NoopType.body, color = Palette.textPrimary)
-                        Text(
-                            uiString(R.string.l10n_settings_screen_github_code_releases_issues_and_the_50b41e25),
-                            style = NoopType.caption,
-                            color = Palette.textTertiary,
-                        )
-                    }
-                }
-
-                // Check for updates — a single, user-initiated call to the project's public releases API (GitHub)
-                // when the button is tapped. No background polling, no auto-update; nothing about you
-                // is sent. Android already holds INTERNET (for the opt-in Coach), so this adds nothing.
-                var updChecking by remember { mutableStateOf(false) }
-                var updResult by remember { mutableStateOf<UpdateCheck.Result?>(null) }
-                // #1659: the automatic half. A sideloaded build has no store to update it, so noticing a
-                // release and saying so in the Updates inbox is the whole of what is possible. ON by
-                // default, because a setting nobody finds is the feature not existing; switching it off
-                // here stops the request entirely. See UpdateAvailability.DEFAULT_ENABLED.
-                var autoCheck by remember {
-                    mutableStateOf(com.noop.update.UpdateWatch.isEnabled(context))
-                }
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    ) {
-                        OutlinedButton(
-                            onClick = {
-                                if (!updChecking) {
-                                    updChecking = true
-                                    updResult = null
-                                    scope.launch {
-                                        updResult = UpdateCheck.check(BuildConfig.VERSION_NAME)
-                                        updChecking = false
-                                    }
-                                }
-                            },
-                            enabled = !updChecking,
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Palette.accent),
-                        ) {
-                            if (updChecking) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(14.dp).padding(end = 6.dp),
-                                    strokeWidth = 2.dp,
-                                    color = Palette.accent,
-                                )
-                                Text(uiString(R.string.l10n_settings_screen_checking_820d6004), style = NoopType.captionNumber)
-                            } else {
-                                Text(uiString(R.string.l10n_settings_screen_check_for_updates_736b9062), style = NoopType.captionNumber)
-                            }
-                        }
-                        when (val r = updResult) {
-                            is UpdateCheck.Result.UpToDate ->
-                                Text(
-                                    uiString(R.string.l10n_settings_screen_you_re_on_the_latest_r_027a82be, r.version),
-                                    style = NoopType.footnote, color = Palette.textSecondary,
-                                )
-                            UpdateCheck.Result.Failed ->
-                                Text(
-                                    uiString(R.string.l10n_settings_screen_couldn_t_check_try_again_b3c885d9),
-                                    style = NoopType.footnote, color = Palette.statusWarning,
-                                )
-                            else -> {}
-                        }
-                    }
-
-                    // #1659: the automatic half, directly under the manual button so the two read as one
-                    // feature — the same placement as the Swift twin.
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                uiString(R.string.l10n_settings_screen_check_automatically_7cd229d2),
-                                style = NoopType.subhead,
-                                color = Palette.textPrimary,
-                            )
-                            Text(
-                                uiString(R.string.l10n_settings_screen_once_a_day_noop_asks_github_5683aad3),
-                                style = NoopType.footnote,
-                                color = Palette.textTertiary,
-                            )
-                        }
-                        Switch(
-                            checked = autoCheck,
-                            onCheckedChange = {
-                                autoCheck = it
-                                com.noop.update.UpdateWatch.setEnabled(context, it)
-                            },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = Palette.surfaceBase,
-                                checkedTrackColor = Palette.accent,
-                                uncheckedThumbColor = Palette.textSecondary,
-                                uncheckedTrackColor = Palette.surfaceInset,
-                                uncheckedBorderColor = Palette.hairline,
-                            ),
-                        )
-                    }
-
-                    // Update available: show what's new, with a download straight to the release.
-                    (updResult as? UpdateCheck.Result.Available)?.let { avail ->
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(Palette.surfaceInset)
-                                .border(1.dp, Palette.accent.copy(alpha = 0.3f), RoundedCornerShape(10.dp))
-                                .padding(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    uiString(R.string.l10n_settings_screen_version_avail_version_is_available_5b401bd4, avail.version),
-                                    style = NoopType.subhead, color = Palette.textPrimary,
-                                    modifier = Modifier.weight(1f),
-                                )
-                                NoopButton(
-                                    text = uiString(R.string.l10n_settings_screen_download_a479c9c3),
-                                    leadingIcon = Icons.Filled.Download,
-                                    kind = NoopButtonKind.Primary,
-                                    onClick = {
-                                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(avail.url)))
-                                    },
-                                )
-                            }
-                            if (avail.notes.isNotEmpty()) {
-                                Text(
-                                    avail.notes,
-                                    style = NoopType.footnote, color = Palette.textSecondary,
-                                    modifier = Modifier
-                                        .heightIn(max = 160.dp)
-                                        .verticalScroll(rememberScrollState()),
-                                )
-                            }
-                        }
-                    }
-
-                    Text(
-                        uiString(R.string.l10n_settings_screen_checks_github_for_the_latest_version_c10a81e2),
-                        style = NoopType.footnote, color = Palette.textTertiary,
-                    )
-                }
-
-                Text(
-                    uiString(R.string.l10n_settings_screen_a_standalone_companion_for_your_whoop_7a132b5a),
-                    style = NoopType.subhead,
-                    color = Palette.textSecondary,
-                )
-
-                // What's new — re-open the changelog sheet any time (macOS About parity).
-                val whatsNewInteraction = remember { MutableInteractionSource() }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .liquidPress(whatsNewInteraction)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Palette.surfaceInset)
-                        .border(1.dp, Palette.hairline, RoundedCornerShape(10.dp))
-                        .clickable(
-                            interactionSource = whatsNewInteraction,
-                            indication = null,
-                        ) { showWhatsNew = true }
-                        .padding(horizontal = 14.dp, vertical = 12.dp)
-                        .semantics { contentDescription = uiString(R.string.l10n_settings_screen_what_s_new_in_noop_appchangelog_d26fb453, AppChangelog.CURRENT_VERSION) },
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    ) {
-                        Icon(
-                            Icons.Filled.Campaign,
-                            contentDescription = null,
-                            tint = Palette.accent,
-                            modifier = Modifier.size(18.dp),
-                        )
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(uiString(R.string.l10n_settings_screen_what_s_new_4d8dc5fe), style = NoopType.headline, color = Palette.textPrimary)
-                            Text(
-                                uiString(R.string.l10n_settings_screen_recent_changes_and_what_to_expect_3ceb660b),
-                                style = NoopType.footnote,
-                                color = Palette.textSecondary,
-                            )
-                        }
-                        Text("›", style = NoopType.title2, color = Palette.accent)
-                    }
-                }
-
-                // How your scores work — the honest explainer for Charge/Effort/Rest + the
-                // confidence labels, opened any time (macOS/iOS About parity).
-                val scoringGuideInteraction = remember { MutableInteractionSource() }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .liquidPress(scoringGuideInteraction)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Palette.surfaceInset)
-                        .border(1.dp, Palette.hairline, RoundedCornerShape(10.dp))
-                        .clickable(
-                            interactionSource = scoringGuideInteraction,
-                            indication = null,
-                        ) { showScoringGuide = true }
-                        .padding(horizontal = 14.dp, vertical = 12.dp)
-                        .semantics { contentDescription = uiString(R.string.l10n_settings_screen_how_your_scores_work_21a0e2be) },
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    ) {
-                        Icon(
-                            Icons.Filled.Science,
-                            contentDescription = null,
-                            tint = Palette.accent,
-                            modifier = Modifier.size(18.dp),
-                        )
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(uiString(R.string.l10n_settings_screen_how_your_scores_work_21a0e2be), style = NoopType.headline, color = Palette.textPrimary)
-                            Text(
-                                uiString(R.string.l10n_settings_screen_charge_effort_and_rest_and_how_d2c423a4),
-                                style = NoopType.footnote,
-                                color = Palette.textSecondary,
-                            )
-                        }
-                        Text("›", style = NoopType.title2, color = Palette.accent)
-                    }
-                }
-
-                // How NOOP works — the plain-English primer (COMPONENT 5 of the explainability layer):
-                // how sleep is sorted, how scores + calibration work, what recording means, and where
-                // each number comes from. The one "?" entry point into the primer (macOS/iOS parity).
-                val howNoopWorksInteraction = remember { MutableInteractionSource() }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .liquidPress(howNoopWorksInteraction)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Palette.surfaceInset)
-                        .border(1.dp, Palette.hairline, RoundedCornerShape(10.dp))
-                        .clickable(
-                            interactionSource = howNoopWorksInteraction,
-                            indication = null,
-                        ) { showHowNoopWorks = true }
-                        .padding(horizontal = 14.dp, vertical = 12.dp)
-                        .semantics { contentDescription = uiString(R.string.l10n_settings_screen_how_noop_works_3396b27a) },
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.MenuBook,
-                            contentDescription = null,
-                            tint = Palette.accent,
-                            modifier = Modifier.size(18.dp),
-                        )
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(uiString(R.string.l10n_settings_screen_how_noop_works_3396b27a), style = NoopType.headline, color = Palette.textPrimary)
-                            Text(
-                                uiString(R.string.l10n_settings_screen_sleep_sorting_scores_recording_and_where_832378b5),
-                                style = NoopType.footnote,
-                                color = Palette.textSecondary,
-                            )
-                        }
-                        Text("›", style = NoopType.title2, color = Palette.accent)
-                    }
-                }
-
-                // Medical disclaimer — inset well with a warning-tinted hairline.
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Palette.surfaceInset)
-                        .border(1.dp, Palette.statusWarning.copy(alpha = 0.25f), RoundedCornerShape(10.dp))
-                        .padding(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.Top,
-                ) {
-                    Icon(
-                        Icons.Filled.Info,
-                        contentDescription = null,
-                        tint = Palette.statusWarning,
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Text(
-                        uiString(R.string.l10n_settings_screen_noop_is_not_a_medical_device_ab32ef7e),
-                        style = NoopType.footnote,
-                        color = Palette.textSecondary,
-                    )
-                }
-
-                SettingsRowDivider()
-
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Overline("Built on")
-                    SettingsAttributionRow(repo = "my-whoop", note = "WHOOP 4.0 protocol")
-                    SettingsAttributionRow(repo = "goose", note = "WHOOP 5.0 protocol")
-                }
-                Text(
-                    uiString(R.string.l10n_settings_screen_open_source_ble_reverse_engineering_work_40062271),
-                    style = NoopType.footnote,
-                    color = Palette.textTertiary,
-                )
-
-            }
-        }
-
-        // What's new sheet, opened from the About row above. Full-screen Dialog so it
-        // covers the whole screen like the macOS .sheet; closing just hides it.
-        if (showWhatsNew) {
-            Dialog(
-                onDismissRequest = { showWhatsNew = false },
-                properties = DialogProperties(usePlatformDefaultWidth = false),
-            ) {
-                Surface(modifier = Modifier.fillMaxSize(), color = Palette.surfaceBase) {
-                    WhatsNewSheet(onClose = { showWhatsNew = false })
-                }
-            }
-        }
-
-        // Scoring guide sheet, opened from the About row above. Same full-screen Dialog idiom.
-        if (showScoringGuide) {
-            Dialog(
-                onDismissRequest = { showScoringGuide = false },
-                properties = DialogProperties(usePlatformDefaultWidth = false),
-            ) {
-                Surface(modifier = Modifier.fillMaxSize(), color = Palette.surfaceBase) {
-                    ScoringGuideScreen(onClose = { showScoringGuide = false })
-                }
-            }
-        }
-
-        // "How NOOP works" primer sheet, opened from the About row above. Same full-screen Dialog idiom.
-        if (showHowNoopWorks) {
-            Dialog(
-                onDismissRequest = { showHowNoopWorks = false },
-                properties = DialogProperties(usePlatformDefaultWidth = false),
-            ) {
-                Surface(modifier = Modifier.fillMaxSize(), color = Palette.surfaceBase) {
-                    HowNoopWorksScreen(onClose = { showHowNoopWorks = false })
-                }
-            }
-        }
 
         // "WHOOP 4.0 vs 5.0/MG" explainer sheet (FI-2 / #490), opened from the Strap section. Same idiom.
         if (showModelComparison) {

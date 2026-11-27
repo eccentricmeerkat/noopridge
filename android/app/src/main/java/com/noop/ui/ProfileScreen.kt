@@ -104,26 +104,51 @@ fun ProfileScreen(vm: AppViewModel, onOpenStepsCalibration: () -> Unit) {
                         }
                         PfSub(stringResource(R.string.settings_name_blurb))
                     }
+                    // RS-1-3 item 9 (owner, 25 Nov): Age becomes Date of Birth ("June 10th, 1990"); a tap opens the Birthday
+                    // wheels. Stored through setDateOfBirth, as onboarding does, so the age and everything from it follow.
                     PfRow {
-                        PfStep(
-                            label = stringResource(R.string.l10n_settings_screen_age_ff9f1ff3), value = profile.age.toString(), unit = "",
-                            decDesc = "Decrease age", incDesc = "Increase age",
-                            onMinus = { mutate { profile.setAge(profile.age - 1) } },
-                            onPlus = { mutate { profile.setAge(profile.age + 1) } },
-                        )
+                        var showBirthday by remember { mutableStateOf(false) }
+                        val zone = java.time.ZoneId.systemDefault()
+                        val dob = java.time.Instant.ofEpochMilli(profile.dateOfBirthMillis).atZone(zone).toLocalDate()
+                        val known = profile.knownAge != null
+                        val label = stringResource(R.string.profile_dob_label)
+                        val value = if (known) birthdayText(dob) else stringResource(R.string.profile_ridge_add)
+                        Row(
+                            Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                                .clickable(role = androidx.compose.ui.semantics.Role.Button) { showBirthday = true }
+                                .semantics(mergeDescendants = true) {},
+                            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        ) {
+                            Text(label, style = PF_LABEL, color = Ridge.ink, modifier = Modifier.weight(1f))
+                            // Owner, 25 Nov: the date a size down from the stepper values (it is long), 2 dp from the chevron.
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                Text(value, style = PF_VALUE.copy(fontSize = 16.sp, lineHeight = 20.sp), color = if (known) Ridge.ink else Ridge.inkMuted, maxLines = 1)
+                                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Ridge.inkSubtle)
+                            }
+                        }
+                        if (showBirthday) {
+                            BirthdayDialog(
+                                initial = dob, minAge = ProfileStore.AGE_MIN, maxAge = ProfileStore.AGE_MAX,
+                                onDismiss = { showBirthday = false },
+                                onDone = { picked -> showBirthday = false; mutate { profile.setDateOfBirth(picked) } },
+                            )
+                        }
                     }
                     PfRow {
                         Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             Text(stringResource(R.string.l10n_settings_screen_sex_e301dd60), style = PF_LABEL, color = Ridge.ink)
+                            Spacer(Modifier.weight(1f))
                             val sexLabels = SEX_OPTIONS.associateWith { it.label }
                             RidgeSegmentedPills(
                                 items = SEX_OPTIONS,
                                 selected = SEX_OPTIONS.firstOrNull { it.tag == profile.sex } ?: SEX_OPTIONS[0],
                                 onSelect = { o -> mutate { profile.sex = o.tag } },
                                 label = { sexLabels.getValue(it) },
-                                fill = true,
-                                itemPadding = 4.dp,
-                                modifier = Modifier.weight(1f),
+                                // Owner, 25 Nov: the pills keep their own width at the right, with space after "Sex".
+                                fill = false,
+                                itemPadding = 12.dp,
+                                // Owner, 25 Nov: the same 36 dp height (and so the same end radius) as the +/- buttons.
+                                height = 36.dp,
                             )
                         }
                     }

@@ -74,7 +74,7 @@ internal fun buildSleepMetricPoints(
             // sleep_performance series carries) — not a local hours-vs-need approximation. Keeps the
             // graph and the score in agreement. (#614 follow-up)
             "performance" -> RestScorer.restFromDaily(d)?.takeIf { it in 0.0..100.0 }
-            "efficiency"  -> d.efficiency?.let { if (it <= 1.0) it * 100.0 else it }
+            "efficiency"  -> efficiencyPercent(d.efficiency)
             "consistency" -> {
                 val idx = days.indexOf(d)
                 val lo = max(0, idx - 13)

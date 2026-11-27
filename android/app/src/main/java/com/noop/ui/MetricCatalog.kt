@@ -131,7 +131,9 @@ internal object MetricCatalog {
         e("stress", R.string.cat_ridge_stress, "/3", CatCategory.RECOVERY, Icons.Filled.ShowChart, { Ridge.stateModerate }, false, 1, CatSource.Registry(MetricId.STRESS)),
         // Sleep
         e("sleep", R.string.l10n_trends_explore_screen_sleep_3cac34e6, "h", CatCategory.SLEEP, Icons.Filled.Bedtime, { Palette.accent }, true, 1, CatSource.Daily { it.totalSleepMin?.let { m -> m / 60.0 } }, "rest"),
-        e("efficiency", R.string.l10n_trends_explore_screen_sleep_efficiency_b4b5c293, "%", CatCategory.SLEEP, Icons.Filled.Bedtime, { Palette.accent }, true, 0, CatSource.Daily { it.efficiency }),
+        // RS-3c: how well each night went, beside Rest.
+        e("sleep_score", R.string.sleep_score_title, "/100", CatCategory.SLEEP, Icons.Filled.Bedtime, { Palette.accent }, true, 0, CatSource.Registry(MetricId.SLEEP_SCORE)),
+        e("efficiency", R.string.l10n_trends_explore_screen_sleep_efficiency_b4b5c293, "%", CatCategory.SLEEP, Icons.Filled.Bedtime, { Palette.accent }, true, 0, CatSource.Daily { efficiencyPercent(it.efficiency) }),
         e("deep_min", R.string.cat_ridge_deep, "min", CatCategory.SLEEP, Icons.Filled.Hotel, { Palette.metricPurple }, true, 0, CatSource.Daily { it.deepMin }),
         e("rem_min", R.string.cat_ridge_rem, "min", CatCategory.SLEEP, Icons.Filled.Hotel, { Palette.metricPurple }, true, 0, CatSource.Daily { it.remMin }),
         e("light_min", R.string.cat_ridge_light, "min", CatCategory.SLEEP, Icons.Filled.Hotel, { Palette.metricCyan }, null, 0, CatSource.Daily { it.lightMin }),

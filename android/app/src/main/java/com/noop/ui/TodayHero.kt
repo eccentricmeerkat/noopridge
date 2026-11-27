@@ -157,8 +157,8 @@ internal fun ScoreHeroRow(
                 // empty / calibrating overlay; badges its recovery winner.
                 val effortRingTap = onOpenMetric?.let { open -> { open(HERO_EFFORT_METRIC_KEY) } }
                 val restRingTap = onOpenSleep ?: onOpenMetric?.let { open -> { open(HERO_REST_METRIC_KEY) } }
-                // C-04 carried state: a prior night's Charge shown on today is dimmed AND dated under its label
-                // ("Last night · 11 Nov" / "Latest sleep · 6 Nov", #779), so it is never read as today's.
+                // C-04 carried state: a prior night's Charge shown on today is dimmed. RS-3d (owner, 26 Nov): no "Last night ·
+                // date" under the orb; the Readiness card's detail line still dates the night it reads.
                 val carriedCharge = lastScoredCharge?.takeIf {
                     recovery == null && shownCharge(recovery, recoveryCalibration != null, it) != null
                 }
@@ -166,8 +166,6 @@ internal fun ScoreHeroRow(
                     modifier = Modifier.width(col),
                     domain = DomainTheme.Charge,
                     onRingTap = onChargeTap,
-                    // Break at the " · " so the date stays whole ("Last night" over "11 Nov").
-                    caption = carriedCharge?.caption?.takeIf { it.isNotBlank() }?.replace(" · ", "\n"),
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         // #802: when today has no Charge yet but a prior night's value is carried, draw a

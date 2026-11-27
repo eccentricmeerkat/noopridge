@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -94,6 +95,8 @@ fun <T> RidgeSegmentedPills(
     modifier: Modifier = Modifier,
     fill: Boolean = false,
     itemPadding: androidx.compose.ui.unit.Dp = Ridge.space4,
+    /** The whole control's height when set (segments fill it inside the inset); null keeps the 48 dp default. */
+    height: androidx.compose.ui.unit.Dp? = null,
 ) {
     val shape = RoundedCornerShape(Ridge.radiusPill)
     Row(
@@ -112,7 +115,7 @@ fun <T> RidgeSegmentedPills(
             val interaction = remember { MutableInteractionSource() }
             Box(
                 (if (fill) Modifier.weight(1f) else Modifier)
-                    .heightIn(min = 40.dp)
+                    .then(if (height != null) Modifier.height(height - Ridge.space1 * 2) else Modifier.heightIn(min = 40.dp))
                     .widthIn(min = 48.dp)
                     .ridgeFocusRing(interaction, Ridge.radiusPill)
                     .clip(shape)
@@ -121,7 +124,7 @@ fun <T> RidgeSegmentedPills(
                         selected = on, role = Role.Tab, interactionSource = interaction, indication = null,
                         onClick = { onSelect(item) },
                     )
-                    .padding(horizontal = itemPadding, vertical = Ridge.space2),
+                    .padding(horizontal = itemPadding, vertical = if (height != null) 0.dp else Ridge.space2),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(label(item), style = RidgeType.bodySm, color = if (on) Ridge.inkOnLiquid else Ridge.inkMuted, maxLines = 1)

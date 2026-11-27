@@ -724,7 +724,7 @@ object WearableExportImporter {
             DailyMetric(
                 deviceId = deviceId, day = d.day,
                 totalSleepMin = d.totalSleepMin,
-                efficiency = d.efficiencyPct ?: sleepEfficiency(d.totalSleepMin, d.awakeMin),
+                efficiency = com.noop.data.EfficiencyStorage.fraction(d.efficiencyPct ?: sleepEfficiency(d.totalSleepMin, d.awakeMin)),
                 deepMin = d.deepMin, remMin = d.remMin, lightMin = d.lightMin,
                 restingHr = d.restingHr, avgHrv = d.avgHrvMs,
                 respRateBpm = d.respRateBpm,   // imported night resp now reaches the day rollup (#17)
@@ -739,7 +739,7 @@ object WearableExportImporter {
         val sleepRows = parsed.sleeps.map { s ->
             SleepSession(
                 deviceId = deviceId, startTs = s.startTs, endTs = s.endTs,
-                efficiency = s.efficiencyPct ?: efficiencyFromStages(s.stagesJson, s.startTs, s.endTs),
+                efficiency = com.noop.data.EfficiencyStorage.fraction(s.efficiencyPct ?: efficiencyFromStages(s.stagesJson, s.startTs, s.endTs)),
                 restingHr = s.lowestHr ?: s.avgHr, avgHrv = s.avgHrvMs, stagesJSON = s.stagesJson,
             )
         }

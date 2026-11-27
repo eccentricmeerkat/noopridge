@@ -12,8 +12,8 @@ internal fun hasRecentData(points: List<SeriesPoint>, today: LocalDate): Boolean
 }
 
 /**
- * The metric keys the picker tags "No data": [load] reads each metric's series (the same reader the chart uses), and a
- * metric whose series is empty, or has nothing in the last 90 days, is returned. A read that throws counts as no data.
+ * The metric keys tagged "No data" (Insights' picker and the Key Metrics editor): [load] reads each metric's series (the same
+ * reader the chart uses), and a metric with no reading at all is returned. A read that throws counts as no data.
  */
 internal suspend fun metricsWithoutRecentData(
     keys: List<String>,

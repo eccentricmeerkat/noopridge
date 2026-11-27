@@ -15,6 +15,12 @@ import com.noop.ui.ridgeGlass
 enum class GlassTone { Neutral, Strong, Charge, Effort, Rest, Alert }
 
 /**
+ * RS-2b: true inside a group box that is itself a [GlassCard] (Automations & Alarms). A card drawn there keeps its padding and
+ * content but paints no glass of its own, so the box is the one glass layer. Off everywhere else.
+ */
+val LocalNestedGlass = androidx.compose.runtime.staticCompositionLocalOf { false }
+
+/**
  * A Noop Ridge glass card (B-02): glass fill over the ground, a 1 dp hairline, [radius] corners, no glow and
  * no nested glass. Tones wash the top-left corner and tint the hairline. Built on [ridgeGlass] so Today's
  * existing cards and new screens draw the same surface.
@@ -36,7 +42,7 @@ fun GlassCard(
     }
     Box(
         modifier = modifier
-            .ridgeGlass(radius = radius, strong = tone == GlassTone.Strong, tint = tint)
+            .then(if (LocalNestedGlass.current) Modifier else Modifier.ridgeGlass(radius = radius, strong = tone == GlassTone.Strong, tint = tint))
             .padding(contentPadding),
         content = content,
     )

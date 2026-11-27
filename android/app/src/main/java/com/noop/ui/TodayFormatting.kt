@@ -133,7 +133,7 @@ internal fun sleepValue(d: DailyMetric?): String {
  */
 private fun restCaption(d: DailyMetric?): String? = when {
     d?.totalSleepMin != null -> sleepValue(d)
-    d?.efficiency != null -> String.format(Locale.getDefault(), "%.0f%% eff", d.efficiency)
+    d?.efficiency != null -> String.format(Locale.getDefault(), "%.0f%% eff", efficiencyPercent(d.efficiency))
     else -> null
 }
 

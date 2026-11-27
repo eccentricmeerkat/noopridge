@@ -50,7 +50,6 @@ class MetricsV2Test {
     @Test
     fun theNeedReadersRequireTheOneNeed() {
         assertFalse(MetricsV2.isOn(V2Change.PLAN_SLEEP_HALF, setOf(V2Change.PLAN_SLEEP_HALF)))
-        assertFalse(MetricsV2.isOn(V2Change.SLEPT_ON_TARGET, setOf(V2Change.SLEPT_ON_TARGET)))
         assertTrue(MetricsV2.isOn(V2Change.PLAN_SLEEP_HALF, setOf(V2Change.PLAN_SLEEP_HALF, V2Change.ONE_SLEEP_NEED)))
         assertTrue(MetricsV2.isOn(V2Change.NORMAL_BAND_60, setOf(V2Change.NORMAL_BAND_60)))
     }

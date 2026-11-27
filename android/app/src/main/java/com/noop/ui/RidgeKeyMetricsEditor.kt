@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
@@ -38,8 +39,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.noop.R
 import com.noop.ui.ridge.RidgeButton
 import com.noop.ui.ridge.RidgeButtonKind
@@ -69,6 +72,45 @@ internal fun keyMetricEntry(m: KeyMetric): CatalogEntry? = MetricCatalog.forKey(
     },
 )
 
+/**
+ * RS-2e: the tiles whose metric has no reading at all, for the editor's "No data" tag. The same rule as Insights' picker
+ * ([metricsWithoutRecentData] over each tile's catalogue entry), so the two lists agree; [load] reads one entry's series.
+ */
+internal suspend fun keyMetricsWithoutData(today: java.time.LocalDate, load: suspend (CatalogEntry) -> List<SeriesPoint>): Set<KeyMetric> {
+    val byName = KeyMetric.entries.associateBy { it.name }
+    return metricsWithoutRecentData(byName.keys.toList(), today) { name ->
+        load(requireNotNull(keyMetricEntry(byName.getValue(name))))
+    }.mapTo(LinkedHashSet()) { byName.getValue(it) }
+}
+
+/**
+ * [keyMetricsWithoutData] read as Insights reads it (the recent days, the registry inputs loaded once), off the main thread
+ * after the sheet is up: opening the editor is never delayed, and the tags appear once the answer is in.
+ */
+@Composable
+internal fun rememberKeyMetricsWithoutData(vm: AppViewModel): Set<KeyMetric> {
+    val days by vm.recentDays.collectAsStateWithLifecycle()
+    var noData by remember { mutableStateOf<Set<KeyMetric>>(emptySet()) }
+    LaunchedEffect(days) {
+        noData = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+            var cached: com.noop.metrics.V10MetricInputs? = null
+            suspend fun inputs() = cached ?: registryInputsFor(vm).also { cached = it }
+            keyMetricsWithoutData(java.time.LocalDate.now()) { entry -> entry.loadSeries(vm, days, { inputs() }) }
+        }
+    }
+    return noData
+}
+
+/** A tile's name in the editor, with Insights' "No data" tag after it when its metric has no reading. */
+@Composable
+internal fun KeyMetricEditorTitle(title: String, noData: Boolean, color: androidx.compose.ui.graphics.Color, modifier: Modifier = Modifier) {
+    Row(modifier, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        // RS-3e: the name takes the spare width, so "No data" sits at the right, beside the row's buttons.
+        Text(title, style = RidgeType.body, color = color, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+        if (noData) Text(stringResource(R.string.explore_ridge_no_data), style = TRN_LEGEND, color = Ridge.inkSubtle, maxLines = 1)
+    }
+}
+
 private val ROW_HEIGHT = 56.dp
 private val ROW_GAP = 8.dp
 
@@ -79,6 +121,8 @@ internal fun RidgeKeyMetricsEditor(
     initialWindowDays: Int,
     onDismiss: () -> Unit,
     onSave: (List<KeyMetric>, Boolean, Int) -> Unit,
+    /** RS-2e: tiles tagged "No data". They can still be added. */
+    noData: Set<KeyMetric> = emptySet(),
 ) {
     val shown = remember { mutableStateListOf<KeyMetric>().apply { addAll(initial) } }
     val hidden = remember { mutableStateListOf<KeyMetric>().apply { addAll(KeyMetric.entries.filter { it !in initial }) } }
@@ -144,7 +188,7 @@ internal fun RidgeKeyMetricsEditor(
                         ) {
                             entry?.let { Icon(it.icon, contentDescription = null, tint = it.accent(), modifier = Modifier.size(22.dp)) }
                                 ?: Box(Modifier.size(22.dp))
-                            Text(title, style = RidgeType.body, color = Ridge.ink, modifier = Modifier.weight(1f), maxLines = 1)
+                            KeyMetricEditorTitle(title, m in noData, Ridge.ink, Modifier.weight(1f))
                             // The drag handle: press and drag to reorder; the row follows the finger and the others make way.
                             val dragDesc = stringResource(R.string.kme_ridge_drag, title)
                             Box(
@@ -209,7 +253,8 @@ internal fun RidgeKeyMetricsEditor(
                 items.forEach { m ->
                     val entry = keyMetricEntry(m)
                     val title = titles.getValue(m)
-                    val showDesc = stringResource(R.string.today_customize_show, title)
+                    val noDataWord = stringResource(R.string.explore_ridge_no_data)
+                    val showDesc = stringResource(R.string.today_customize_show, title).let { if (m in noData) listOf(it, noDataWord).joinToString() else it }
                     Row(
                         Modifier
                             .fillMaxWidth()
@@ -221,7 +266,7 @@ internal fun RidgeKeyMetricsEditor(
                     ) {
                         entry?.let { Icon(it.icon, contentDescription = null, tint = it.accent().copy(alpha = if (atLimit) 0.4f else 1f), modifier = Modifier.size(22.dp)) }
                             ?: Box(Modifier.size(22.dp))
-                        Text(title, style = RidgeType.body, color = if (atLimit) Ridge.inkSubtle else Ridge.ink, modifier = Modifier.weight(1f), maxLines = 1)
+                        KeyMetricEditorTitle(title, m in noData, if (atLimit) Ridge.inkSubtle else Ridge.ink, Modifier.weight(1f))
                         Icon(Icons.Filled.Add, contentDescription = null, tint = if (atLimit) Ridge.inkSubtle else Ridge.brand, modifier = Modifier.padding(end = 8.dp).size(22.dp))
                     }
                 }

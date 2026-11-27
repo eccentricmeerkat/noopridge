@@ -1,13 +1,13 @@
 package com.noop.ui
 
+import com.noop.metrics.V2Change
+import com.noop.metrics.MetricsV2
 import com.noop.analytics.ReadinessEngine
 import com.noop.data.DailyMetric
 import com.noop.metrics.DayKey
 import com.noop.metrics.MetricId
 import com.noop.metrics.MetricRegistry
-import com.noop.metrics.MetricsV2
 import com.noop.metrics.NormalRange
-import com.noop.metrics.V2Change
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -84,9 +84,12 @@ internal fun effortBand(effort: Double): EffortBand = when {
     else -> EffortBand.ALL_OUT
 }
 
-/** "Slept on target" in v10 terms: Rest at or above 85 (D-14, R4b). With [V2Change.SLEPT_ON_TARGET] on (R9a V2-3),
- *  a night is on target when asleep ≥ that night's one need (V2-1), as D-14 decided. */
-internal const val REST_ON_TARGET = 85.0
+/** "Slept on target": a Rest in the Optimal band, 85 and up (RS-2d, owner, 26 Nov 2026). It replaces R9a V2-3's rule (asleep
+ *  ≥ that night's need), which marked only the nights that reached 100% of the need. */
+internal const val REST_ON_TARGET = 85
+
+/** Judged on the rounded score, the figure the app shows: a night that reads "85" has its moon. */
+internal fun restOnTarget(rest: Double): Boolean = rest.roundToInt() >= REST_ON_TARGET
 
 internal data class ConsistencyDay(
     val date: LocalDate,
@@ -122,24 +125,16 @@ internal fun consistencyStart(today: LocalDate): LocalDate =
 internal fun buildConsistency(
     registry: MetricRegistry,
     today: LocalDate,
-    v2: Set<V2Change> = MetricsV2.active,
 ): ConsistencyTrend {
     val start = consistencyStart(today)
     val end = start.plusDays((CONSISTENCY_WEEKS * 7 - 1).toLong())
     val effort = registry.series(MetricId.EFFORT, DayKey(start), DayKey(end)).map { it.value }
     val rest = registry.series(MetricId.REST, DayKey(start), DayKey(end)).map { it.value }
-    val byNeed = MetricsV2.isOn(V2Change.SLEPT_ON_TARGET, v2)
-    val asleep = if (byNeed) registry.series(MetricId.SLEEP_DURATION, DayKey(start), DayKey(end)).map { it.value } else emptyList()
-    val need = if (byNeed) registry.series(MetricId.SLEEP_NEED, DayKey(start), DayKey(end)).map { it.value } else emptyList()
     val cells = (0 until CONSISTENCY_WEEKS * 7).map { i ->
         val d = start.plusDays(i.toLong())
         val future = d.isAfter(today)
         val e = if (future) null else effort[i]
-        val onTarget = when {
-            future -> null
-            byNeed -> asleep[i]?.takeIf { it > 0.0 }?.let { a -> need[i]?.let { n -> a >= n * 60.0 } }
-            else -> rest[i]?.let { it >= REST_ON_TARGET }
-        }
+        val onTarget = if (future) null else rest[i]?.let(::restOnTarget)
         ConsistencyDay(d, future, e, e?.let(::effortBand), onTarget)
     }
     val past = cells.filterNot { it.future }
@@ -251,7 +246,7 @@ internal data class SynthesisCell(
     val date: LocalDate,
     /** A day in the future half of the current week: drawn invisible. */
     val future: Boolean,
-    /** The 0–4 Synthesis stage (`SYNTHESIS_BAND_FLOORS`), null when Charge is untracked. */
+    /** The 0–4 stage (`SYNTHESIS_BAND_FLOORS`): morning Readiness (RS-3b), or Charge's Synthesis stage; null when untracked. */
     val band: Int?,
 )
 
@@ -287,25 +282,41 @@ private fun wholeShares(counts: List<Int>): List<Int> {
     return result
 }
 
-internal fun buildSynthesis(registry: MetricRegistry, today: LocalDate): SynthesisTrend {
+internal fun buildSynthesis(
+    registry: MetricRegistry,
+    today: LocalDate,
+    /** RS-3b: the calendar is Daily Readiness, each day's morning figure (Charge and Rest), not Charge's category. */
+    readiness: Boolean = MetricsV2.on(V2Change.READINESS_SCORE),
+): SynthesisTrend {
     val start = today.minusDays((today.dayOfWeek.value - DayOfWeek.MONDAY.value).toLong())
         .minusWeeks((SYNTHESIS_WEEKS - 1).toLong())
     val end = start.plusDays((SYNTHESIS_WEEKS * 7 - 1).toLong())
     val charge = registry.series(MetricId.CHARGE, DayKey(start), DayKey(end)).map { it.value }
+    val scores: List<Double?> = if (!readiness) charge else {
+        val rest = registry.series(MetricId.REST, DayKey(start), DayKey(end)).map { it.value }
+        charge.mapIndexed { i, c -> rest[i]?.let { r -> c?.let { ReadinessScore.morning(it, r) } } }
+    }
+    // Readiness is banded on its rounded score, as the Today card is; Synthesis keeps v10's raw cut.
+    val stage: (Double) -> Int = if (readiness) ReadinessScore::band else ::synthesisStage
     val cells = (0 until SYNTHESIS_WEEKS * 7).map { i ->
         val d = start.plusDays(i.toLong())
         val future = d.isAfter(today)
-        SynthesisCell(d, future, if (future) null else charge[i]?.let(::synthesisStage))
+        SynthesisCell(d, future, if (future) null else scores[i]?.let(stage))
     }
-    val tracked = charge.filterIndexed { i, v -> v != null && !start.plusDays(i.toLong()).isAfter(today) }
-        .filterNotNull()
-    val (lowOrDepleted, steady, strongOrPeak) = wholeShares(
+    val tracked = cells.indices.mapNotNull { i -> scores[i]?.takeIf { !cells[i].future } }
+    // Readiness's shares count the same five categories its squares show (Steady from 50). v10's Synthesis shares keep
+    // their own cut, which starts Steady at 40.
+    val shares = if (readiness) {
+        val bands = cells.filterNot { it.future }.mapNotNull { it.band }
+        listOf(bands.count { it <= 1 }, bands.count { it == 2 }, bands.count { it >= 3 })
+    } else {
         listOf(
             tracked.count { it < SYNTHESIS_STEADY_FLOOR },
             tracked.count { it >= SYNTHESIS_STEADY_FLOOR && it < SYNTHESIS_STRONG_FLOOR },
             tracked.count { it >= SYNTHESIS_STRONG_FLOOR },
-        ),
-    ).let { Triple(it[0], it[1], it[2]) }
+        )
+    }
+    val (lowOrDepleted, steady, strongOrPeak) = wholeShares(shares).let { Triple(it[0], it[1], it[2]) }
     val monthFmt = DateTimeFormatter.ofPattern("MMM", Locale.getDefault())
     val months = (0 until SYNTHESIS_WEEKS).map { start.plusWeeks(it.toLong()).format(monthFmt) }
     val labels = months.mapIndexed { i, m -> if (i > 0 && m == months[i - 1]) "" else m }
@@ -422,7 +433,6 @@ internal suspend fun loadTrendsFixedCards(
     val registry = com.noop.metrics.V10MetricRegistry(
         com.noop.metrics.V10MetricInputs(
             days = days, restByDay = restByDay, today = today,
-            // R9a V2-3: the one need Consistency's moons measure against reads the age (#27 rules).
             age = ProfileStore.from(vm.getApplication<android.app.Application>()).knownAge,
         ),
     )

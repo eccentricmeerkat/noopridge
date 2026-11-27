@@ -63,7 +63,8 @@ internal val EXPLORE_METRIC_KEYS = setOf("recovery", "strain", "hrv", "rhr", "sl
  */
 internal fun ridgeMetricRoute(key: String): String = when (key) {
     in EXPLORE_METRIC_KEYS -> exploreRoute(key)
-    "fitness_age", "vo2max_est", "vitality" -> Destination.Baseline.route
+    // RS-3e: Vitality is not on Baseline, so its tile opens Insights on Vitality like any other catalogue metric.
+    "fitness_age", "vo2max_est" -> Destination.Baseline.route
     "rest" -> Destination.Sleep.route
     "insights" -> Destination.Insights.route
     // B2-X: any other catalogue metric opens Insights on that metric (Fix 5: Calories, Skin temperature and Steps too; they used

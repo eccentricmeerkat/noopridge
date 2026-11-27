@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 /**
- * R9a (`metricsV2`) on the screens: the Sleep tab's need, Consistency's moons, the plan line, the logical day and the
+ * R9a (`metricsV2`) on the screens: the Sleep tab's need, the plan line, the logical day and the
  * age source. Each change is checked off (v10) and on.
  */
 class MetricsV2ScreensTest {
@@ -51,31 +51,6 @@ class MetricsV2ScreensTest {
         // The tab and the registry agree with the change on.
         val reg = V10MetricRegistry(V10MetricInputs(days = days, today = today, age = 40, v2 = setOf(V2Change.ONE_SLEEP_NEED)))
         assertEquals(reg.value(com.noop.metrics.MetricId.SLEEP_DEBT, DayKey(today)).value, on.debtByDay[today.toString()])
-    }
-
-    // MARK: - V2-3 slept on target
-
-    @Test
-    fun aMoonMeansAsleepAtOrAboveThatNightsNeed() {
-        val days = nights()
-        val rest = days.associate { it.day to 90.0 }
-        val reg = V10MetricRegistry(V10MetricInputs(days = days, restByDay = rest, today = today, age = 40,
-            v2 = setOf(V2Change.ONE_SLEEP_NEED, V2Change.SLEPT_ON_TARGET)))
-        val off = buildConsistency(reg, today, v2 = emptySet())
-        val on = buildConsistency(reg, today, v2 = setOf(V2Change.ONE_SLEEP_NEED, V2Change.SLEPT_ON_TARGET))
-        val asleep = days.associate { it.day to it.totalSleepMin!! }
-        val past = on.cells.filterNot { it.future }
-        assertEquals(off.trackedNights, past.count { it.onTarget != null })
-        for (c in past) {
-            val a = asleep[c.date.toString()] ?: continue
-            val need = oneSleepNeedHours(asleep, c.date, 40) * 60.0
-            assertEquals(c.date.toString(), a >= need, c.onTarget)
-        }
-        // Rest 90 every night: v10 marks every tracked night.
-        assertEquals(off.trackedNights, off.onTarget)
-        assertTrue(on.onTarget < off.onTarget)
-        // Without the one need, the moons stay on Rest.
-        assertEquals(off, buildConsistency(reg, today, v2 = setOf(V2Change.SLEPT_ON_TARGET)))
     }
 
     // MARK: - V2-2 the plan line

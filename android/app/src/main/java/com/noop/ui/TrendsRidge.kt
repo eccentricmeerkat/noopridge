@@ -49,6 +49,7 @@ import com.noop.ui.ridge.chart.ridgeEndRing
 import com.noop.ui.ridge.chart.ridgeGapBar
 import com.noop.ui.ridge.chart.ridgeLine
 import com.noop.ui.ridge.chart.ridgeStack
+import com.noop.ui.ridge.chart.effortAxis
 import com.noop.ui.ridge.chart.scoreAxis
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -236,9 +237,9 @@ private fun weekPhrase(thisWeek: Double?, lastWeek: Double?, fmt: (Double) -> St
     }
 
 /**
- * Effort over the range (B2-2a-2): daily dots, the bright 7-day mean and today ringed. The frame is the board's
- * axis-less one — no y labels, gridlines or date labels (Q6); the "Today" caption keeps the last slot legible and the
- * scrub tooltip keeps the date.
+ * Effort over the range (B2-2a-2): daily dots, the bright 7-day mean and today ringed. RS-3e gave it a fitted y axis
+ * with gridlines; there are still no date labels (Q6): the "Today" caption keeps the last slot legible and the scrub
+ * tooltip keeps the date.
  */
 @Composable
 internal fun RidgeEffortCard(m: TrendsRidgeModel, effortScale: EffortScale, onOpen: (() -> Unit)? = null) {
@@ -261,13 +262,13 @@ internal fun RidgeEffortCard(m: TrendsRidgeModel, effortScale: EffortScale, onOp
             val rollingFmt = stringResource(R.string.trends_ridge_rolling)
             val lastIdx = e.values.indexOfLast { it != null }
             val a11y = stringResource(R.string.trends_ridge_effort_a11y, m.days.size, fmt(e.average), fmt(e.today))
+            // RS-3e (owner, 26 Nov): a y axis, fitted as Calories' is, at Calories' height.
+            val whoop = effortScale == EffortScale.WHOOP
             RidgePlot(
                 n = m.days.size,
-                axis = scoreAxis,
+                axis = effortAxis((e.values + e.mean7).filterNotNull(), whoop),
                 height = 132.dp,
-                yLabel = { it.roundToInt().toString() },
-                yLabels = false,
-                gridlines = false,
+                yLabel = { (if (whoop) it * 21.0 / 100.0 else it).roundToInt().toString() },
                 baseline = true,
                 caption = stringResource(R.string.trends_ridge_stat_today),
                 xLabels = emptyList(),
@@ -406,10 +407,9 @@ internal fun RidgeChargeCard(m: TrendsRidgeModel, onOpen: (() -> Unit)? = null) 
             RidgePlot(
                 n = m.days.size,
                 axis = scoreAxis,
+                // RS-3e: a y axis; the height is unchanged.
                 height = 132.dp,
                 yLabel = { it.roundToInt().toString() },
-                yLabels = false,
-                gridlines = false,
                 baseline = true,
                 caption = stringResource(R.string.trends_ridge_stat_today),
                 xLabels = emptyList(),

@@ -250,12 +250,33 @@ object RidgeChart {
     val neutral = Ridge.inkSubtle
 }
 
+/** RS-3g: the Sleep score card's own colours. The Sleep page design's night sky, quietened (RS-3h, owner, 27 Nov 2026) to
+ *  a dark slate-blue that sits with the page's backdrop. */
+object RidgeNightSky {
+    val top = Color(0xFF0F1B29)
+    val middle = Color(0xFF152538)
+    val bottom = Color(0xFF1A2942)
+    val stroke = Color(0x3D8FB4E6)
+    val glow = Color(0xFF3D6199)
+    val glowFar = Color(0xFF233F66)
+    val nebula = Color(0xFF3F5687)
+    val flare = Color(0xFFB0FF5A)
+    val star = Color(0xFFDBE8FF)
+    val starGlow = Color(0xFFAACDFF)
+    val label = Color(0xFFA9C8FF)
+    val orbGlow = Color(0xFF5AA0FF)
+    val liquid = Color(0xFF1748CC)
+    val liquidDeep = Color(0xFF061560)
+}
+
 /** One of the three score liquids: the surface colour, the deep colour at the bottom of the gradient
  *  (and the back wave), and the glow under the orb. A metric keeps its liquid on every surface. */
 enum class RidgeLiquid(val top: Color, val deep: Color) {
     CHARGE(Ridge.charge, Ridge.chargeDeep),
     EFFORT(Ridge.effort, Ridge.effortDeep),
     REST(Ridge.rest, Ridge.restDeep),
+    /** RS-3g: the Sleep score's deep blue, on its night-sky card ([RidgeNightSky]). */
+    NIGHT(RidgeNightSky.liquid, RidgeNightSky.liquidDeep),
     /** The strap battery orb, the one orb that is not a score (design system p. 4): darker, quieter green. */
     BATTERY(Ridge.battery, Ridge.batteryDeep),
 }

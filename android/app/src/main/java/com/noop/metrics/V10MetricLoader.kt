@@ -9,6 +9,7 @@ import com.noop.ui.loadCaloriesByDay
 import com.noop.ui.loadSleepTabSessions
 import com.noop.ui.logicalDayNow
 import com.noop.ui.napSleepMinutesByDay
+import com.noop.ui.bedWakeByWakeDay
 import com.noop.ui.stepsForDay
 import kotlinx.coroutines.flow.first
 
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.first
  * | age, maxHrOverride | `ProfileStore` (Settings), override only when set |
  * | restNeedHours | `IntelligenceEngine.routineRestNeedHours` (the routine scoring run's read) |
  * | importedNeedMin / importedDebtMin | the Sleep tab's export-verbatim series |
- * | napSleepMinByDay | the Sleep tab (`loadSleepTabSessions` + `napSleepMinutesByDay`) |
+ * | napSleepMinByDay, bedWakeByDay | the Sleep tab (`loadSleepTabSessions` + `napSleepMinutesByDay`, `mainSleepSpan`) |
  * | caloriesByDay | Today (`loadCaloriesByDay`) |
  * | computedSeries | Health (`metricSeriesComputedUnion` for the weekly keys) |
  * | importedStepsByDay / stepsEstimateByDay | Today's Steps tile (`stepsForDay`; `resolvedSeries("steps_est")`) |
@@ -47,6 +48,9 @@ internal suspend fun loadV10MetricInputs(app: NoopApplication): V10MetricInputs 
     val importedSteps = (apple + healthConnect).map { it.day }.toSet()
         .mapNotNull { day -> stepsForDay(apple, healthConnect, day)?.let { day to it } }.toMap()
 
+    val sleeps = runCatching { loadSleepTabSessions(repo, strap) }.getOrDefault(emptyList())
+    val midsleep = runCatching { repo.habitualMidsleepSec(strap) }.getOrNull()
+
     return V10MetricInputs(
         days = runCatching { repo.recentDaysMergedFlow(app.activeDeviceId).first() }.getOrDefault(emptyList()),
         restByDay = runCatching {
@@ -64,9 +68,9 @@ internal suspend fun loadV10MetricInputs(app: NoopApplication): V10MetricInputs 
         restNeedHours = runCatching { IntelligenceEngine.routineRestNeedHours(repo, profile.age.toDouble()) }.getOrNull(),
         importedNeedMin = stored("sleep_need_min"),
         importedDebtMin = stored("sleep_debt_min"),
-        napSleepMinByDay = runCatching {
-            napSleepMinutesByDay(loadSleepTabSessions(repo, strap), repo.habitualMidsleepSec(strap))
-        }.getOrDefault(emptyMap()),
+        napSleepMinByDay = runCatching { napSleepMinutesByDay(sleeps, midsleep) }.getOrDefault(emptyMap()),
+        // RS-3c: the Sleep score's bed and wake times, one bridged main night per local wake day.
+        bedWakeByDay = runCatching { bedWakeByWakeDay(sleeps, midsleep, java.time.ZoneId.systemDefault()) }.getOrDefault(emptyMap()),
         caloriesByDay = runCatching { loadCaloriesByDay(repo, strap) }.getOrDefault(emptyMap()),
         importedStepsByDay = importedSteps,
         stepsEstimateByDay = runCatching {

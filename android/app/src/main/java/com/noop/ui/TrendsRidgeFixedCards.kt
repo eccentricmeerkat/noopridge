@@ -394,12 +394,17 @@ private val SYN_CELL = 13.dp
 private val SYN_GAP = 3.dp
 
 @Composable
-internal fun RidgeSynthesisCard(s: SynthesisTrend, onOpen: (() -> Unit)? = null) {
+internal fun RidgeSynthesisCard(
+    s: SynthesisTrend,
+    onOpen: (() -> Unit)? = null,
+    readiness: Boolean = com.noop.metrics.MetricsV2.on(com.noop.metrics.V2Change.READINESS_SCORE),
+) {
     TrendCard(
-        eyebrow = stringResource(R.string.trends_ridge_syn_eyebrow),
-        title = stringResource(R.string.trends_ridge_syn_title),
-        sub = stringResource(R.string.trends_ridge_syn_sub, SYNTHESIS_WEEKS),
-        onOpen = onOpen,
+        eyebrow = stringResource(if (readiness) R.string.readiness_cal_eyebrow else R.string.trends_ridge_syn_eyebrow),
+        title = stringResource(if (readiness) R.string.readiness_cal_title else R.string.trends_ridge_syn_title),
+        sub = stringResource(if (readiness) R.string.readiness_cal_sub else R.string.trends_ridge_syn_sub, SYNTHESIS_WEEKS),
+        // RS-3b: the card used to open Charge's chart, which is not what a readiness calendar shows.
+        onOpen = onOpen.takeUnless { readiness },
         trailing = stringResource(R.string.trends_ridge_syn_days, s.tracked),
     ) {
         // Monday-first weekday labels on the left (M/W/F/S), then the month row and the 20-column heat grid.
@@ -735,11 +740,7 @@ internal fun RidgeConsistencyCard(c: ConsistencyTrend) {
                 Swatch.Square(Ridge.inkSubtle, outlined = true) to intensity.getValue(EffortBand.REST),
                 Swatch.Square(Ridge.dataConsistency) to intensity.getValue(EffortBand.MODERATE),
                 Swatch.Square(Ridge.effort) to intensity.getValue(EffortBand.HIGH),
-                Swatch.Dot(Ridge.ink) to stringResource(
-                    // R9a V2-3: the legend names the rule the moons follow.
-                    if (com.noop.metrics.MetricsV2.on(com.noop.metrics.V2Change.SLEPT_ON_TARGET)) R.string.trends_ridge_con_target_legend_need
-                    else R.string.trends_ridge_con_target_legend,
-                ),
+                Swatch.Dot(Ridge.ink) to stringResource(R.string.trends_ridge_con_target_legend),
             ),
         )
     }

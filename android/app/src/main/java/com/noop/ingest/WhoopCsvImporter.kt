@@ -72,9 +72,10 @@ object WhoopCsvImporter {
      * WHOOP CSVs carry "Sleep efficiency %" on a 0–100 scale, but NOOP's `efficiency` columns store
      * the 0–1 fraction the native pipeline writes (AnalyticsEngine: actual-sleep ÷ in-bed). Divide at
      * the WRITE boundary — the verbatim parsed value stays untouched, same shape as the Day Strain
-     * rescale above. Keep byte-identical to Swift (WhoopExportImporter.fractionFromImportedEfficiencyPct).
+     * rescale above. RS-3d: a file that already holds a fraction (an older NOOP export did on some rows) is kept as it is
+     * ([com.noop.data.EfficiencyStorage.fraction]); Android differs from Swift here until the twin takes the same fix.
      */
-    private fun efficiencyFractionFromPct(pct: Double?): Double? = pct?.let { it / 100.0 }
+    private fun efficiencyFractionFromPct(pct: Double?): Double? = com.noop.data.EfficiencyStorage.fraction(pct)
 
     private val DAY_FMT: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 

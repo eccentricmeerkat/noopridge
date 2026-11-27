@@ -270,7 +270,7 @@ object XiaomiBandImporter {
             DailyMetric(
                 deviceId = deviceId, day = d.day,
                 totalSleepMin = d.totalSleepMin,
-                efficiency = sleepEfficiency(d.totalSleepMin, d.awakeMin),
+                efficiency = com.noop.data.EfficiencyStorage.fraction(sleepEfficiency(d.totalSleepMin, d.awakeMin)),
                 deepMin = d.deepMin, remMin = d.remMin, lightMin = d.lightMin,
                 restingHr = d.restingHr, spo2Pct = d.avgSpo2, steps = d.steps,
                 activeKcalEst = d.activeKcal,
@@ -281,7 +281,7 @@ object XiaomiBandImporter {
         val sleepRows = sleeps.map { s ->
             SleepSession(
                 deviceId = deviceId, startTs = s.startTs, endTs = s.endTs,
-                efficiency = efficiency(s.stagesJson, s.startTs, s.endTs),
+                efficiency = com.noop.data.EfficiencyStorage.fraction(efficiency(s.stagesJson, s.startTs, s.endTs)),
                 restingHr = s.minHr, stagesJSON = s.stagesJson,
             )
         }

@@ -74,6 +74,9 @@ object Zones {
  * is a UI concern, so this pure function omits it. Callers decide whether to run it.
  */
 object IllnessWatch {
+    /** Earlier wrist temperatures needed before a new one can be called raised: the respiration signal's own bar. */
+    private const val MIN_BASE_TEMPS = 10
+
     /**
      * Evaluate the [days] history (oldest -> newest). Returns a human-readable banner
      * message when 2+ anomaly flags fire, otherwise null.
@@ -132,9 +135,16 @@ object IllnessWatch {
         }
 
         run {
-            val r = rm { it.skinTempDevC }
-            if (r != null && r >= 0.6) {
-                flags.add("skin temp +${formatOneDp(r)}°C")
+            // RS-3i: the column holds a change from normal for nights NOOP scored, but the wrist temperature itself for
+            // nights from a WHOOP export ([VitalBands.isAbsoluteSkinTemp]). A change is judged as it stands; a temperature
+            // only against the baseline window's own temperatures, and not at all with too few of them. Never mixed.
+            val (recentTemps, recentChanges) = recent.mapNotNull { it.skinTempDevC }.partition(VitalBands::isAbsoluteSkinTemp)
+            val baseTemps = base.mapNotNull { it.skinTempDevC }.filter(VitalBands::isAbsoluteSkinTemp)
+            val rise = mean(recentChanges) ?: mean(recentTemps)?.let { now ->
+                mean(baseTemps)?.takeIf { baseTemps.size >= MIN_BASE_TEMPS }?.let { usual -> now - usual }
+            }
+            if (rise != null && rise >= 0.6) {
+                flags.add("skin temp +${formatOneDp(rise)}°C")
             }
         }
 

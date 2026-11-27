@@ -705,6 +705,7 @@ fun AppRoot(viewModel: AppViewModel = viewModel()) {
                             // #706/#684: the dashboard cards draw a tappable chevron; wire each to its detail,
                             // matching iOS. Stress + the vitals are pushes; Sleep is a top-level tab switch.
                             onOpenStress = { nav.navigate(Destination.Stress.route) },
+                            onOpenVitals = { nav.navigate(Destination.VitalSigns.route) },
                             onOpenHealth = { nav.navigate(if (ridgeShell) Destination.Explore.route else Destination.Health.route) },
                             // Every metric/vital card opens its OWN focused detail trend (vital_detail/<key>),
                             // not the shared Health hub (2026-07-03). Mirrors the iOS liquidCard metricDetail.
@@ -793,7 +794,7 @@ fun AppRoot(viewModel: AppViewModel = viewModel()) {
                             ridgeHeader = insightsHeader(nav, InsightsMode.EXPLORE, EXPLORE_METRIC_ROUTE),
                         )
                     }
-                    ridgeTool(Destination.Automations.route) { AutomationsScreen(viewModel, onOpenAlarms = { nav.navigate(Destination.SmartAlarm.route) }) }
+                    ridgeTool(Destination.Automations.route) { AutomationsScreen(viewModel) }
                     ridgeTool(Destination.SmartAlarm.route) { SmartAlarmScreen(viewModel) }
                     ridgeTool(Destination.Workouts.route) {
                         WorkoutsScreen(viewModel, onOpenWorkout = if (ridgeShell) ({ r -> nav.navigate(workoutRoute(r.startTs)) }) else null)
@@ -891,7 +892,10 @@ fun AppRoot(viewModel: AppViewModel = viewModel()) {
                     ridgeTool(Destination.NoopLimitations.route) { NoopLimitationsScreen() }
                     ridgeTool(Destination.BackupSync.route) { BackupSyncScreen() }
                     ridgeTool(Destination.Notifications.route) { NotificationsPowerScreen(viewModel) }
-                    ridgeTool(Destination.About.route) { AboutNoopScreen(onOpenTestCentre = { nav.navigate(Destination.TestCentre.route) }) }
+                    ridgeTool(Destination.About.route) { AboutNoopScreen(
+                        onOpenTestCentre = { nav.navigate(Destination.TestCentre.route) },
+                        onOpenScoringGuide = { nav.navigate(HubSheet.SCORING_GUIDE.route) },
+                    ) }
                     ridgeTool(Destination.PowerSaving.route) { PowerSavingScreen(viewModel) }
                     ridgeTool(Destination.YourData.route, headerAction = { YourDataBackupChip { nav.navigate(Destination.BackupSync.route) } }) {
                         YourDataScreen(viewModel, onOpenInsights = { nav.navigate(Destination.Explore.route) },

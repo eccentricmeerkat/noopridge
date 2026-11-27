@@ -181,6 +181,12 @@ internal fun napSleepMinutesByDay(
             .sumOf { decodedAsleepMinutes(it.stagesJSON, it.effectiveStartTs) }
     }
 
+/** RS-3c: each local wake day's main-night bed and wake clock times ([mainSleepSpan]), for the Sleep score's consistency. */
+internal fun bedWakeByWakeDay(sleeps: List<SleepSession>, habitualMidsleepSec: Long?, zone: java.time.ZoneId): Map<String, SleepScore.BedWake> =
+    sleeps.groupBy { localDayString(it.endTs) }
+        .mapNotNull { (day, blocks) -> mainSleepSpan(blocks, habitualMidsleepSec)?.let { (bed, wake) -> day to SleepScore.bedWake(bed, wake, zone) } }
+        .toMap()
+
 /**
  * The day's main-night bridged SPAN (onset -> wake), the same window [mainSleepGroup] bridges into one
  * continuous night. The ONE canonical bed/wake read every glance screen (Coupled, Today's HR band) should

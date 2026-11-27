@@ -1,6 +1,9 @@
 package com.noop.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.clickable
@@ -248,20 +251,22 @@ internal fun hoursVsNeeded(trendHours: List<Double>, trendNeedHours: List<Double
     )
 
 /**
- * B2-4a-3: the board's Hours vs Needed card, which also takes the Rest orb (owner D10): the night's Rest score in the
- * glass orb, last night's hours against the need, how much of the need was slept, and the "Optimal" word with where
- * the score came from. The need is the one figure the model gives (no Baseline / Effort / Debt split, D11).
+ * RS-1-2 item 5 (`Sleep.dc.html`, Hours vs Needed): last night's hours against tonight's Sleep needed, with the Rest score
+ * as a chip (the orb is gone), an Hours of sleep bar, the Sleep needed bar in its three parts and their table. The need
+ * is [split]'s total; with both V2 parts off that is the one Base need, so the numbers read as before.
  */
 @Composable
 internal fun RidgeHoursVsNeededCard(
-    h: HoursVsNeeded,
+    sleptMin: Double,
+    split: SleepNeedSplit,
     score: Double?,
-    word: String?,
     source: String,
     onHowRestWorks: () -> Unit,
 ) {
     val hoursFmt = stringResource(R.string.sleep_ridge_hvn_hours)
     val one = { x: Double -> hoursFmt.format(String.format(java.util.Locale.getDefault(), "%.1f", x)) }
+    val needMin = split.totalMin
+    val percent = if (needMin > 0.0) (sleptMin / needMin * 100.0).coerceAtLeast(0.0).roundToInt() else 0
     GlassCard(Modifier.fillMaxWidth(), contentPadding = PaddingValues(18.dp)) {
         Column(verticalArrangement = Arrangement.spacedBy(Ridge.space4)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -276,33 +281,126 @@ internal fun RidgeHoursVsNeededCard(
                     modifier = Modifier.heightIn(min = 48.dp).clickable(onClick = onHowRestWorks).wrapContentHeight(Alignment.CenterVertically),
                 )
             }
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Ridge.space5),
-            ) {
-                if (score != null) {
-                    LiquidOrb(
-                        fraction = score / 100.0,
-                        display = score.roundToInt().toString(),
-                        liquid = RidgeLiquid.REST,
-                        diameter = 110.dp,
-                        glass = true,
-                    )
-                }
-                Column(verticalArrangement = Arrangement.spacedBy(Ridge.space1)) {
-                    Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(one(h.sleptH), style = RidgeType.numeralXl.copy(fontSize = 38.sp, lineHeight = 42.sp), color = Ridge.ink)
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Ridge.space1)) {
+                    // Board: "of X needed" sits beside the hours, on their baseline.
+                    Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(one(sleptMin / 60.0), style = RidgeType.numeralLg.copy(lineHeight = 48.sp), color = Ridge.ink)
                         Text(
-                            stringResource(R.string.sleep_ridge_hvn_needed, one(h.neededH)), style = TRN_SUB, color = Ridge.inkMuted,
+                            stringResource(R.string.sleep_ridge_hvn_needed, one(needMin / 60.0)),
+                            style = TRN_SUB.copy(fontSize = 15.sp), color = Ridge.inkMuted, maxLines = 1,
                             modifier = Modifier.padding(bottom = 6.dp),
                         )
                     }
-                    Text(stringResource(R.string.sleep_ridge_hvn_slept, h.percent), style = TRN_SUB, color = Ridge.inkMuted)
-                    val line = listOfNotNull(word, source.takeIf { it.isNotBlank() }).joinToString(" · ")
-                    if (line.isNotEmpty()) Text(line, style = TRN_LEGEND, color = Ridge.inkSubtle)
+                    Text(stringResource(R.string.sleep_ridge_hvn_slept, percent), style = TRN_SUB, color = Ridge.inkMuted)
+                    // Provenance stays (each value carries its source), under the board's lines.
+                    if (source.isNotBlank()) Text(source, style = TRN_LEGEND, color = Ridge.inkSubtle)
+                }
+                if (score != null) {
+                    Text(
+                        stringResource(R.string.sleep_ridge_rest_chip, score.roundToInt()),
+                        style = TRN_LEGEND.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold),
+                        color = Ridge.brand, maxLines = 1,
+                        modifier = Modifier
+                            .border(1.dp, Ridge.brand.copy(alpha = 0.4f), RoundedCornerShape(Ridge.radiusPill))
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                    )
                 }
             }
+            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                HvnBarHeader(stringResource(R.string.sleep_ridge_hos_title), hoursMinutesPadded(sleptMin))
+                HoursOfSleepBar(hoursOfSleepFill(sleptMin, needMin), stringResource(R.string.sleep_ridge_hos_a11y, hoursMinutesPadded(sleptMin), percent, hoursMinutesPadded(needMin)))
+                HvnBarHeader(stringResource(R.string.sleep_ridge_need_title), hoursMinutesPadded(needMin))
+                SleepNeededBar(split)
+            }
+            SleepNeedTable(split)
+            // RS-1-2: how the figure is built, with the Effort part named as an estimate (a NOOP heuristic, not a study's number).
+            Text(stringResource(R.string.sleep_ridge_need_note), style = TRN_LEGEND, color = Ridge.inkSubtle)
+        }
+    }
+}
+
+/** An eyebrow on the left and its figure in the serif on the right. */
+@Composable
+private fun HvnBarHeader(label: String, value: String) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
+        RidgeEyebrow(label, Modifier.weight(1f))
+        Text(value, style = RidgeType.numeralMd.copy(fontSize = 20.sp, lineHeight = 24.sp), color = Ridge.ink)
+    }
+}
+
+/** The board's Hours of sleep bar: a faint track and a mint gradient fill with a soft glow, [fill] 0 to 1. */
+@Composable
+private fun HoursOfSleepBar(fill: Float, a11y: String) {
+    val track = RoundedCornerShape(8.dp)
+    Box(
+        Modifier.fillMaxWidth().height(16.dp)
+            .semantics { contentDescription = a11y }
+            .background(Ridge.glassStroke.copy(alpha = 0.10f), track)
+            .border(1.dp, Ridge.glassStroke, track),
+    ) {
+        if (fill > 0f) {
+            Box(
+                Modifier.fillMaxWidth(fill).fillMaxHeight()
+                    .ridgeSoftGlow(Ridge.brand, 8.dp)
+                    .background(Brush.horizontalGradient(0f to Ridge.brandDeep, 0.7f to Ridge.brand, 1f to lerp(Ridge.brand, Ridge.ink, 0.35f)), track),
+            )
+        }
+    }
+}
+
+/** The three-part Sleep needed bar: Base (grey), Recent Effort (blue), Sleep debt (orange); parts of 0 are left out. */
+@Composable
+private fun SleepNeededBar(split: SleepNeedSplit) {
+    val parts = listOf(
+        split.baseMin to Ridge.glassStroke.copy(alpha = 0.4f),
+        (split.effortMin ?: 0).toDouble() to Ridge.effort,
+        split.debtMin.toDouble() to Ridge.stateLow,
+    ).filter { it.first > 0.0 }
+    val a11y = stringResource(
+        R.string.sleep_ridge_need_a11y, hoursMinutesPadded(split.totalMin), hoursMinutesPadded(split.baseMin),
+        hoursMinutesPadded((split.effortMin ?: 0).toDouble()), hoursMinutesPadded(split.debtMin.toDouble()),
+    )
+    Row(Modifier.fillMaxWidth().height(16.dp).semantics { contentDescription = a11y }, horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+        parts.forEachIndexed { i, (min, color) ->
+            val first = i == 0
+            val last = i == parts.lastIndex
+            val shape = RoundedCornerShape(
+                topStart = if (first) 8.dp else 3.dp, bottomStart = if (first) 8.dp else 3.dp,
+                topEnd = if (last) 8.dp else 3.dp, bottomEnd = if (last) 8.dp else 3.dp,
+            )
+            Box(Modifier.weight(min.toFloat()).fillMaxHeight().background(color, shape))
+        }
+    }
+}
+
+/** The breakdown table under the bars: Base sleep, Recent Effort ("—" without enough Effort history) and Sleep debt. */
+@Composable
+private fun SleepNeedTable(split: SleepNeedSplit) {
+    val shape = RoundedCornerShape(Ridge.radiusMd)
+    Column(
+        Modifier.fillMaxWidth()
+            .background(Ridge.bg000.copy(alpha = 0.4f), shape)
+            .border(1.dp, Ridge.glassStroke.copy(alpha = 0.10f), shape)
+            .padding(horizontal = 14.dp, vertical = 4.dp),
+    ) {
+        NeedRow(Ridge.glassStroke.copy(alpha = 0.4f), stringResource(R.string.sleep_ridge_need_base), hoursMinutesPadded(split.baseMin), Ridge.ink, divider = false)
+        NeedRow(
+            Ridge.effort, stringResource(R.string.sleep_ridge_need_effort),
+            split.effortMin?.let { hoursMinutesPadded(it.toDouble(), signed = true) } ?: "—", Ridge.effort, divider = true,
+        )
+        NeedRow(Ridge.stateLow, stringResource(R.string.sleep_ridge_need_debt), hoursMinutesPadded(split.debtMin.toDouble(), signed = true), Ridge.stateLow, divider = true)
+    }
+}
+
+@Composable
+private fun NeedRow(swatch: Color, label: String, value: String, valueColor: Color, divider: Boolean) {
+    Column {
+        if (divider) Box(Modifier.fillMaxWidth().height(1.dp).background(Ridge.glassStroke))
+        Row(Modifier.fillMaxWidth().heightIn(min = 44.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Box(Modifier.size(10.dp).background(swatch, RoundedCornerShape(3.dp)))
+            Text(label, style = RidgeType.bodySm.copy(fontSize = 14.sp), color = Ridge.ink, modifier = Modifier.weight(1f))
+            Text(value, style = RidgeType.numeralMd.copy(fontSize = 16.sp, lineHeight = 20.sp), color = valueColor)
         }
     }
 }
